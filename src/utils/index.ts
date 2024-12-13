@@ -25,11 +25,11 @@ export async function runCommand(command: string) {
   try {
     const { stdout, stderr } = await execPromise(command);
     if (stderr) {
-      console.error('Error Output:', stderr);
+      // console.error('Error Output:', stderr);
     }
     return stdout;
   } catch (error) {
-    console.error('Command failed:', error);
+    // console.error('Command failed:', error);
   }
 }
 
