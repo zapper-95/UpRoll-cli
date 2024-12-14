@@ -296,6 +296,30 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     },
   ]);
 
+  console.log(
+    colors.fg.yellow,
+    'Config your grafana user and password',
+    colors.reset
+  );
+
+  const grafanaForm = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'GF_SECURITY_ADMIN_USER',
+      message: 'Enter the Grafana User:',
+      validate: (input) => (input ? true : 'Grafana User cannot be empty.'),
+      default: 'admin',
+    },
+    {
+      type: 'input',
+      name: 'GF_SECURITY_ADMIN_PASSWORD',
+      message: 'Enter the Grafana Password:',
+      validate: (input) =>
+        input ? true : 'Grafana Password cannot be empty.',
+      default: 'admin',
+    },
+  ]);
+
   const COLOR_PRIMARY = `'${bridgeUIForm.COLOR_PRIMARY}'`;
   const COLOR_SECONDARY = `'${bridgeUIForm.COLOR_SECONDARY}'`;
 
@@ -304,6 +328,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     ...L1Form,
     ...rollupForm,
     ...bridgeUIForm,
+    ...grafanaForm,
     COLOR_PRIMARY,
     COLOR_SECONDARY,
   };

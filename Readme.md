@@ -30,8 +30,6 @@ Unlike Conduit, **Opstack CLI Tool** provides developers and chain operators wit
 
 **Opstack CLI Tool** supports the latest OP Stack v1.9.0 and is prepared for the upcoming migration
 
-**Opstack CLI Tool** will continue develop and improvement out Tool
-
 
 ## Hardware requirements
 Hardware requirements for OP Mainnet nodes can vary depending on the type of node you plan to run. Archive nodes generally require significantly more resources than full nodes. Below are suggested minimum hardware requirements for each type of node.
@@ -73,6 +71,12 @@ $ npm install -g @upnode/opstack-cli
 $ ops version
 ```
 
+**Update version**
+
+```console
+$ npm update -g @upnode/opstack-cli
+```
+
 ## Quick Start
 To start the cli for the first time you need to run cmd
 ```console
@@ -81,7 +85,7 @@ $ ops run
 and then you need to config the environtment As follows
 | Value  | description |
 | ------------- | ------------- |
-| user_name       | User name of backend, indexer database   |
+| user_name       | User name of backend, indexer database , traefik dashboard  |
 | user_password   | Password of database    |
 | domain_name     | The domain name (must be hostname) (Example : localhost, example.test, test.app)  use for bridge, blockscout, rpc, indexer etc. |
 | protocol   | Select protocol for domain  => http, https  |
@@ -96,6 +100,33 @@ $ ops run
 
 => Deploy Opstack Rollup include (Deployment UI, Grafana, Blockscout, Bridge UI)
 ```
+
+After you deploy new rollup, you need to config the **subdomain (domain name service)** in [cloudflare](https://www.cloudflare.com/) connect with **domain_name** that you set when run firstly
+
+Example
+![alt text](img/cloudflare.png)
+
+**DNS Setup**
+Ensure that all the CNAME records listed above are properly configured in your DNS provider. Replace `${DOMAIN_NAME}` with your actual domain name.
+
+**Example DNS Entry**
+For example, if your domain name is `example.com`, the CNAME `dashboard.${DOMAIN_NAME}` should resolve to `dashboard.example.com`.
+
+| CNAME          |         Service description      | Type |
+|----------------|---------------------------|-- |
+|    **chain**       |        Core blockchain service (op-geth), responsible for handling the Layer 2 node operations.   | Node RPC |
+|    **blockscout-backend**       |       Backend service for Blockscout, handling API calls and blockchain data processing.    | Backend |
+|    **blockscout-stats**       |      Service for providing statistical data and insights related to the blockchain via Blockscout.     |Backend |
+|    **blockscout-visualizer**       |       Advanced visualization tool for detailed blockchain analytics and charts.    |Backend |
+|    **dashboard**       |    Traefik dashboard use username and password that you set when run the cli        |Backend |
+|    **deploy-api**       |     deployment backend Rest API      |Backend |
+| **opstack-bridge-indexer-server** | Backend service for indexing transactions and data for the Optimism stack bridge.|Backend |
+|    **deploy**       |       Frontend of deployment handle you rollup    |Frontend |
+|    **bridge**       |     Frontend service for the cross-chain or cross-layer bridge, enabling seamless asset transfers.      |Frontend |
+|    **blockscout**       |       Frontend interface for Blockscout, allowing users to explore blockchain transactions and data.    |Frontend |
+|    **grafana**       |       Grafana monitoring dashboard for visualizing system metrics and performance insights. use username and password   |Frontend |
+| **prometheus** |Prometheus monitoring service for collecting and storing time-series metrics. | Frontend |
+
 
 ### Parameter
 
@@ -152,6 +183,12 @@ This document outlines the configuration parameters for Layer 1 (L1) setup. Belo
 | **Enter the Secondary Color**       | Secondary color for the app's theme             | `#9EDDFF`                                 |
 | **Enter the WalletConnect Project ID** | Project ID for WalletConnect integration        | `00000`                                   |
 
+**Config your grafana user and password**
+| Config                              | Description                                      | 
+|-------------------------------------|--------------------------------------------------|
+| **Enter the Grafana User**          |         User name of grafana                  | 
+| **Enter the Grafana Password**         | Password of grafana user               | 
+
 
 ## Stop all services
 
@@ -205,9 +242,9 @@ $ ops run
 => Chain Info
 ```
 
-<a href="https://ibb.co/gw23fh1"><img src="https://i.ibb.co/q9SdcVG/Screenshot-2567-12-14-at-21-33-03.png" alt="Screenshot-2567-12-14-at-21-33-03" border="0"></a>
 
 - **Data Volume path** = rollup data
 - **deploy-config** = path of deploy-config.json (rollup config)
 - **genesis.json** = path of genesis.json (genesis config data)
-- **Data Volume path** = rollup data
+- **allocs.json** = path of allocs.json
+- **artifact.json** = path of artifact.json (Layer 1 Contract addresses)
