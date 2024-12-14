@@ -1,6 +1,6 @@
 {
   "name": "@upnode/opstack-cli",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "command line interface for management opstack rollup",
   "main": "dist/index.js",
   "scripts": {
@@ -35,5 +35,9 @@
     "dotenv": "^16.4.6",
     "fs-extra": "^11.2.0",
     "simple-git": "^3.27.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/upnodedev/opstack-cli.git"
   }
 }
