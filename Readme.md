@@ -104,7 +104,7 @@ $ ops run
 After you deploy new rollup, you need to config the **subdomain (domain name service)** in [cloudflare](https://www.cloudflare.com/) connect with **domain_name** that you set when run firstly
 
 Example
-![alt text](img/cloudflare.png)
+<a href="https://ibb.co/84QgW7v"><img src="https://i.ibb.co/tP1p7Jj/cloudflare.png" alt="cloudflare" border="0"></a>
 
 **DNS Setup**
 Ensure that all the CNAME records listed above are properly configured in your DNS provider. Replace `${DOMAIN_NAME}` with your actual domain name.
