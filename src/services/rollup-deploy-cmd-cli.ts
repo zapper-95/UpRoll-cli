@@ -130,9 +130,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       type: 'input',
       name: 'L1_BLOCK_EXPLORER_API',
       message: 'Enter the L1 Block Explorer API:',
-      validate: (input) =>
-        input ? true : 'L1 Block Explorer API cannot be empty.',
-      default: 'https://api.etherscan.io/api',
+      default: '',
     },
     {
       type: 'list',

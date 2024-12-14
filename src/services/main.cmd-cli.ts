@@ -34,51 +34,51 @@ export const mainCMDCLI = async () => {
       message: '🚀 Select the action',
       choices: [
         {
-          name: '1) Launch Deployment UI',
+          name: 'Launch Deployment UI',
           value: Action.deployUI,
         },
         {
-          name: '2) Deploy Opstack Rollup include (Deployment UI, Grafana, Blockscout, Bridge UI)',
+          name: 'Deploy Opstack Rollup include (Deployment UI, Grafana, Blockscout, Bridge UI)',
           value: Action.deploy,
         },
         {
-          name: '3) Start the deployment',
+          name: 'Start the deployment',
           value: Action.start,
         },
         {
-          name: '4) Stop the deployment',
+          name: 'Stop the deployment',
           value: Action.stop,
         },
+        // {
+        //   name: '5) Import existing OP Stack deployment',
+        //   value: Action.import,
+        // },
         {
-          name: '5) Import existing OP Stack deployment',
-          value: Action.import,
-        },
-        {
-          name: '6) Chain Info',
+          name: 'Chain Info',
           value: Action.chainInfo,
         },
         {
-          name: '7) Status of the deployment',
+          name: 'Status of the deployment',
           value: Action.status,
         },
         {
-          name: '8) View logs',
+          name: 'View logs',
           value: Action.logs,
         },
+        // {
+        //   name: '9) Backup Config',
+        //   value: Action.backupConfig,
+        // },
+        // {
+        //   name: '10) Backup Data Snapshot',
+        //   value: Action.backup,
+        // },
+        // {
+        //   name: '11) Delete Chain',
+        //   value: Action.delete,
+        // },
         {
-          name: '9) Backup Config',
-          value: Action.backupConfig,
-        },
-        {
-          name: '10) Backup Data Snapshot',
-          value: Action.backup,
-        },
-        {
-          name: '11) Delete Chain',
-          value: Action.delete,
-        },
-        {
-          name: '12) Exit',
+          name: 'Exit',
           value: Action.exit,
         },
       ],
@@ -100,9 +100,9 @@ export const mainCMDCLI = async () => {
     case Action.stop:
       await StopCMDCLI();
       break;
-    case Action.import:
-      console.log('Importing');
-      break;
+    // case Action.import:
+    //   console.log('Importing');
+    //   break;
     case Action.chainInfo:
       await InfoCMDCLI();
       break;
@@ -112,15 +112,15 @@ export const mainCMDCLI = async () => {
     case Action.logs:
       await LogsCmd();
       break;
-    case Action.backupConfig:
-      console.log('Backup Config');
-      break;
-    case Action.backup:
-      console.log('Backup');
-      break;
-    case Action.delete:
-      console.log('Delete');
-      break;
+    // case Action.backupConfig:
+    //   console.log('Backup Config');
+    //   break;
+    // case Action.backup:
+    //   console.log('Backup');
+    //   break;
+    // case Action.delete:
+    //   console.log('Delete');
+    //   break;
     case Action.exit:
       console.log('Exit');
       break;

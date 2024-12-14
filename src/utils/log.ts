@@ -38,7 +38,7 @@ export const startLog = () => {
   );
   console.log(
     colors.fg.green,
-    `Welcome to Upnode Deploy version : ${CONFIG.DEPLOYMENT_REPO_VERSION}`,
+    `Welcome to Upnode Deploy`,
     colors.reset
   );
   console.log(colors.fg.green, 'OP Stack Deployment Tool', colors.reset);

@@ -44,7 +44,7 @@ export const InfoCMDCLI = async () => {
     colors.reset
   );
   console.log(
-    'allocs.json path: ',
+    'artifact.json path: ',
     colors.fg.yellow,
     `${dockerComposePath}/data/deployments/artifact.json`,
     colors.reset
