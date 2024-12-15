@@ -28,7 +28,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Batcher Private Key:',
       validate: (input) =>
         input ? true : 'Batcher Private Key cannot be empty.',
-      default: '0x',
     },
     {
       type: 'input',
@@ -36,7 +35,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Proposer Private Key:',
       validate: (input) =>
         input ? true : 'Proposer Private Key cannot be empty.',
-      default: '0x',
     },
     {
       type: 'input',
@@ -44,7 +42,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Sequencer Private Key:',
       validate: (input) =>
         input ? true : 'Sequencer Private Key cannot be empty.',
-      default: '0x',
     },
     {
       type: 'input',
@@ -52,7 +49,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Deployer Private Key:',
       validate: (input) =>
         input ? true : 'Deployer Private Key cannot be empty.',
-      default: '0x',
     },
     {
       type: 'input',
@@ -60,7 +56,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Admin Private Key:',
       validate: (input) =>
         input ? true : 'Admin Private Key cannot be empty.',
-      default: '0x',
     },
   ]);
   console.log(colors.fg.yellow, 'Config your Layer 1', colors.reset);
@@ -70,22 +65,18 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       name: 'L1_RPC_URL',
       message: 'Enter the L1 RPC URL:',
       validate: (input) => (input ? true : 'L1 RPC URL cannot be empty.'),
-      default:
-        'https://quick-serene-pine.ethereum-holesky.quiknode.pro/a5c5ac0df0f0656d58699a732b567738f0ef6542',
     },
     {
       type: 'number',
       name: 'L1_CHAIN_ID',
       message: 'Enter the L1 Chain ID:',
       validate: (input) => (input ? true : 'L1 Chain ID cannot be empty.'),
-      default: 17000,
     },
     {
       type: 'input',
       name: 'L1_CHAIN_NAME',
       message: 'Enter the L1 Chain Name:',
       validate: (input) => (input ? true : 'L1 Chain Name cannot be empty.'),
-      default: 'Ethereum mainnet',
     },
     {
       type: 'input',
@@ -124,13 +115,11 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the L1 Block Explorer URL:',
       validate: (input) =>
         input ? true : 'L1 Block Explorer URL cannot be empty.',
-      default: 'https://holesky.beaconcha.in',
     },
     {
       type: 'input',
       name: 'L1_BLOCK_EXPLORER_API',
-      message: 'Enter the L1 Block Explorer API:',
-      default: '',
+      message: 'Enter the L1 Block Explorer API (can blank):',
     },
     {
       type: 'list',
@@ -147,7 +136,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
         'basic',
         'any',
       ],
-      default: 'quicknode',
+      default: 'any',
     },
     {
       type: 'input',
@@ -155,7 +144,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the L1 Multi Call3 Address:',
       validate: (input) =>
         input ? true : 'L1 Multi Call3 Address cannot be empty.',
-      default: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
     {
       type: 'number',
@@ -163,7 +151,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the L1 Multi Call3 Block Created:',
       validate: (input) =>
         input ? true : 'L1 Multi Call3 Block Created cannot be empty.',
-      default: 77,
     },
   ]);
 
@@ -175,19 +162,17 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Rollup Name (Chain name):',
       validate: (input) =>
         input ? true : 'Rollup Name (Chain name) cannot be empty.',
-      default: 'Optimism',
     },
     {
       type: 'number',
       name: 'L2_CHAIN_ID',
       message: 'Enter the Rollup Chain ID:',
       validate: (input) => (input ? true : 'Rollup Chain ID cannot be empty.'),
-      default: 43333,
     },
     {
       type: 'input',
       name: 'L2_LOGO_URL',
-      message: 'Enter the Rollup Logo URL:',
+      message: 'Enter the Rollup Logo URL (default is OP logo):',
       validate: (input) => (input ? true : 'Rollup Logo URL cannot be empty.'),
       default: 'https://cryptologos.cc/logos/optimism-ethereum-op-logo.png',
     },
@@ -221,7 +206,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Governance Token Name:',
       validate: (input) =>
         input ? true : 'Governance Token Name cannot be empty.',
-      default: 'Optimism',
     },
     {
       type: 'input',
@@ -229,7 +213,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Governance Token Symbol:',
       validate: (input) =>
         input ? true : 'Governance Token Symbol cannot be empty.',
-      default: 'OP',
     },
     {
       type: 'number',
@@ -267,7 +250,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     {
       type: 'input',
       name: 'APP_LOGO',
-      message: 'Enter the App Logo URL:',
+      message: 'Enter the App Logo URL (default is upnode logo):',
       validate: (input) => (input ? true : 'App Logo URL cannot be empty.'),
       default: 'https://i.ibb.co/r36YpbK/upnode.png',
     },
@@ -308,7 +291,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       name: 'GF_SECURITY_ADMIN_USER',
       message: 'Enter the Grafana User:',
       validate: (input) => (input ? true : 'Grafana User cannot be empty.'),
-      default: 'admin',
     },
     {
       type: 'input',
@@ -316,7 +298,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       message: 'Enter the Grafana Password:',
       validate: (input) =>
         input ? true : 'Grafana Password cannot be empty.',
-      default: 'admin',
     },
   ]);
 

@@ -92,9 +92,15 @@ and then you need to config the environtment As follows
 | domain_name | The domain name (must be hostname) (Example : localhost, example.test, test.app) use for bridge, blockscout, rpc, indexer etc. |
 | protocol | Select protocol for domain => http, https |
 
-When you complete initial config, the cli will clone [opstack-deployment](https://github.com/upnodedev/opstack-deployment) and run the docker compose of opstack-deployment for REST API in our cli tool and frontend also the proxy [traefik](https://traefik.io/traefik/) that use to proxy the requests to correct services.
+After completing the initial configuration, the CLI will clone the [opstack-deployment](https://github.com/upnodedev/opstack-deployment) repository and run the Docker Compose setup, which includes the REST API for our CLI tool, the frontend, and the Traefik proxy. Traefik is used to route requests to the appropriate services.
 
-<span style="color:red">If you run on local matchine use doamin name domain name = \*\*localhost , protocal = http and then add localhost to /etc/host</span>
+Note: If you are running this on a local machine, set the domain name to localhost and use the http protocol. Additionally, remember to add localhost to your /etc/hosts file.
+
+```console
+/etc/hosts add this line
+
+127.0.0.1       localhost
+```
 
 ## Deploy new chain with CLI
 
@@ -104,7 +110,7 @@ $ ops run
 => Deploy Opstack Rollup include (Deployment UI, Grafana, Blockscout, Bridge UI)
 ```
 
-After you deploy new rollup, you need to config the **subdomain (domain name service)** in [cloudflare](https://www.cloudflare.com/) connect with **domain_name** that you set when run firstly
+After deploying a new rollup, you need to configure the subdomain (domain name service) in Cloudflare so that it points to the `${DOMAIN_NAME}` you specified during the initial setup.
 
 Example<br />
 <a href="https://ibb.co/84QgW7v"><img src="https://i.ibb.co/tP1p7Jj/cloudflare.png" alt="cloudflare" border="0"></a>
@@ -115,20 +121,20 @@ Ensure that all the CNAME records listed above are properly configured in your D
 **Example DNS Entry**
 For example, if your domain name is `example.com`, the CNAME `dashboard.${DOMAIN_NAME}` should resolve to `dashboard.example.com`.
 
-| CNAME                             | Service description                                                                                             | Type     |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- |
-| **chain**                         | Core blockchain service (op-geth), responsible for handling the Layer 2 node operations.                        | Node RPC |
-| **blockscout-backend**            | Backend service for Blockscout, handling API calls and blockchain data processing.                              | Backend  |
-| **blockscout-stats**              | Service for providing statistical data and insights related to the blockchain via Blockscout.                   | Backend  |
-| **blockscout-visualizer**         | Advanced visualization tool for detailed blockchain analytics and charts.                                       | Backend  |
-| **dashboard**                     | Traefik dashboard use username and password that you set when run the cli                                       | Backend  |
-| **deploy-api**                    | deployment backend Rest API                                                                                     | Backend  |
-| **opstack-bridge-indexer-server** | Backend service for indexing transactions and data for the Optimism stack bridge.                               | Backend  |
-| **deploy**                        | Frontend of deployment handle you rollup                                                                        | Frontend |
-| **bridge**                        | Frontend service for the cross-chain or cross-layer bridge, enabling seamless asset transfers.                  | Frontend |
-| **blockscout**                    | Frontend interface for Blockscout, allowing users to explore blockchain transactions and data.                  | Frontend |
-| **grafana**                       | Grafana monitoring dashboard for visualizing system metrics and performance insights. use username and password | Frontend |
-| **prometheus**                    | Prometheus monitoring service for collecting and storing time-series metrics.                                   | Frontend |
+| CNAME                             | Service description                                                                                             | Type     | Upnode Testnet |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | --- |
+| **chain**                         | Core blockchain service (op-geth), responsible for handling the Layer 2 node operations.                        | Node RPC | https://chain.upnode-test.com |
+| **blockscout-backend**            | Backend service for Blockscout, handling API calls and blockchain data processing.                              | Backend  |https://blockscout-backend.upnode-test.com |
+| **blockscout-stats**              | Service for providing statistical data and insights related to the blockchain via Blockscout.                   | Backend  |https://blockscout-stats.upnode-test.com |
+| **blockscout-visualizer**         | Advanced visualization tool for detailed blockchain analytics and charts.                                       | Backend  |https://blockscout-visualizer.upnode-test.com |
+| **dashboard**                     | Traefik dashboard use username and password that you set when run the cli                                       | Backend  |https://dashboard.upnode-test.com |
+| **deploy-api**                    | deployment backend Rest API                                                                                     | Backend  |https://deploy-api.upnode-test.com |
+| **opstack-bridge-indexer-server** | Backend service for indexing transactions and data for the Optimism stack bridge.                               | Backend  |https://opstack-bridge-indexer-server.upnode-test.com |
+| **deploy**                        | Frontend of deployment handle you rollup                                                                        | Frontend |https://deploy.upnode-test.com |
+| **bridge**                        | Frontend service for the cross-chain or cross-layer bridge, enabling seamless asset transfers.                  | Frontend |https://bridge.upnode-test.com |
+| **blockscout**                    | Frontend interface for Blockscout, allowing users to explore blockchain transactions and data.                  | Frontend |https://blockscout.upnode-test.com |
+| **grafana**                       | Grafana monitoring dashboard for visualizing system metrics and performance insights. use username and password | Frontend |https://grafana.upnode-test.com |
+| **prometheus**                    | Prometheus monitoring service for collecting and storing time-series metrics.                                   | Frontend |https://prometheus.upnode-test.com |
 
 ### Parameter
 
@@ -192,8 +198,7 @@ This document outlines the configuration parameters for Layer 1 (L1) setup. Belo
 
 ## Stop all services
 
-<span style="color:red">** This command will stop all services **</span>
-<span style="color:blue">We will develop selecting stop each service in future</span>
+This command will stop all services. We plan to add the ability to stop individual services in the future.
 
 ```console
 $ ops run
@@ -203,8 +208,7 @@ $ ops run
 
 ## Start all services
 
-<span style="color:red">** This command will start all services **</span>
-<span style="color:blue">We will develop selecting start each service in future</span>
+This command will start all services. We plan to add the ability to start individual services in the future.
 
 ```console
 $ ops run
@@ -214,7 +218,7 @@ $ ops run
 
 ## Status of the deployment
 
-This command will display the status of the deployment for all services and check status of docker container for every services.
+This command displays the deployment status of all services and checks the Docker container status for each service.
 
 ```console
 $ ops run
@@ -224,7 +228,7 @@ $ ops run
 
 ## View logs
 
-Display logs and status each service
+This command displays the logs and status of each service.
 
 <a href="https://ibb.co/svsrvvt"><img src="https://i.ibb.co/zhPwhhN/Screenshot-2567-12-14-at-21-27-51.png" alt="Screenshot-2567-12-14-at-21-27-51" border="0"></a>
 
@@ -235,6 +239,8 @@ $ ops run
 ```
 
 ## Chain Info
+
+This command displays the config of deployment rollup.
 
 ```console
 $ ops run

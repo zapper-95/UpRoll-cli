@@ -1,6 +1,6 @@
 {
   "name": "@upnode/opstack-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "command line interface for management opstack rollup",
   "main": "dist/index.js",
   "scripts": {
