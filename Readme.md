@@ -29,8 +29,8 @@ Unlike Conduit, **Opstack CLI Tool** provides developers and chain operators wit
 **Opstack CLI Tool** supports the latest OP Stack v1.9.0 and is prepared for the upcoming migration
 
 
-## How to use a fiw commands
-https://www.youtube.com/watch?v=JKe9q2z09XA
+## How to use
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/JKe9q2z09XA/0.jpg)](https://www.youtube.com/watch?v=JKe9q2z09XA)
 
 ## Hardware requirements
 
