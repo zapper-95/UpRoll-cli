@@ -5,7 +5,7 @@
     </picture>
     <h1 align="center">Opstack CLI Tool</h1>
     <h4 align="center">By Upnode Deploy</h4>
-  </a>
+</p>
 
 <p align="center">
   <a aria-label="Typescript" href="https://www.npmjs.com/package/turbo">
@@ -121,20 +121,20 @@ Ensure that all the CNAME records listed above are properly configured in your D
 **Example DNS Entry**
 For example, if your domain name is `example.com`, the CNAME `dashboard.${DOMAIN_NAME}` should resolve to `dashboard.example.com`.
 
-| CNAME                             | Service description                                                                                             | Type     | Upnode Testnet |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | --- |
-| **chain**                         | Core blockchain service (op-geth), responsible for handling the Layer 2 node operations.                        | Node RPC | https://chain.upnode-test.com |
-| **blockscout-backend**            | Backend service for Blockscout, handling API calls and blockchain data processing.                              | Backend  |https://blockscout-backend.upnode-test.com |
-| **blockscout-stats**              | Service for providing statistical data and insights related to the blockchain via Blockscout.                   | Backend  |https://blockscout-stats.upnode-test.com |
-| **blockscout-visualizer**         | Advanced visualization tool for detailed blockchain analytics and charts.                                       | Backend  |https://blockscout-visualizer.upnode-test.com |
-| **dashboard**                     | Traefik dashboard use username and password that you set when run the cli                                       | Backend  |https://dashboard.upnode-test.com |
-| **deploy-api**                    | deployment backend Rest API                                                                                     | Backend  |https://deploy-api.upnode-test.com |
-| **opstack-bridge-indexer-server** | Backend service for indexing transactions and data for the Optimism stack bridge.                               | Backend  |https://opstack-bridge-indexer-server.upnode-test.com |
-| **deploy**                        | Frontend of deployment handle you rollup                                                                        | Frontend |https://deploy.upnode-test.com |
-| **bridge**                        | Frontend service for the cross-chain or cross-layer bridge, enabling seamless asset transfers.                  | Frontend |https://bridge.upnode-test.com |
-| **blockscout**                    | Frontend interface for Blockscout, allowing users to explore blockchain transactions and data.                  | Frontend |https://blockscout.upnode-test.com |
-| **grafana**                       | Grafana monitoring dashboard for visualizing system metrics and performance insights. use username and password | Frontend |https://grafana.upnode-test.com |
-| **prometheus**                    | Prometheus monitoring service for collecting and storing time-series metrics.                                   | Frontend |https://prometheus.upnode-test.com |
+| CNAME                             | Service description                                                                                             | Type     | Upnode Testnet                                        |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------- |
+| **chain**                         | Core blockchain service (op-geth), responsible for handling the Layer 2 node operations.                        | Node RPC | https://chain.upnode-test.com                         |
+| **blockscout-backend**            | Backend service for Blockscout, handling API calls and blockchain data processing.                              | Backend  | https://blockscout-backend.upnode-test.com            |
+| **blockscout-stats**              | Service for providing statistical data and insights related to the blockchain via Blockscout.                   | Backend  | https://blockscout-stats.upnode-test.com              |
+| **blockscout-visualizer**         | Advanced visualization tool for detailed blockchain analytics and charts.                                       | Backend  | https://blockscout-visualizer.upnode-test.com         |
+| **dashboard**                     | Traefik dashboard use username and password that you set when run the cli                                       | Backend  | https://dashboard.upnode-test.com                     |
+| **deploy-api**                    | deployment backend Rest API                                                                                     | Backend  | https://deploy-api.upnode-test.com                    |
+| **opstack-bridge-indexer-server** | Backend service for indexing transactions and data for the Optimism stack bridge.                               | Backend  | https://opstack-bridge-indexer-server.upnode-test.com |
+| **deploy**                        | Frontend of deployment handle you rollup                                                                        | Frontend | https://deploy.upnode-test.com                        |
+| **bridge**                        | Frontend service for the cross-chain or cross-layer bridge, enabling seamless asset transfers.                  | Frontend | https://bridge.upnode-test.com                        |
+| **blockscout**                    | Frontend interface for Blockscout, allowing users to explore blockchain transactions and data.                  | Frontend | https://blockscout.upnode-test.com                    |
+| **grafana**                       | Grafana monitoring dashboard for visualizing system metrics and performance insights. use username and password | Frontend | https://grafana.upnode-test.com                       |
+| **prometheus**                    | Prometheus monitoring service for collecting and storing time-series metrics.                                   | Frontend | https://prometheus.upnode-test.com                    |
 
 ### Parameter
 
