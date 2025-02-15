@@ -1,5 +1,5 @@
 {
-  "name": "@upnode/opstack-cli",
+  "name": "@upnode/UpRoll-cli",
   "version": "1.1.3",
   "description": "command line interface for management opstack rollup",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
     "dev": "nodemon -I --exec ts-node src/test2.ts"
   },
   "bin": {
-    "ops": "./dist/index.js"
+    "uproll": "./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -28,13 +28,14 @@
     "axios": "^1.7.8",
     "blessed": "^0.1.81",
     "child_process": "^1.0.2",
-    "inquirer": "^12.1.0",
-    "nodemon": "^3.1.7",
-    "ws": "^8.18.0",
     "commander": "^12.1.0",
     "dotenv": "^16.4.6",
     "fs-extra": "^11.2.0",
-    "simple-git": "^3.27.0"
+    "inquirer": "^12.1.0",
+    "nodemon": "^3.1.7",
+    "simple-git": "^3.27.0",
+    "ws": "^8.18.0",
+    "yaml": "^2.7.0"
   },
   "repository": {
     "type": "git",
