@@ -49,6 +49,43 @@ export const getDockerComposePath = async () => {
   return dockerComposePath;
 };
 
+
+export const getKurtosis = async () => {
+  let kurtosis = '';
+  let isKurtosisInstalled = false;
+  const kurtosis1Version = await runCommand('kurtosis');
+  const kurtosis2Version = await runCommand('kurtosis');
+
+  if (kurtosis1Version) {
+    kurtosis = 'kurtosis';
+  } else if (kurtosis2Version) {
+    kurtosis = 'kurtosis';
+  }
+
+  if (kurtosis1Version || kurtosis2Version) {
+    isKurtosisInstalled = true;
+  }
+
+  return { kurtosis, isKurtosisInstalled };
+};
+
+
+export const getKurtosisPath = async () => {
+  const CURRENT_PATH = await runCommand('pwd');
+  if (!CURRENT_PATH) {
+    console.log('Error getting current path');
+    throw new Error('Error getting current path');
+  }
+
+  const getKurtosisPackagePath = path.join(
+    CURRENT_PATH.trim(),
+    PATH_NAME.DEPLOYMENT_REPO
+  );
+
+  return getKurtosisPackagePath;
+};
+
+
 /**
  * Get environment value
  * @param {string} envPath
