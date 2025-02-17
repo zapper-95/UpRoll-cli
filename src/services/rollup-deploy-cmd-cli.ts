@@ -5,6 +5,7 @@ import { colors } from '../utils/colors';
 import { loadingBarAnimationInfinite, rollupConfigLog } from '../utils/log';
 
 import { getAuthToken } from '../shared/api';
+import { configToYAML } from '../utils/configtoYAML';
 let AUTHEN_TOKEN = '';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
@@ -14,10 +15,10 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   }
   console.clear();
 
-  AUTHEN_TOKEN = await getAuthToken();
-  if (!AUTHEN_TOKEN) {
-    return;
-  }
+  // AUTHEN_TOKEN = await getAuthToken();
+  // if (!AUTHEN_TOKEN) {
+  //   return;
+  // }
 
   rollupConfigLog();
   console.log(colors.fg.yellow, 'Config your Wallet', colors.reset);
@@ -332,7 +333,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       postData[key] = postData[key].trim();
     }
   }
-
+  configToYAML(postData);
   console.log(postData);
 
   const loadingRollup = loadingBarAnimationInfinite(
