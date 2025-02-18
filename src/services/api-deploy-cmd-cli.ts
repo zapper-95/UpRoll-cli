@@ -25,10 +25,8 @@ let check = false;
  */
 export const apiDeployCmdCli = async () => {
   const kurtosisPath = await getKurtosisPath();
-  const envPath = `${kurtosisPath}/.env`;
   const optimsimPackageExists = await fs.pathExists(kurtosisPath);
 
-  //const dockerTest = await getDockerCompose();
   const kurtosisTest = await getKurtosis();
   kurtosis = kurtosisTest.kurtosis;
   if (!kurtosisTest.isKurtosisInstalled) {
@@ -46,10 +44,16 @@ export const apiDeployCmdCli = async () => {
       '🚀 Cloning optimism-package repository'
     );
     const git = simpleGit();
-    await git.clone(CONFIG.DEPLOYMENT_REPO, PATH_NAME.DEPLOYMENT_REPO, [
-      '--branch',
-      CONFIG.DEPLOYMENT_REPO_VERSION,
-    ]);
+
+    // Clone the repo to your desired directory
+    await git.clone(CONFIG.DEPLOYMENT_REPO, PATH_NAME.DEPLOYMENT_REPO);
+    
+    // Now, create a new git instance that points to the cloned repo
+    const repoGit = simpleGit(PATH_NAME.DEPLOYMENT_REPO);
+    
+    // Checkout the specific commit
+    await repoGit.checkout(CONFIG.DEPLOYMENT_REPO_HASH);
+    
     clearInterval(loading);
   }
   console.log('Project setup complete!');
