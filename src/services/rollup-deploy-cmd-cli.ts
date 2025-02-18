@@ -1,12 +1,12 @@
 import inquirer from 'inquirer';
 import axios from 'axios';
-import { CONFIG } from '../utils/config';
+import { CONFIG, PATH_NAME } from '../utils/config';
 import { colors } from '../utils/colors';
 import { loadingBarAnimationInfinite, rollupConfigLog } from '../utils/log';
-
-import { getAuthToken } from '../shared/api';
+import { runCommand, runLongCommand } from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
-let AUTHEN_TOKEN = '';
+import {exec, spawn} from 'child_process';
+
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -15,12 +15,48 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   }
   console.clear();
 
-  // AUTHEN_TOKEN = await getAuthToken();
-  // if (!AUTHEN_TOKEN) {
-  //   return;
-  // }
-
   rollupConfigLog();
+  configToYAML({});
+  await runLongCommand(
+    'kurtosis',
+    [
+      'run',
+      '.',
+      '--args-file',
+      './network_params.yaml']
+  );
+
+
+//   // start the `ping google.com` command
+//    const command = spawn('kurtosis', [
+//     'run',
+//     ".",
+//     '--args-file',
+//     './network_params.yaml'
+//   ], {
+//     cwd: './optimism-package',
+//     shell: true
+//   });
+//   // the `data` event is fired every time data is
+//   // output from the command
+//   command.stdout.on('data', output => {
+//       // the output data is captured and printed in the callback
+//       console.log(output.toString())
+// })
+
+// command.stderr.on('data', data => {
+//   console.error("Error Output: ", data.toString());
+// });
+
+  const configName = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'configName',
+      message: 'Enter the Config Name:',
+      validate: (input) => (input ? true : 'Config Name cannot be empty.'),
+    },
+  ]);
+
   console.log(colors.fg.yellow, 'Config your Wallet', colors.reset);
   const privateKeyForm = await inquirer.prompt([
     {
@@ -302,10 +338,14 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     },
   ]);
 
+
+
+
   const COLOR_PRIMARY = `'${bridgeUIForm.COLOR_PRIMARY}'`;
   const COLOR_SECONDARY = `'${bridgeUIForm.COLOR_SECONDARY}'`;
 
   const postData: { [key: string]: any } = {
+    ... configName,
     ...privateKeyForm,
     ...L1Form,
     ...rollupForm,
@@ -334,34 +374,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     }
   }
   configToYAML(postData);
-  console.log(postData);
 
-  const loadingRollup = loadingBarAnimationInfinite(
-    'Rollup deployment request by API'
-  );
-  try {
-    const res = await axios.post(
-      `${CONFIG.DEPLOYMENT_URL}/api/deploy/rollup`,
-      postData,
-      {
-        headers: {
-          Authorization: `${AUTHEN_TOKEN}`,
-        },
-      }
-    );
-    if (res.status === 200) {
-      console.log('🔨 Rollup deployment is building');
-      console.log(
-        `👩🏻‍💻 Rollup is building if you want to moniter logs use ( opstack-cli logs building )`
-      );
-    } else {
-      console.log(`❌ Rollup deployment is failed :${res.data.message}`);
-    }
-    clearInterval(loadingRollup);
-    return;
-  } catch (error : any) {
-    console.log('❌ Rollup deployment is failed');
-    console.log('Error: ', error.message || error); 
-    clearInterval(loadingRollup);
-  }
+  console.log(postData);
 }
