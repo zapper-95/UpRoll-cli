@@ -16,6 +16,9 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   console.clear();
 
   rollupConfigLog();
+
+
+
   configToYAML({});
   await runLongCommand(
     'kurtosis',
@@ -23,31 +26,9 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       'run',
       '.',
       '--args-file',
-      './network_params.yaml']
+      '../data-out.yaml']
   );
-
-
-//   // start the `ping google.com` command
-//    const command = spawn('kurtosis', [
-//     'run',
-//     ".",
-//     '--args-file',
-//     './network_params.yaml'
-//   ], {
-//     cwd: './optimism-package',
-//     shell: true
-//   });
-//   // the `data` event is fired every time data is
-//   // output from the command
-//   command.stdout.on('data', output => {
-//       // the output data is captured and printed in the callback
-//       console.log(output.toString())
-// })
-
-// command.stderr.on('data', data => {
-//   console.error("Error Output: ", data.toString());
-// });
-
+  
   const configName = await inquirer.prompt([
     {
       type: 'input',
@@ -374,6 +355,14 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
     }
   }
   configToYAML(postData);
+  await runLongCommand(
+    'kurtosis',
+    [
+      'run',
+      '.',
+      '--args-file',
+      './network_params.yaml']
+  );
 
   console.log(postData);
 }
