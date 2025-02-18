@@ -34,7 +34,6 @@ export async function runCommand(command: string) {
   }
 }
 
-
 export async function runLongCommand(commandName: string, args:string[]): Promise<string> {
 
     const command = spawn(
@@ -63,36 +62,6 @@ export async function runLongCommand(commandName: string, args:string[]): Promis
       });
     });
 
-}
-
-
-
-export async function runCommandLive(command: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // Using shell mode allows us to pass the whole command string.
-    const child = spawn(command, { shell: true });
-    let output = '';
-
-    child.stdout.on('data', (data) => {
-      const text = data.toString();
-      process.stdout.write(text); // Live output to console
-      output += text;
-    });
-
-    child.stderr.on('data', (data) => {
-      const text = data.toString();
-      process.stderr.write(text); // Live error output
-      output += text;
-    });
-
-    child.on('error', (error) => {
-      reject(error);
-    });
-
-    child.on('close', () => {
-      resolve(output);
-    });
-  });
 }
 
 export const consoleLogTable = (data: any[]) => {
