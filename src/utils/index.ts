@@ -1,5 +1,6 @@
 import { promisify } from 'util';
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
+import { PATH_NAME } from './config';
 
 const execPromise = promisify(exec);
 
@@ -31,6 +32,67 @@ export async function runCommand(command: string) {
   } catch (error) {
     // console.error('Command failed:', error);
   }
+}
+
+
+export async function runLongCommand(commandName: string, args:string[]): Promise<string> {
+
+    const command = spawn(
+      commandName, 
+      args, 
+      {
+      cwd: "./" + PATH_NAME.DEPLOYMENT_REPO,
+      shell: true,
+    });
+
+    command.stdout.on('data', output => {
+      console.log(output.toString());
+    })
+
+    command.stderr.on('data', output => {
+      console.log(output.toString());
+    })
+
+    return new Promise((resolve, reject) => {
+      command.on('close', () => {
+        resolve('Command executed successfully');
+      });
+
+      command.on('error', (error) => {
+        reject(error);
+      });
+    });
+
+}
+
+
+
+export async function runCommandLive(command: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // Using shell mode allows us to pass the whole command string.
+    const child = spawn(command, { shell: true });
+    let output = '';
+
+    child.stdout.on('data', (data) => {
+      const text = data.toString();
+      process.stdout.write(text); // Live output to console
+      output += text;
+    });
+
+    child.stderr.on('data', (data) => {
+      const text = data.toString();
+      process.stderr.write(text); // Live error output
+      output += text;
+    });
+
+    child.on('error', (error) => {
+      reject(error);
+    });
+
+    child.on('close', () => {
+      resolve(output);
+    });
+  });
 }
 
 export const consoleLogTable = (data: any[]) => {
