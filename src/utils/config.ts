@@ -1,6 +1,7 @@
 export const CONFIG = {
   DEPLOYMENT_REPO: 'https://github.com/ethpandaops/optimism-package.git',
   DEPLOYMENT_REPO_VERSION: '1.2.0',
+  DEPLOYMENT_REPO_HASH : 'c32a626c575983331c1d4fc52c507588e385ed56',
   DEPLOYMENT_URL: 'http://localhost:3050',
   DEPLOYMENT_WS_URL: 'ws://localhost:3050',
 };
