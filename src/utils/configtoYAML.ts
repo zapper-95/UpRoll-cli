@@ -15,8 +15,7 @@ export function configToYAML(postData: {[key: string]: any}) {
 
         const newConfigPath = path.join(__dirname, '../config/data-out.yaml');
         fs.writeFileSync(newConfigPath, newYaml, 'utf8');
-
-        console.log("YAML file created successfully");
+        console.log("Config file created successfully");
       } catch (e) {
         console.log(e);
       }
