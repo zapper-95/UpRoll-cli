@@ -6,7 +6,7 @@ import { loadingBarAnimationInfinite, rollupConfigLog } from '../utils/log';
 import { runCommand, runLongCommand } from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import {exec, spawn} from 'child_process';
-
+import path from 'path';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -26,7 +26,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       'run',
       '.',
       '--args-file',
-      '../data-out.yaml']
+      path.join(__dirname, '../config/data-out.yaml')]
   );
   
   const configName = await inquirer.prompt([
