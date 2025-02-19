@@ -13,7 +13,7 @@ export function configToYAML(postData: {[key: string]: any}) {
 
         const newYaml = yaml.safeDump(config);
 
-        const newConfigPath = path.join(__dirname, '../config/data-out.yaml');
+        const newConfigPath = path.join(__dirname, '../config/' + postData.configName + '.yaml');
         fs.writeFileSync(newConfigPath, newYaml, 'utf8');
         console.log("Config file created successfully");
       } catch (e) {
