@@ -56,7 +56,7 @@ ethereum_package:
   network_params:
     preset: minimal
     genesis_delay: 5
-    additional_preloaded_contracts: '
+    additional_preloaded_contracts: |
       {
         "0x4e59b44847b379578588920cA78FbF26c0B4956C": {
           "balance": "0ETH",
@@ -65,4 +65,3 @@ ethereum_package:
           "nonce": "1"
         }
       }
-    '
