@@ -137,6 +137,55 @@ export const rollupConfigLog = () => {
   );
 };
 
+export const kurtosisRunTestnetLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Deploying rollup using config', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+export const deployCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Rollup deployment complete!', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const deployFailedLog = (errMsg:string) =>{
+  console.clear()
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Rollup deployment failed');
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
 export const checkpayloadLog = (payload: PayloadInterface) => {
   console.log(
     colors.fg.blue,
