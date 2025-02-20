@@ -1,5 +1,7 @@
 import { promisify } from 'util';
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
+import { PATH_NAME } from './config';
+import { rejects } from 'assert';
 
 const execPromise = promisify(exec);
 
@@ -31,6 +33,43 @@ export async function runCommand(command: string) {
   } catch (error) {
     // console.error('Command failed:', error);
   }
+}
+
+export function runKurtosisCommand(commandName: string, args:string[]){
+
+    const command = spawn(
+      commandName, 
+      args, 
+      {
+      cwd: "./" + PATH_NAME.DEPLOYMENT_REPO,
+      shell: true,
+    });
+
+    command.stdout.on('data', output => {
+      console.log(output.toString());
+    })
+
+    command.stderr.on('data', output => {
+      console.log(output.toString());
+    })
+
+    return new Promise((resolve, reject) => {
+      command.on('error', (err) => {
+        console.error('Failed to start command:', err);
+        reject(err);
+      });
+  
+      command.on('close', (code) => {
+        
+        if (code === 0){
+          resolve('Command executed successfully');
+        }
+        else{
+          reject(new Error('Command failed while running'));
+        }
+      })
+    });
+
 }
 
 export const consoleLogTable = (data: any[]) => {

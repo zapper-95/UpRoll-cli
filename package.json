@@ -4,7 +4,7 @@
   "description": "command line interface for management opstack rollup",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r config dist/",
     "start": "ts-node src/index.ts",
     "blessdev": "nodemon -I --exec ts-node src/test.ts",
     "dev": "nodemon -I --exec ts-node src/test2.ts"
@@ -34,11 +34,12 @@
     "inquirer": "^12.1.0",
     "nodemon": "^3.1.7",
     "simple-git": "^3.27.0",
+    "write-yaml": "^1.0.0",
     "ws": "^8.18.0",
     "yaml": "^2.7.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/upnodedev/opstack-cli.git"
+    "url": "https://github.com/zapper-95/UpRoll-cli"
   }
 }
