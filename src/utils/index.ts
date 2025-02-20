@@ -1,6 +1,7 @@
 import { promisify } from 'util';
 import { exec, spawn } from 'child_process';
 import { PATH_NAME } from './config';
+import { rejects } from 'assert';
 
 const execPromise = promisify(exec);
 
@@ -34,7 +35,7 @@ export async function runCommand(command: string) {
   }
 }
 
-export async function runLongCommand(commandName: string, args:string[]): Promise<string> {
+export function runKurtosisCommand(commandName: string, args:string[]){
 
     const command = spawn(
       commandName, 
@@ -53,13 +54,20 @@ export async function runLongCommand(commandName: string, args:string[]): Promis
     })
 
     return new Promise((resolve, reject) => {
-      command.on('close', () => {
-        resolve('Command executed successfully');
+      command.on('error', (err) => {
+        console.error('Failed to start command:', err);
+        reject(err);
       });
-
-      command.on('error', (error) => {
-        reject(error);
-      });
+  
+      command.on('close', (code) => {
+        
+        if (code === 0){
+          resolve('Command executed successfully');
+        }
+        else{
+          reject(new Error('Command failed while running'));
+        }
+      })
     });
 
 }
