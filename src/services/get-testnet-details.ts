@@ -97,9 +97,6 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
       ]);
 
       console.log(colors.fg.yellow, 'Config Privileged Accounts', colors.reset);
-
-
-      
       const privilegedAccounts = await inquirer.prompt([
         // Batcher prompts
         {
@@ -199,7 +196,6 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
         'Config your grafana user and password',
         colors.reset
       );
-    
       const grafanaForm = await inquirer.prompt([
 
         {
