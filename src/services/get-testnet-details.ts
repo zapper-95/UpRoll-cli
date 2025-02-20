@@ -1,6 +1,6 @@
 import { colors } from '../utils/colors';
 import inquirer from "inquirer";
-export async function  GetTestnetDetails(): Promise<{[key: string]: any}|undefined>{
+export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
     const configForm = await inquirer.prompt([
         {
           type: 'input',
@@ -241,7 +241,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}|undefin
       
       if (!confirmPostdata) {
         console.log(colors.fg.red, 'Please run the command again', colors.reset);
-        return;
+        throw new Error('User did not confirm the data');
       }
     
       // trim if there is string all in the object postData
