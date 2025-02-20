@@ -4,7 +4,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
     const configForm = await inquirer.prompt([
         {
           type: 'input',
-          name: 'configName',
+          name: 'CONFIG_NAME',
           message: 'Enter the Config Name:',
           validate: (input) => (input ? true : 'Config Name cannot be empty.'),
         },
@@ -16,7 +16,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
 
         {
           type: 'input',
-          name: 'NETWORK_ID',
+          name: 'L1_NETWORK_ID',
           message: 'Enter the L1 Network ID:',
           validate: (input) => (input ? true : 'Network ID cannot be empty.'),
           default: '315908',
@@ -26,6 +26,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
           name: 'L1_RPC_KIND',
           message: 'Select RPC Kind for L1',
           choices: [
+            'standard',
             'alchemy',
             'quicknode',
             'infura',
@@ -58,12 +59,6 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
           message: 'Enter the L1 Consensus Layer RPC URL:',
           validate: (input) => (input ? true : 'L1 Consensus Layer RPC URL cannot be empty.'),
           default: 'http://cl-1-lighthouse-geth:4000',
-        },
-        {
-          type: 'input',
-          name: 'L1_CHAIN_NAME',
-          message: 'Enter the L1 Chain Name:',
-          validate: (input) => (input ? true : 'L1 Chain Name cannot be empty.'),
         },
         {
           type: 'input',
@@ -215,7 +210,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
         },
         {
           type: 'input',
-          name: 'DASHBOARD_SOURCE',
+          name: 'GRAFANA_DASHBOARD_SOURCE',
           message: 'Enter your dashboard source:',
           validate: (input) => (input ? true : 'Grafana dashboard source cannot be empty.'),
           when: (answers) => answers.USE_GRAFANA,
