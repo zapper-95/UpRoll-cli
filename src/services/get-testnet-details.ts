@@ -104,7 +104,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
           name: 'BATCHER_KIND',
           message: 'Select the Batcher Kind',
           choices: ['signer', 'private_key'],
-          default: 'signer',
+          default: 'private_key',
         },
         {
           type: 'input',
@@ -133,7 +133,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
           name: 'CHALLENGER_KIND',
           message: 'Select the Challenger Kind',
           choices: ['signer', 'private_key'],
-          default: 'signer',
+          default: 'private_key',
         },
         {
           type: 'input',
@@ -166,7 +166,7 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
           name: 'PROPOSER_KIND',
           message: 'Select the Proposer Kind',
           choices: ['signer', 'private_key'],
-          default: 'signer',
+          default: 'private_key',
         },
         {
           type: 'input',
