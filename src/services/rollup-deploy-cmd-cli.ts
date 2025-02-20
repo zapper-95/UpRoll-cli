@@ -1,13 +1,8 @@
 import inquirer from 'inquirer';
-import axios from 'axios';
-import { CONFIG, PATH_NAME } from '../utils/config';
-import { colors } from '../utils/colors';
-import { loadingBarAnimationInfinite, rollupConfigLog } from '../utils/log';
-import { runCommand, runLongCommand } from '../utils';
+import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog} from '../utils/log';
+import { runKurtosisCommand } from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
-import {exec, spawn} from 'child_process';
 import path from 'path';
-import { assert, error } from 'console';
 import { GetTestnetDetails } from "./get-testnet-details"
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
@@ -21,7 +16,6 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
 
   // Are you planning on making a devnet or testnet?
   const networkType = await inquirer.prompt(
-
     [
       {
         type: 'list',
@@ -35,36 +29,55 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   )
 
   if (networkType.networkType === "devnet"){
-
-    // Run Kurtosis without any user input, using the default config
-    await runLongCommand(
+    console.log("Runnning with default devnet config");
+  
+    // Run Kurtosis using the default devnet config
+    let command = runKurtosisCommand(
       'kurtosis',
       [
         'run',
         '.',
         '--args-file',
-        path.join(__dirname, '../config/config_template.yaml')]
-    );  
+        path.join(__dirname, '../config/devnet_config.yaml')]
+    )
+    command.then(
+      deployCompleteLog,
+      (err) => deployFailedLog(String(err))
+    );
   }
   else{ // Testnet
-
-    // Get the testnet details from the user, make a config file and then run Kurtosis with that config
-    const postData = await GetTestnetDetails();
-
-    if (postData === undefined){
+    // Get the testnet details from the user
+    let postData: {[key: string]: any};
+    try{
+      postData = await GetTestnetDetails();
+    } catch (e) {
+      deployFailedLog(String(e));
       return;
     }
 
-    configToYAML(postData);
-    await runLongCommand(
+    // Convert the testnet details to a YAML file
+    try{
+      configToYAML(postData);
+    } catch (e) {
+      deployFailedLog(String(e));
+      return;
+    }
+
+    kurtosisRunTestnetLog();
+
+    // Run Kurtosis using the testnet config
+    let command =  runKurtosisCommand(
       'kurtosis',
       [
         'run',
         '.',
         '--args-file',
-        path.join(__dirname, '../config/' + postData.configName + '.yaml')]
+        path.join(__dirname, '../config/' + postData.CONFIG_NAME + '.yaml')]
     );
-
+    command
+    .then(
+      deployCompleteLog,
+      (err) => deployFailedLog(String(err))
+    )
   }
-
 }
