@@ -4,7 +4,8 @@
   "description": "command line interface for management opstack rollup",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && cp -r config dist/",
+    "build": "tsc && cp -r templates dist/",
+    "postbuild": "chmod +x dist/index.js",
     "start": "ts-node src/index.ts",
     "blessdev": "nodemon -I --exec ts-node src/test.ts",
     "dev": "nodemon -I --exec ts-node src/test2.ts"
