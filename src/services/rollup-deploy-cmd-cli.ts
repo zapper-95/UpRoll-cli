@@ -1,51 +1,58 @@
 import inquirer from 'inquirer';
 import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog} from '../utils/log';
-import { runKurtosisCommand } from '../utils';
+import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import path from 'path';
 import { GetTestnetDetails } from "./get-testnet-details"
+import { getProjectDetails } from './get-project-details';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  if (onlyUI) {
-    return;
-  }
   console.clear();
-
   rollupConfigLog();
 
-  // Are you planning on making a devnet or testnet?
-  const networkType = await inquirer.prompt(
-    [
-      {
-        type: 'list',
-        name: 'networkType',
-        message: 'Are you planning on making a devnet or testnet?',
-        choices: ['devnet', 'testnet'],
-        default:
-          'devnet',
-      }
-    ]
-  )
+  const projectDetails = await getProjectDetails();
 
-  if (networkType.networkType === "devnet"){
-    console.log("Runnning with default devnet config");
+  // make a directory with the project name in a project folder
+  await runCommand('mkdir -p ./dist/projects/');
+  await runCommand('mkdir -p ./dist/projects/' + projectDetails.projectName + "/");
+      
   
-    // Run Kurtosis using the default devnet config
-    let command = runKurtosisCommand(
-      'kurtosis',
-      [
-        'run',
-        '.',
-        '--args-file',
-        path.join(__dirname, '../config/devnet_config.yaml')]
-    )
-    command.then(
-      deployCompleteLog,
-      (err) => deployFailedLog(String(err))
-    );
+  if (projectDetails.networkType === "devnet"){
+    await deployDevnet(projectDetails);
   }
   else{ // Testnet
+    await deployTestnet(projectDetails);
+  }
+}
+
+
+
+async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
+  console.log("Runnning with default devnet config");
+  
+  // Run Kurtosis using the default devnet config
+  let command1 = runKurtosisCommand("pwd", []);
+
+  let command = runKurtosisCommand(
+    'kurtosis',
+    [
+      'run',
+      './optimism-package',
+      '--args-file',
+      './dist/templates/devnet_config.yaml',
+      '--enclave', 
+      projectDetails.projectName
+    ]
+  )
+  command.then(
+    deployCompleteLog,
+    (err) => deployFailedLog(String(err))
+  );
+}
+
+async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
+
     // Get the testnet details from the user
     let postData: {[key: string]: any};
     try{
@@ -57,7 +64,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
 
     // Convert the testnet details to a YAML file
     try{
-      configToYAML(postData);
+      configToYAML(projectDetails.projectName, postData);
     } catch (e) {
       deployFailedLog(String(e));
       return;
@@ -70,14 +77,17 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
       'kurtosis',
       [
         'run',
-        '.',
+        './optimism-package',
         '--args-file',
-        path.join(__dirname, '../config/' + postData.CONFIG_NAME + '.yaml')]
+        'dist/projects/' + projectDetails.projectName + '/config.yaml',
+        '--enclave',
+        projectDetails.projectName,
+      ]
     );
+    
     command
     .then(
       deployCompleteLog,
       (err) => deployFailedLog(String(err))
     )
-  }
 }
