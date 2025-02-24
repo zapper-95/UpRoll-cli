@@ -1,10 +1,10 @@
-export function configToYAML(postData: {[key: string]: any}) {
+export function configToYAML(projectName:string, postData: {[key: string]: any}) {
     const path = require("path");
     const fs = require('fs');
     const yaml = require('js-yaml');
 
 
-    const templatePath = path.join(__dirname, '../config/testnet_config.yaml');
+    const templatePath = path.join(__dirname, '../templates/testnet_config.yaml');
     const config = yaml.safeLoad(fs.readFileSync(templatePath, 'utf8'));
 
     // setting level 1 config
@@ -58,7 +58,7 @@ export function configToYAML(postData: {[key: string]: any}) {
         config.optimism_package.observability.grafana_params.dashboard_sources.push(postData.GRAFANA_DASHBOARD_SOURCE);
     }
     const newYaml = yaml.safeDump(config);
-    const newConfigPath = path.join(__dirname, '../config/' + postData.CONFIG_NAME + '.yaml');
+    const newConfigPath = path.join(__dirname, `../projects/${projectName}/config.yaml`);
     fs.writeFileSync(newConfigPath, newYaml, 'utf8');
     console.log("Config file created successfully");
 }
