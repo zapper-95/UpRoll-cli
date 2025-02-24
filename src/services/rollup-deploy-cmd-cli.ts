@@ -32,8 +32,6 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
   console.log("Runnning with default devnet config");
   
   // Run Kurtosis using the default devnet config
-  let command1 = runKurtosisCommand("pwd", []);
-
   let command = runKurtosisCommand(
     'kurtosis',
     [
