@@ -58,7 +58,7 @@ export const mainCMDCLI = async () => {
           value: Action.chainInfo,
         },
         {
-          name: 'Status of the deployment',
+          name: 'Status of Rollups',
           value: Action.status,
         },
         {
