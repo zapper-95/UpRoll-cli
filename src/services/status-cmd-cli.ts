@@ -1,12 +1,10 @@
-import { getAllDockerPs } from '../shared';
-import { getAuthToken, getDeploymentStatus } from '../shared/api';
-import { consoleLogTable } from '../utils';
+
+import {runCommand} from '../utils';
 
 export const StatusCMDCLI = async () => {
-  const DeploymentStatus = await getDeploymentStatus();
-  console.log('Deployment', DeploymentStatus.deploy ? '✅' : '❌');
-  console.log('Deployment status:', DeploymentStatus.status);
-  const dockerPs = await getAllDockerPs();
-  // console.log(backendStatus);
-  consoleLogTable(dockerPs);
+  // TODO: Only include enclaves that have a corresponding project name
+  let cmdOut = await runCommand("kurtosis enclave ls");
+  
+  console.log(cmdOut);  
+  return;
 };
