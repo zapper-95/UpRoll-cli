@@ -1,3 +1,5 @@
+import path from "path";
+
 export const CONFIG = {
   DEPLOYMENT_REPO: 'https://github.com/ethpandaops/optimism-package.git',
   DEPLOYMENT_REPO_VERSION: '1.2.0',
@@ -8,6 +10,7 @@ export const CONFIG = {
 
 export const PATH_NAME = {
   DEPLOYMENT_REPO: 'optimism-package',
+  UPROLL_CLI : path.join(__dirname, '../..'),
 };
 
 export const ENV_DEPLOYMENT_REPO_DEFAULT = {
