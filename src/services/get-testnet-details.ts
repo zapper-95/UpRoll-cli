@@ -1,16 +1,8 @@
 import { colors } from '../utils/colors';
 import inquirer from "inquirer";
 export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
-    const configForm = await inquirer.prompt([
-        {
-          type: 'input',
-          name: 'CONFIG_NAME',
-          message: 'Enter the Config Name:',
-          validate: (input) => (input ? true : 'Config Name cannot be empty.'),
-        },
-      ]);
-      
-    
+
+
       console.log(colors.fg.yellow, 'Config your Layer 1', colors.reset);
       const L1Form = await inquirer.prompt([
 
@@ -215,7 +207,6 @@ export async function  GetTestnetDetails(): Promise<{[key: string]: any}>{
 
     
       const postData: { [key: string]: any } = {
-        ... configForm,
         ...L1Form,
         ...rollupForm,
         ...privilegedAccounts,
