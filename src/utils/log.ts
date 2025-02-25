@@ -137,7 +137,56 @@ export const rollupConfigLog = () => {
   );
 };
 
-export const kurtosisRunConfig = () =>{
+export const saveChainInfoLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Saving chain information to your project folder', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const saveChainInfoCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+  console.log(colors.fg.green, 'Chain information saved!', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const saveChainInfoFailedLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  )
+  console.log(colors.fg.red, 'Failed to save chain information');
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+}
+
+export const kurtosisRunTestnetLog = () =>{
   console.log(
 
     colors.fg.blue,
