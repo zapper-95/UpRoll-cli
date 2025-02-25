@@ -47,7 +47,7 @@ export const apiDeployCmdCli = async () => {
 
     // Clone the repo to your desired directory
     await git.clone(CONFIG.DEPLOYMENT_REPO, PATH_NAME.DEPLOYMENT_REPO);
-    
+
     // Now, create a new git instance that points to the cloned repo
     const repoGit = simpleGit(PATH_NAME.DEPLOYMENT_REPO);
     
