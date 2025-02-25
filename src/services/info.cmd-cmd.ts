@@ -130,14 +130,21 @@ export const readConfigJson = async (rollupName:string, rollupConfig:string) => 
 
 };
 
-export const readConfigJsonFile = async (filePath: string) => {
+export const readConfigFile = async (filePath: string) => {
   // read the file and display the content if the file exists
-  try {
-    const data = fs.readFileSync(filePath, 'utf8');
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    const data = await fs.promises.readFile(filePath, 'utf8');
 
-    return JSON.parse(data);
-  } catch (error) {
-    return undefined;
-  }
+    // parse the file based on its extension
+    if (filePath.endsWith('.json')) {
+      return JSON.parse(data);
+    }
+    else if (filePath.endsWith('.yaml')) {
+      return yaml.parse(data);
+    }
+    else if (filePath.endsWith('.toml')) {
+      return toml.parse(data);
+    }
+    else{
+      throw new Error('Invalid file format. Supported formats are json, yaml, toml');
+    }
 };
