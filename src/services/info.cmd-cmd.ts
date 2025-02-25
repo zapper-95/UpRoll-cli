@@ -2,13 +2,12 @@ import inquirer from 'inquirer';
 import { colors } from '../utils/colors';
 import fs from 'fs';
 import { PATH_NAME } from '../utils/config';
-
-
+import yaml from 'yaml';
+import toml from 'toml';
 export const InfoCMDCLI = async () => {
 
 
   console.clear();
-  // console.log(path)
   console.log('------------------');
   console.log(colors.fg.magenta, 'Chain Info', colors.reset);
   console.log('------------------');
@@ -16,11 +15,10 @@ export const InfoCMDCLI = async () => {
   try{
     let rollupName = await selectRollup();
     let rollupConfig = await selectRollupConfig(rollupName);
-    await readConfigJson(rollupName, rollupConfig);
+    await displayConfig(rollupName, rollupConfig);
 
   }catch(err){
-    console.log(err);
-    return;
+    console.log("❌ Error:", err);
   }
 
 };
@@ -37,7 +35,6 @@ export const getRollups = async () => {
     )
     .catch((err) => {
       console.log(err);
-      return
     }
     );
 
@@ -55,7 +52,6 @@ export const getConfigs = async (projectName:string) => {
     )
     .catch((err) => {
       console.log(err);
-      return
     }
     );
 
@@ -67,7 +63,7 @@ export const selectRollupConfig = async (rollupName:string) => {
   let configs = await getConfigs(rollupName);
 
   if (configs.length === 0) {
-    throw new Error('❌ No configs found');
+    throw new Error('No configs found');
   }
   let configChoices = configs.map((config, index) => (
     {
@@ -90,11 +86,12 @@ export const selectRollupConfig = async (rollupName:string) => {
 
 
 export const selectRollup = async () => {
-  let rollups = await getRollups();
+  const rollups = await getRollups();
   if (rollups.length === 0) {
-    throw new Error('❌ No rollups found');
+    throw new Error('No rollups found');
   }
 
+  // build the rollup options using the found folders in the projects directory
   let rollupsChoices = rollups.map((rollup, index) => (
     {
       name: `${index + 1}) ${rollup}`,
@@ -115,18 +112,15 @@ export const selectRollup = async () => {
 
 
 
-export const readConfigJson = async (rollupName:string, rollupConfig:string) => {
+export const displayConfig = async (rollupName:string, rollupConfig:string) => {
   let filePath = `${PATH_NAME.UPROLL_CLI}/dist/projects/${rollupName}/${rollupConfig}`;
+  const data = await readConfigFile(filePath);
+  console.log('------------------');
+  console.log(colors.fg.magenta, `${rollupName}➜${rollupConfig}`, colors.reset);
+  console.log('------------------');
+  console.log(data);
 
-  const data = await readConfigJsonFile(filePath);
-  if (!data) {
-    console.log('❌ File not found', filePath);
-  } else {
-    console.log('------------------');
-    console.log(colors.fg.magenta, `${rollupName}➜${rollupConfig}`, colors.reset);
-    console.log('------------------');
-    console.log(data);
-  }
+
 
 };
 
