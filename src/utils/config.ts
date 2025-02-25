@@ -9,7 +9,7 @@ export const CONFIG = {
 };
 
 export const PATH_NAME = {
-  DEPLOYMENT_REPO: 'optimism-package',
+  DEPLOYMENT_REPO: path.join(path.join(__dirname, '../..'), 'optimism-package'),
   UPROLL_CLI : path.join(__dirname, '../..'),
 };
 

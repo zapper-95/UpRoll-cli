@@ -25,7 +25,7 @@ let check = false;
  */
 export const apiDeployCmdCli = async () => {
   const kurtosisPath = await getKurtosisPath();
-  const optimsimPackageExists = await fs.pathExists(kurtosisPath);
+  const optimsimPackageExists = await fs.pathExists(PATH_NAME.DEPLOYMENT_REPO);
 
   const kurtosisTest = await getKurtosis();
   kurtosis = kurtosisTest.kurtosis;
@@ -47,7 +47,7 @@ export const apiDeployCmdCli = async () => {
 
     // Clone the repo to your desired directory
     await git.clone(CONFIG.DEPLOYMENT_REPO, PATH_NAME.DEPLOYMENT_REPO);
-    
+
     // Now, create a new git instance that points to the cloned repo
     const repoGit = simpleGit(PATH_NAME.DEPLOYMENT_REPO);
     
