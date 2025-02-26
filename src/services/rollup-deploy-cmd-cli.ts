@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog} from '../utils/log';
+import { rollupConfigLog , kurtosisRunConfig, deployCompleteLog, deployFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import path from 'path';
@@ -68,7 +68,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
       return;
     }
 
-    kurtosisRunTestnetLog();
+    kurtosisRunConfig();
 
     // Run Kurtosis using the testnet config
     let command =  runKurtosisCommand(
