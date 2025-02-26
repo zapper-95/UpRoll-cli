@@ -7,6 +7,7 @@ import { LogsCmdAPICLI } from './services/logs-cmd-cli';
 import { mainCMDCLI } from './services/main.cmd-cli';
 import { apiDeployCmdCli } from './services/api-deploy-cmd-cli';
 import packageJson from '../package.json';
+import { RollupDeployEndpoint } from './services/rollup-deploy-endpoint';
 
 startLog();
 const program = new Command();
@@ -16,7 +17,7 @@ program
   .description('A CLI tool for manage opstack deployment')
   .version(packageJson.version);
 
-program.command('run').description('Run Opstack CLI Tool').action(mainCMDCLI);
+program.command('run [endpoint]').description('Run Opstack CLI Tool').action((endpoint) => mainCMDCLI(endpoint));
 program
   .command('api')
   .description('Run Opstack CLI API')
