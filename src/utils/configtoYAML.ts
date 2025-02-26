@@ -5,7 +5,7 @@ export function configToYAML(projectName:string, postData: {[key: string]: any})
 
 
     const templatePath = path.join(__dirname, '../templates/testnet_config.yaml');
-    const config = yaml.safeLoad(fs.readFileSync(templatePath, 'utf8'));
+    const config = yaml.load(fs.readFileSync(templatePath, 'utf8'));
 
     // setting level 1 config
     config.external_l1_network_params = {
@@ -57,7 +57,7 @@ export function configToYAML(projectName:string, postData: {[key: string]: any})
         config.optimism_package.observability = {"grafana_params": {"dashboard_sources":[]}}
         config.optimism_package.observability.grafana_params.dashboard_sources.push(postData.GRAFANA_DASHBOARD_SOURCE);
     }
-    const newYaml = yaml.safeDump(config);
+    const newYaml = yaml.dump(config);
     const newConfigPath = path.join(__dirname, `../projects/${projectName}/config.yaml`);
     fs.writeFileSync(newConfigPath, newYaml, 'utf8');
     console.log("Config file created successfully");
