@@ -39,7 +39,7 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
       'run',
       './optimism-package',
       '--args-file',
-      './dist/templates/devnet_config.yaml',
+      `${PATH_NAME.UPROLL_CLI}/dist/templates/devnet_config.yaml`,
       '--enclave', 
       projectDetails.projectName
     ]
@@ -78,7 +78,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         'run',
         './optimism-package',
         '--args-file',
-        'dist/projects/' + projectDetails.projectName + '/config.yaml',
+        `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/config.yaml`,
         '--enclave',
         projectDetails.projectName,
       ]
