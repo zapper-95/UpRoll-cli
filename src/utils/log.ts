@@ -137,7 +137,7 @@ export const rollupConfigLog = () => {
   );
 };
 
-export const kurtosisRunTestnetLog = () =>{
+export const kurtosisRunConfig = () =>{
   console.log(
 
     colors.fg.blue,
