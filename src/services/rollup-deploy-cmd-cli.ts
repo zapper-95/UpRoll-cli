@@ -16,7 +16,7 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
 
   // make a directory with the project name in a project folder
   await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
-  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/projectDetails.projectName/`);
+  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
       
   
   if (projectDetails.networkType === "devnet"){
