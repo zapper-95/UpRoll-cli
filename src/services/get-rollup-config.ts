@@ -2,7 +2,7 @@ import inquirer from "inquirer";
 import { colors } from "../utils/colors";
 
 export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
-  const postData: { [key: string]: any } = {};
+  let postData: { [key: string]: any } = {};
 
   // Rollup Name
   console.log(colors.fg.yellow, "Configure Rollup", colors.reset);
@@ -67,9 +67,9 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       default: true,
     },
   ]);
+  postData.L1_EL_RPC_URL = el_rpc_url;
 
   if (useSameUrl) {
-    postData.L1_EL_RPC_URL = el_rpc_url;
     postData.L1_WS_URL = el_rpc_url;
     postData.L1_CL_RPC_URL = el_rpc_url;
   }
@@ -90,10 +90,8 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
         validate: (input) => (input ? true : "CL RPC URL cannot be empty."),
       },
     ]);
-    postData.L1_EL_RPC_URL = el_rpc_url;
     postData.L1_WS_URL = el_ws_url;
     postData.L1_CL_RPC_URL = cl_rpc_url;
-
   }
 
   // rpc kind is alchemy if contains .alchemy or .quicknode if contains .quicknode
@@ -183,17 +181,25 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
           validate: (input) => (input ? true : `${role} Private Key cannot be empty.`),
         },
       ]);
-      config[`${role.toUpperCase()}_PRIVATE_KEY`] = privateKey;
+      config[`${role.toUpperCase()}_PRIVATE_KEY`] = String(privateKey);
     } else {
-      const { signerEndpoint } = await inquirer.prompt([
+      const signerConfig = await inquirer.prompt([
+        {
+          type: "input",
+          name: "signerAddress",
+          message: `Enter the ${role} Signer Address:`,
+          validate: (input) => (input ? true : `${role} Signer Address cannot be empty.`),
+        },
         {
           type: "input",
           name: "signerEndpoint",
           message: `Enter the ${role} Signer Endpoint:`,
           validate: (input) => (input ? true : `${role} Signer Endpoint cannot be empty.`),
         },
+
       ]);
-      config[`${role.toUpperCase()}_SIGNER_ENDPOINT`] = signerEndpoint;
+      config[`${role.toUpperCase()}_SIGNER_ADDRESS`] = String(signerConfig.signerAddress);
+      config[`${role.toUpperCase()}_SIGNER_ENDPOINT`] = String(signerConfig.signerEndpoint);
     }
     return config;
   }
@@ -201,7 +207,7 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
   const batcherConfig = await getSignerConfig("Batcher");
   const sequencerConfig = await getSignerConfig("Sequencer");
   const proposerConfig = await getSignerConfig("Proposer");
-  Object.assign(postData, batcherConfig, sequencerConfig, proposerConfig);
+  postData = Object.assign(postData, batcherConfig, sequencerConfig, proposerConfig);
 
   // Admin Configuration
   console.log(colors.fg.yellow, "Admin Configuration", colors.reset);
@@ -244,31 +250,40 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       message: "Enter the Withdrawal Delay (proofMaturityDelaySeconds):",
       validate: (input) => (input ? true : "Withdrawal Delay cannot be empty."),
     },
+  ]);
+
+  console.log(colors.fg.yellow, "Fee Withdrawal Networks", colors.reset);
+  const feeWithdrawalNetworks = await inquirer.prompt([
     {
-      type: "input",
-      name: "sequencerFeeRecipient",
-      message:
-        "Enter the Sequencer Fee Recipient (applies to baseFeeVaultRecipient, l1FeeVaultRecipient, sequencerFeeVaultRecipient):",
-      validate: (input) => (input ? true : "Sequencer Fee Recipient cannot be empty."),
+      type: "list",
+      name: "baseFeeVaultWithdrawalNetwork",
+      message: "Select the nçetwork for Base Fee Vault Withdrawal (L1 or L2):",
+      choices: ["L1", "L2"],
+      default: "L1",
     },
     {
       type: "list",
-      name: "feeWithdrawalNetwork",
-      message:
-        "Select the network for fee withdrawal (applies to baseFeeVaultWithdrawalNetwork, l1FeeVaultWithdrawalNetwork, sequencerFeeVaultWithdrawalNetwork):",
+      name: "l1FeeVaultWithdrawalNetwork",
+      message: "Select the network for L1 Fee Vault Withdrawal (L1 or L2):",
+      choices: ["L1", "L2"],
+      default: "L1",
+    },
+    {
+      type: "list",
+      name: "sequencerFeeVaultWithdrawalNetwork",
+      message: "Select the network for Sequencer Fee Vault Withdrawal (L1 or L2):",
       choices: ["L1", "L2"],
       default: "L1",
     },
   ]);
+  
   postData.L2_CHAIN_ID = chainConfig.l2ChainID;
   postData.L2_BLOCK_TIME = chainConfig.l2BlockTime;
   postData.PROOF_MATURITY_DELAY_SECONDS = chainConfig.proofMaturityDelaySeconds;
-  postData.BASE_FEE_VAULT_RECIPIENT = chainConfig.sequencerFeeRecipient;
-  postData.L1_FEE_VAULT_RECIPIENT = chainConfig.sequencerFeeRecipient;
-  postData.SEQUENCER_FEE_VAULT_RECIPIENT = chainConfig.sequencerFeeRecipient;
-  postData.BASE_FEE_VAULT_WITHDRAWAL_NETWORK = chainConfig.feeWithdrawalNetwork;
-  postData.L1_FEE_VAULT_WITHDRAWAL_NETWORK = chainConfig.feeWithdrawalNetwork;
-  postData.SEQUENCER_FEE_VAULT_WITHDRAWAL_NETWORK = chainConfig.feeWithdrawalNetwork;
+  postData.BASE_FEE_VAULT_RECIPIENT =  feeWithdrawalNetworks.baseFeeVaultWithdrawalNetwork;
+  postData.L1_FEE_VAULT_RECIPIENT = feeWithdrawalNetworks.l1FeeVaultWithdrawalNetwork;
+  postData.SEQUENCER_FEE_VAULT_RECIPIENT = feeWithdrawalNetworks.sequencerFeeVaultWithdrawalNetwork;
+
 
   // Gas Configuration
   console.log(colors.fg.yellow, "Gas Configuration", colors.reset);
