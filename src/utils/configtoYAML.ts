@@ -24,6 +24,7 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
     el_ws_url: postData.L1_WS_URL,
     cl_rpc_url: postData.L1_CL_RPC_URL,
     network_id: settlementChainId,
+    priv_key: postData.DEPLOYER_PRIVATE_KEY,
   };
 
   // --- Chain (Rollup) Configuration ---
@@ -47,19 +48,23 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
   }
 
   // --- Signer Configuration ---
-  config.optimism_package.deployer_private_key = postData.DEPLOYER_PRIVATE_KEY;
+
 
   function setSignerParams(
     paramsBlock: any,
     role: string,
-    kind: string,
     privateKey: string,
-    signerEndpoint: string
+    signerEndpoint: string[]
   ) {
-    if (kind === "Private Key") {
-      paramsBlock.extra_params.push(`--${role.toLowerCase()}.private-key=${privateKey}`);
-    } else {
-      paramsBlock.extra_params.push(`--${role.toLowerCase()}.signer-endpoint=${signerEndpoint}`);
+    if (privateKey) {
+      paramsBlock.extra_params.push(`--private-key=${privateKey}`);
+    } else if (signerEndpoint) {
+      paramsBlock.extra_params.push(`--signer-address=${signerEndpoint}`);
+      paramsBlock.extra_params.push(`--signer-endpoint=${signerEndpoint}`);
+      paramsBlock.extra_params.push('--signer.tls.enabled=false');
+    }
+    else{
+      throw new Error(`Missing private key or signer endpoint for ${role}`);  
     }
   }
 
@@ -67,25 +72,22 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
   setSignerParams(
     config.optimism_package.chains[0].batcher_params,
     "Batcher",
-    postData.BATCHER_KIND,
     postData.BATCHER_PRIVATE_KEY,
-    postData.BATCHER_SIGNER_ENDPOINT
+    [postData.BATCHER_SIGNER_ADDRESS, postData.BATCHER_SIGNER_ENDPOINT]
   );
 
   setSignerParams(
     config.optimism_package.chains[0].challenger_params,
     "Sequencer",
-    postData.SEQUENCER_KIND,
     postData.SEQUENCER_PRIVATE_KEY,
-    postData.SEQUENCER_SIGNER_ENDPOINT
+    [postData.SEQUENCER_SIGNER_ADDRESS, postData.SEQUENCER_SIGNER_ENDPOINT]
   );
 
   setSignerParams(
     config.optimism_package.chains[0].proposer_params,
     "Proposer",
-    postData.PROPOSER_KIND,
     postData.PROPOSER_PRIVATE_KEY,
-    postData.PROPOSER_SIGNER_ENDPOINT
+    [postData.PROPOSER_SIGNER_ADDRESS, postData.PROPOSER_SIGNER_ENDPOINT]
   );
 
   // --- Admin Configuration ---
@@ -103,5 +105,4 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
   const newYaml = yaml.dump(config);
   const newConfigPath = path.join(__dirname, `../projects/${projectName}/config.yaml`);
   fs.writeFileSync(newConfigPath, newYaml, "utf8");
-  console.log("Config file created successfully. Your rollup is now configured to use the correct settlement chain ID!");
 }
