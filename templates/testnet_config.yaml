@@ -2,27 +2,7 @@ optimism_package:
   chains:
     - participants:
       - el_type: op-geth
-        el_log_level: ""
-        el_extra_env_vars: {}
-        el_extra_labels: {}
-        el_extra_params: []
-        el_tolerations: []
-        el_volume_size: 0
-        el_min_cpu: 0
-        el_max_cpu: 0
-        el_min_mem: 0
-        el_max_mem: 0
         cl_type: op-node
-        cl_log_level: ""
-        cl_extra_env_vars: {}
-        cl_extra_labels: {}
-        cl_extra_params: []
-        cl_tolerations: []
-        cl_volume_size: 0
-        cl_min_cpu: 0
-        cl_max_cpu: 0
-        cl_min_mem: 0
-        cl_max_mem: 0
         node_selectors: {}
         tolerations: []
         count: 1
@@ -37,17 +17,16 @@ optimism_package:
       batcher_params:
         extra_params: []
       challenger_params:
-        extra_params: []
-      proposer_params:
+        enabled: true
         extra_params: []
       mev_params:
         builder_host: ""
         builder_port: ""
       additional_services: []
   op_contract_deployer_params:
-    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-deployer:v0.0.11
-    l1_artifacts_locator: https://storage.googleapis.com/oplabs-contract-artifacts/artifacts-v1-c193a1863182092bc6cb723e523e8313a0f4b6e9c9636513927f1db74c047c15.tar.gz
-    l2_artifacts_locator: https://storage.googleapis.com/oplabs-contract-artifacts/artifacts-v1-c193a1863182092bc6cb723e523e8313a0f4b6e9c9636513927f1db74c047c15.tar.gz
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-deployer:v0.0.12
+    l1_artifacts_locator: https://storage.googleapis.com/oplabs-contract-artifacts/artifacts-v1-fffcbb0ebf7f83311791534a41e65ef90df47797f9ca8f86941452f597f7128c.tar.gz
+    l2_artifacts_locator: https://storage.googleapis.com/oplabs-contract-artifacts/artifacts-v1-fffcbb0ebf7f83311791534a41e65ef90df47797f9ca8f86941452f597f7128c.tar.gz
   global_log_level: "info"
   global_node_selectors: {}
   global_tolerations: []
