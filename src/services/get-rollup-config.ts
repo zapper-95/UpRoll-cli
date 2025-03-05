@@ -269,6 +269,12 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       message: "Enter the Withdrawal Delay (proofMaturityDelaySeconds):",
       validate: (input) => (input ? true : "Withdrawal Delay cannot be empty."),
     },
+    {
+      type: "number",
+      name: "disputeGameFinalityDelaySeconds",
+      message: "Enter the Dispute Game Finality Delay (disputeGameFinalityDelaySeconds):",
+      validate: (input) => (input ? true : "Dispute Game Finality Delay cannot be empty."),
+    }
   ]);
 
   console.log(colors.fg.yellow, "Fee Withdrawal Networks", colors.reset);
@@ -276,7 +282,7 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
     {
       type: "list",
       name: "baseFeeVaultWithdrawalNetwork",
-      message: "Select the nçetwork for Base Fee Vault Withdrawal (L1 or L2):",
+      message: "Select the network for Base Fee Vault Withdrawal (L1 or L2):",
       choices: ["L1", "L2"],
       default: "L1",
     },
@@ -302,7 +308,7 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
   postData.BASE_FEE_VAULT_RECIPIENT =  feeWithdrawalNetworks.baseFeeVaultWithdrawalNetwork;
   postData.L1_FEE_VAULT_RECIPIENT = feeWithdrawalNetworks.l1FeeVaultWithdrawalNetwork;
   postData.SEQUENCER_FEE_VAULT_RECIPIENT = feeWithdrawalNetworks.sequencerFeeVaultWithdrawalNetwork;
-
+  postData.DISPUTE_GAME_FINALITY_DELAY_SECONDS = chainConfig.disputeGameFinalityDelaySeconds;
 
   // Gas Configuration
   console.log(colors.fg.yellow, "Gas Configuration", colors.reset);
@@ -339,11 +345,151 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       validate: (input) => (input ? true : "Blob Base Fee Scalar cannot be empty."),
     },
   ]);
+
   postData.L2_GENESIS_BLOCK_GAS_LIMIT = gasConfig.l2GenesisBlockGasLimit;
   postData.EIP1559_ELASTICITY = gasConfig.eip1559Elasticity;
   postData.EIP1559_DENOMINATOR = gasConfig.eip1559Denominator;
   postData.GAS_PRICE_ORACLE_BASE_FEE_SCALAR = gasConfig.gasPriceOracleBaseFeeScalar;
   postData.GAS_PRICE_ORACLE_BLOB_BASE_FEE_SCALAR = gasConfig.gasPriceOracleBlobBaseFeeScalar;
+
+
+  // Data availibility
+
+  console.log(colors.fg.yellow, "Data Availability", colors.reset);
+  const dataAvailability = await inquirer.prompt([
+    {
+      type: "list",
+      name: "daProvider",
+      message: "Select a Data Availability Provider:",
+      choices: ["ETH Blob + Calldata", "ETH Blob", "Eth Calldata", "Custom"],
+      default: "ETH Blob + Calldata",
+    },
+    {
+      type: "number",
+      name: "batcherSubmissionFrequency",
+      message: "Enter the Batcher Submission Frequency (minutes):",
+      validate: (input) => (input ? true : "Batcher Submission Frequency cannot be empty."),
+      default: 1,
+    }
+  ]);
+  postData.DA_PROVIDER = dataAvailability.daProvider;
+  postData.BATCHER_SUBMISSION_FREQUENCY = dataAvailability.batcherSubmissionFrequency;
+  
+  if (dataAvailability.daProvider === "Custom") {
+    const customDA = await inquirer.prompt([
+      {
+        type: "input",
+        name: "daServerEndpoint",
+        message: "Enter the DA Server Endpoint:",
+        validate: (input) => (input ? true : "DA Server Endpoint cannot be empty."),
+      },
+      {
+        type: "list",
+        name: "commitmentType",
+        message: "Select a Commitment Type:",
+        choices: ["Generic", "Keccak256"],
+        default: "Generic",
+      }
+    ]);
+ 
+  postData.DA_SERVER_ENDPOINT = customDA.daServerEndpoint;
+  postData.COMMITMENT_TYPE = customDA.commitmentType;
+
+  if (customDA.commitmentType === "Generic") {
+    const genericCommitmentConfig = await inquirer.prompt([
+    {
+      type: "input",
+      name: "daChallengeChallengeContractAddress",
+      message: "Enter the DA Challenge Contract Address:",
+      validate: (input) => (input ? true : "DA Challenge Contract Address cannot be empty."),
+    },
+    ]);
+    postData.DA_CHALLENGE_CONTRACT_ADDRESS = genericCommitmentConfig.daChallengeChallengeContractAddress;
+  }
+
+  const daWindowConfig = await inquirer.prompt([
+    {
+    type: "number",
+    name: "daChallengeWindow",
+    message: "Enter the DA Challenge Window:",
+    validate: (input) => (input ? true : "DA Challenge Window cannot be empty."),
+    },
+    {
+    type: "number",
+    name: "daResolveWindow",
+    message: "Enter the DA Resolve Window:",
+    validate: (input) => (input ? true : "DA Resolve Window cannot be empty."),
+    },
+  ]);
+  postData.DA_CHALLENGE_WINDOW = daWindowConfig.daChallengeWindow;
+  postData.DA_RESOLVE_WINDOW = daWindowConfig.daResolveWindow;
+  }
+
+
+  // Interop Configuration
+  console.log(colors.fg.yellow, "Interop Configuration", colors.reset);
+  const { enableInterop } = await inquirer.prompt([
+    {
+      type: "confirm",
+      name: "enableInterop",
+      message: "Enable interop with other rollups?",
+      default: false,
+    },
+  ]);
+  
+  postData.ENABLE_INTEROP = enableInterop;
+  
+  if (enableInterop) {
+    const dependencies = [];
+    let addingDependency = true;
+    
+    while (addingDependency) {
+      const dependency = await inquirer.prompt([
+        {
+          type: "number",
+          name: "chainId",
+          message: "Enter the dependency Chain ID:",
+          validate: (input) => (input ? true : "Chain ID cannot be empty."),
+        },
+        {
+          type: "input",
+          name: "wsRpcEndpoint",
+          message: "Enter the WebSocket RPC Endpoint for this dependency:",
+          validate: (input) => (input ? true : "WebSocket RPC Endpoint cannot be empty."),
+        },
+        {
+          type: "input",
+          name: "activationTime",
+          message: "Enter the Activation Time:",
+          validate: (input) => (input ? true : "Activation Time cannot be empty."),
+        },
+        {
+          type: "input",
+          name: "historyMinTime",
+          message: "Enter the History Min Time:",
+          validate: (input) => (input ? true : "History Min Time cannot be empty."),
+        },
+      ]);
+      
+      dependencies.push(dependency);
+      
+      const { addAnother } = await inquirer.prompt([
+        {
+          type: "confirm",
+          name: "addAnother",
+          message: "Add another dependency?",
+          default: false,
+        },
+      ]);
+      
+      if (!addAnother) {
+        addingDependency = false;
+      }
+    }
+    
+    postData.INTEROP_DEPENDENCIES = dependencies;
+  }
+
 
   // Confirm configuration
   console.log(colors.fg.blue, "\n====================================", colors.reset);
