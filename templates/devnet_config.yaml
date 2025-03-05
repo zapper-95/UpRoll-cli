@@ -2,6 +2,7 @@ optimism_package:
   chains:
     - participants:
       - el_type: op-geth
+        el_image: "optimism/op-geth:latest"
         el_log_level: ""
         el_extra_env_vars: {}
         el_extra_labels: {}
@@ -59,7 +60,7 @@ ethereum_package:
   network_params:
     preset: minimal
     genesis_delay: 5
-    additional_preloaded_contracts: '
+    additional_preloaded_contracts: |
       {
         "0x4e59b44847b379578588920cA78FbF26c0B4956C": {
           "balance": "0ETH",
@@ -68,4 +69,3 @@ ethereum_package:
           "nonce": "1"
         }
       }
-    '
