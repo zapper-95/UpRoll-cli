@@ -1,10 +1,13 @@
+import { PATH_NAME } from "./config";
+
+
 export function configToYAML(projectName: string, postData: { [key: string]: any }) {
   const path = require("path");
   const fs = require("fs");
   const yaml = require("js-yaml");
 
   // Load the YAML template
-  const templatePath = path.join(__dirname, "../templates/testnet_config.yaml");
+  const templatePath = path.join(PATH_NAME.UPROLL_CLI, "/dist/templates/testnet_config.yaml");
   const config = yaml.load(fs.readFileSync(templatePath, "utf8"));
 
   // --- External L1 Args (Settlement Layer) ---
@@ -42,8 +45,10 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
   // --- Participants ---
   if (postData.PARTICIPANTS && Array.isArray(postData.PARTICIPANTS)) {
     config.optimism_package.chains[0].participants = postData.PARTICIPANTS.map((p: any) => ({
-      el_type: p.executionClient || "op-geth",
-      cl_type: p.consensusClient || "op-node",
+      el_type: p.executionLayer,
+      el_image: p.ELImage,
+      cl_type: p.consensusLayer,
+      cl_image: p.CLImage,
     }));
   }
 
@@ -76,19 +81,21 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
     [postData.BATCHER_SIGNER_ADDRESS, postData.BATCHER_SIGNER_ENDPOINT]
   );
 
-  setSignerParams(
-    config.optimism_package.chains[0].challenger_params,
-    "Sequencer",
-    postData.SEQUENCER_PRIVATE_KEY,
-    [postData.SEQUENCER_SIGNER_ADDRESS, postData.SEQUENCER_SIGNER_ENDPOINT]
-  );
+  // TODO: Update fork of optimism package to allow sequencer and proposer to be set up with private key or signer
 
-  setSignerParams(
-    config.optimism_package.chains[0].proposer_params,
-    "Proposer",
-    postData.PROPOSER_PRIVATE_KEY,
-    [postData.PROPOSER_SIGNER_ADDRESS, postData.PROPOSER_SIGNER_ENDPOINT]
-  );
+  // setSignerParams(
+  //   config.optimism_package.chains[0].challenger_params,
+  //   "Sequencer",
+  //   postData.SEQUENCER_PRIVATE_KEY,
+  //   [postData.SEQUENCER_SIGNER_ADDRESS, postData.SEQUENCER_SIGNER_ENDPOINT]
+  // );
+
+  // setSignerParams(
+  //   config.optimism_package.chains[0].proposer_params,
+  //   "Proposer",
+  //   postData.PROPOSER_PRIVATE_KEY,
+  //   [postData.PROPOSER_SIGNER_ADDRESS, postData.PROPOSER_SIGNER_ENDPOINT]
+  // );
 
   // --- Admin Configuration ---
   config.optimism_package.final_system_owner = postData.L1_SYSTEM_ADMIN;
@@ -103,6 +110,7 @@ export function configToYAML(projectName: string, postData: { [key: string]: any
 
   // --- Final Touches ---
   const newYaml = yaml.dump(config);
-  const newConfigPath = path.join(__dirname, `../projects/${projectName}/config.yaml`);
+  console.log(newYaml);
+  const newConfigPath = path.join(PATH_NAME.UPROLL_CLI, `/dist/projects/${projectName}/config.yaml`);
   fs.writeFileSync(newConfigPath, newYaml, "utf8");
 }

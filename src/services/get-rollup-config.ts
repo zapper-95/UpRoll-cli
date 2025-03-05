@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import { colors } from "../utils/colors";
+import {EL_IMAGES, CL_IMAGES} from "../utils/el_cl_images";
 
 export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
   let postData: { [key: string]: any } = {};
@@ -108,7 +109,7 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
   console.log(colors.fg.yellow, "Configure Participants", colors.reset);
   const participants: any[] = [];
   // Add default participant: op-geth with op-node
-  participants.push({ executionClient: "op-geth", consensusClient: "op-node" });
+  participants.push({ executionLayer: "op-geth", consensusLayer: "op-node"});
   console.log(
     colors.fg.blue,
     "Default participant added: op-geth with op-node",
@@ -130,18 +131,36 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       const participant = await inquirer.prompt([
         {
           type: "input",
-          name: "executionClient",
-          message: "Enter the execution client (default: op-geth):",
+          name: "executionLayer",
+          message: "Enter the execution layer (default: op-geth):",
+          validate: (input) => (input in EL_IMAGES ? true : "Invalid execution layer. It should be one of the following " + Object.keys(EL_IMAGES).join(", ")),
           default: "op-geth",
         },
         {
           type: "input",
-          name: "consensusClient",
-          message: "Enter the consensus client (default: op-node):",
+          name: "consensusLayer",
+          message: "Enter the consensus layer (default: op-node):",
+          validate: (input) => (input in CL_IMAGES ? true : "Invalid consensus layer. It should be one of the following " + Object.keys(CL_IMAGES).join(", ")),
           default: "op-node",
         },
       ]);
-      participants.push(participant);
+      const participantsImage = await inquirer.prompt([
+        {
+          type: "input",
+          name: "ELImage",
+          message: "Enter the execution layer image:",
+          default: EL_IMAGES[participant.executionLayer],
+        },
+        {
+          type: "input",
+          name: "CLImage",
+          message: "Enter the consensus layer image:",
+          default: CL_IMAGES[participant.consensusLayer],
+        },
+      ]);
+
+
+      participants.push({...participant, ...participantsImage});
     }
   }
   postData.PARTICIPANTS = participants;
@@ -347,6 +366,6 @@ export async function GetRollupConfig(): Promise<{ [key: string]: any }> {
       postData[key] = postData[key].trim();
     }
   }
-
+  console.log(postData);
   return postData;
 }
