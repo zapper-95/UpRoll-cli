@@ -13,7 +13,7 @@ optimism_package:
         name: "op-kurtosis"
         fjord_time_offset: 0
         granite_time_offset: 0
-        fund_dev_accounts: true
+        fund_dev_accounts: false
       batcher_params:
         extra_params: []
       challenger_params:
