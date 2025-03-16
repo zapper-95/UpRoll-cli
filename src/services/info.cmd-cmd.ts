@@ -1,9 +1,13 @@
 import inquirer from 'inquirer';
 import { colors } from '../utils/colors';
 import fs from 'fs';
+import util from 'util';
 import { PATH_NAME } from '../utils/config';
-import yaml from 'yaml';
-import toml from 'toml';
+import path from 'path';
+const yaml = require("js-yaml");
+var toml = require('toml');
+
+
 export const InfoCMDCLI = async () => {
 
 
@@ -23,41 +27,27 @@ export const InfoCMDCLI = async () => {
 
 };
 
+async function getRollups(): Promise<string[]> {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects");
 
-export const getRollups = async () => {
-  let rollups: string[] = []
-
-  await fs.promises.readdir(PATH_NAME.UPROLL_CLI + "/dist/projects")
-    .then(
-      (files) => {
-        rollups = files;
-      }
-    )
-    .catch((err) => {
-      console.log(err);
-    }
-    );
-
-  return rollups;
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK); 
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
 }
 
-export const getConfigs = async (projectName:string) => {
-  let configs: string[] = []
+export const getConfigs = async (projectName: string): Promise<string[]> => {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", projectName);
 
-  await fs.promises.readdir(PATH_NAME.UPROLL_CLI + "/dist/projects/" + projectName)
-    .then(
-      (files) => {
-        configs = files;
-      }
-    )
-    .catch((err) => {
-      console.log(err);
-    }
-    );
-
-  return configs;
-}
-
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK);
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
+};
 
 export const selectRollupConfig = async (rollupName:string) => {
   let configs = await getConfigs(rollupName);
@@ -119,26 +109,26 @@ export const displayConfig = async (rollupName:string, rollupConfig:string) => {
   console.log(colors.fg.magenta, `${rollupName}➜${rollupConfig}`, colors.reset);
   console.log('------------------');
   console.log(data);
-
-
-
 };
 
 export const readConfigFile = async (filePath: string) => {
-  // read the file and display the content if the file exists
-    const data = await fs.promises.readFile(filePath, 'utf8');
+  try {
+    await fs.promises.access(filePath, fs.constants.F_OK);
 
-    // parse the file based on its extension
-    if (filePath.endsWith('.json')) {
+    const data = await fs.promises.readFile(filePath, "utf8");
+
+    if (filePath.endsWith(".json")) {
       return JSON.parse(data);
-    }
-    else if (filePath.endsWith('.yaml')) {
-      return yaml.parse(data);
-    }
-    else if (filePath.endsWith('.toml')) {
+    } else if (filePath.endsWith(".yaml") || filePath.endsWith(".yml")) {
+      return util.inspect(yaml.load(data), { depth: null, colors: true });
+    } else if (filePath.endsWith(".toml")) {
       return toml.parse(data);
+    } else {
+      throw new Error(
+        "Invalid file format. Supported formats are JSON, YAML, and TOML."
+      );
     }
-    else{
-      throw new Error('Invalid file format. Supported formats are json, yaml, toml');
-    }
+  } catch {
+    throw new Error(`File does not exist or cannot be accessed: ${filePath}`);
+  }
 };
