@@ -11,9 +11,6 @@ import {
   PATH_NAME,
 } from '../utils/config';
 import simpleGit from 'simple-git';
-import inquirer from 'inquirer';
-import { createNewEnv } from '../utils';
-import path from 'path';
 import { loadingBarAnimationInfinite } from '../utils/log';
 
 let kurtosis: string;

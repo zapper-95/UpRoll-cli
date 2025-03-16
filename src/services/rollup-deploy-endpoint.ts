@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { rollupConfigLog , kurtosisRunConfig, deployCompleteLog, deployFailedLog} from '../utils/log';
+import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import path from 'path';
@@ -22,7 +22,6 @@ export async function RollupDeployEndpoint(endpoint:string) {
     
     await downloadConfig(endpoint, projectName.projectName);
     
-    kurtosisRunConfig();
     await deployFromEndpoint(endpoint, projectName.projectName);
  
   } catch(error){
