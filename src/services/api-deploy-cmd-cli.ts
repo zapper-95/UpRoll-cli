@@ -25,7 +25,7 @@ let check = false;
  */
 export const apiDeployCmdCli = async () => {
   const kurtosisPath = await getKurtosisPath();
-  const optimsimPackageExists = await fs.pathExists(kurtosisPath);
+  const optimsimPackageExists = await fs.pathExists(PATH_NAME.DEPLOYMENT_REPO);
 
   const kurtosisTest = await getKurtosis();
   kurtosis = kurtosisTest.kurtosis;

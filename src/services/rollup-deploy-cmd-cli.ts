@@ -3,8 +3,9 @@ import { rollupConfigLog , kurtosisRunConfig, deployCompleteLog, deployFailedLog
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import path from 'path';
-import { GetTestnetDetails } from "./get-testnet-details"
+import { GetRollupConfig } from "./get-rollup-config"
 import { getProjectDetails } from './get-project-details';
+import { PATH_NAME } from '../utils/config';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -14,8 +15,8 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   const projectDetails = await getProjectDetails();
 
   // make a directory with the project name in a project folder
-  await runCommand('mkdir -p ./dist/projects/');
-  await runCommand('mkdir -p ./dist/projects/' + projectDetails.projectName + "/");
+  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
+  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
       
   
   if (projectDetails.networkType === "devnet"){
@@ -38,7 +39,7 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
       'run',
       './optimism-package',
       '--args-file',
-      './dist/templates/devnet_config.yaml',
+      `${PATH_NAME.UPROLL_CLI}/dist/templates/devnet_config.yaml`,
       '--enclave', 
       projectDetails.projectName
     ]
@@ -54,7 +55,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
     // Get the testnet details from the user
     let postData: {[key: string]: any};
     try{
-      postData = await GetTestnetDetails();
+      postData = await GetRollupConfig(projectDetails.projectName);
     } catch (e) {
       deployFailedLog(String(e));
       return;
@@ -62,7 +63,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
 
     // Convert the testnet details to a YAML file
     try{
-      configToYAML(projectDetails.projectName, postData);
+      configToYAML(postData);
     } catch (e) {
       deployFailedLog(String(e));
       return;
@@ -77,7 +78,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         'run',
         './optimism-package',
         '--args-file',
-        'dist/projects/' + projectDetails.projectName + '/config.yaml',
+        `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/config.yaml`,
         '--enclave',
         projectDetails.projectName,
       ]

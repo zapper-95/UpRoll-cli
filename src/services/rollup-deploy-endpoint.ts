@@ -3,7 +3,6 @@ import { rollupConfigLog , kurtosisRunConfig, deployCompleteLog, deployFailedLog
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import path from 'path';
-import { GetTestnetDetails } from "./get-testnet-details"
 import { getProjectDetails, getProjectName } from './get-project-details';
 import fs from 'fs';
 import { PATH_NAME } from '../utils/config';
