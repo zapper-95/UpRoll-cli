@@ -1,11 +1,10 @@
-import inquirer from 'inquirer';
-import { rollupConfigLog , kurtosisRunConfig, deployCompleteLog, deployFailedLog} from '../utils/log';
+import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog, saveChainInfoLog, saveChainInfoCompleteLog, saveChainInfoFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
-import path from 'path';
 import { GetRollupConfig } from "./get-rollup-config"
 import { getProjectDetails } from './get-project-details';
 import { PATH_NAME } from '../utils/config';
+import { loadingBarAnimationInfinite } from '../utils/log';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -25,29 +24,45 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
   else{ // Testnet
     await deployTestnet(projectDetails);
   }
+  // save relevant chain info to the project directory
+    await saveChainInfo(projectDetails.projectName);
 }
 
-
+async function saveChainInfo(projectName:string){
+    const loading = loadingBarAnimationInfinite(
+      '🚀 Downloading deployment information'
+    );
+  
+  return runKurtosisCommand("kurtosis", [
+    'files',
+    'download',
+    projectName,
+    'op-deployer-configs',
+    './dist/projects/' + projectName
+  ])
+  .then(() => clearInterval(loading))
+  .then(
+    ()=> saveChainInfoCompleteLog(),
+  (err) => saveChainInfoFailedLog(String(err))
+  )
+} 
 
 async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
   console.log("Runnning with default devnet config");
   
   // Run Kurtosis using the default devnet config
-  let command = runKurtosisCommand(
+  return runKurtosisCommand(
     'kurtosis',
     [
       'run',
       './optimism-package',
-      '--args-file',
-      `${PATH_NAME.UPROLL_CLI}/dist/templates/devnet_config.yaml`,
       '--enclave', 
       projectDetails.projectName
     ]
-  )
-  command.then(
-    deployCompleteLog,
-    (err) => deployFailedLog(String(err))
-  );
+  ).then(
+    ()=> deployCompleteLog(),
+  (err) => deployFailedLog(String(err))
+);
 }
 
 async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
@@ -69,10 +84,9 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
       return;
     }
 
-    kurtosisRunConfig();
 
     // Run Kurtosis using the testnet config
-    let command =  runKurtosisCommand(
+    return runKurtosisCommand(
       'kurtosis',
       [
         'run',
@@ -82,11 +96,8 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         '--enclave',
         projectDetails.projectName,
       ]
-    );
-    
-    command
-    .then(
-      deployCompleteLog,
-      (err) => deployFailedLog(String(err))
+    ).then(
+      ()=> deployCompleteLog(),
+    (err) => deployFailedLog(String(err))
     )
 }

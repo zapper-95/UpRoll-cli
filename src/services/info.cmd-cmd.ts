@@ -1,120 +1,134 @@
 import inquirer from 'inquirer';
-import { getDockerComposePath } from '../shared';
 import { colors } from '../utils/colors';
 import fs from 'fs';
+import util from 'util';
+import { PATH_NAME } from '../utils/config';
+import path from 'path';
+const yaml = require("js-yaml");
+var toml = require('toml');
+
 
 export const InfoCMDCLI = async () => {
+
+
   console.clear();
-  // console.log(path)
   console.log('------------------');
   console.log(colors.fg.magenta, 'Chain Info', colors.reset);
   console.log('------------------');
 
-  console.log(colors.fg.magenta, 'Path of config file', colors.reset);
-  const dockerComposePath = await getDockerComposePath();
+  try{
+    let rollupName = await selectRollup();
+    let rollupConfig = await selectRollupConfig(rollupName);
+    await displayConfig(rollupName, rollupConfig);
 
-  console.log(
-    'Data Volume path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data`,
-    colors.reset
-  );
-  console.log(
-    'deploy-config path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data/configurations/deploy-config.json`,
-    colors.reset
-  );
-  console.log(
-    'rollup.json path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data/configurations/rollup.json`,
-    colors.reset
-  );
-  console.log(
-    'genesis.json path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data/configurations/genesis.json`,
-    colors.reset
-  );
-  console.log(
-    'allocs.json path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data/deployments/allocs.json`,
-    colors.reset
-  );
-  console.log(
-    'artifact.json path: ',
-    colors.fg.yellow,
-    `${dockerComposePath}/data/deployments/artifact.json`,
-    colors.reset
-  );
-  console.log('------------------');
-  await readConfigJson();
+  }catch(err){
+    console.log("❌ Error:", err);
+  }
+
 };
 
-export const readConfigJson = async () => {
-  const dockerComposePath = await getDockerComposePath();
-  const actionAns = await inquirer.prompt([
+async function getRollups(): Promise<string[]> {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects");
+
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK); 
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
+}
+
+export const getConfigs = async (projectName: string): Promise<string[]> => {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", projectName);
+
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK);
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
+};
+
+export const selectRollupConfig = async (rollupName:string) => {
+  let configs = await getConfigs(rollupName);
+
+  if (configs.length === 0) {
+    throw new Error('No configs found');
+  }
+  let configChoices = configs.map((config, index) => (
+    {
+      name: `${index + 1}) ${config}`,
+      value: config
+    }
+  ));
+
+  const configAns = await inquirer.prompt([
     // list choice with description
     {
       type: 'list',
-      name: 'action',
+      name: 'config',
       message: '⚙️ Select the config to look up',
-      choices: [
-        {
-          name: '1) deploy-config.json',
-          value: 'deploy-config.json',
-        },
-        {
-          name: '2) rollup.json',
-          value: 'rollup.json',
-        },
-        {
-          name: '3) genesis.json',
-          value: 'genesis.json',
-        },
-        {
-          name: '4) allocs.json',
-          value: 'allocs.json',
-        },
-        {
-          name: '5) artifact.json (Layer 1 Contract addresses)',
-          value: 'artifact.json',
-        },
-      ],
+      choices: configChoices
     },
   ]);
+  return configAns.config;
+}
 
-  console.log(actionAns.action);
-  let filePath = `${dockerComposePath}/data/configurations/${actionAns.action}`;
-  if (
-    actionAns.action === 'artifact.json' ||
-    actionAns.action === 'allocs.json'
-  ) {
-    filePath = `${dockerComposePath}/data/deployments/${actionAns.action}`;
-  }
-  const data = await readConfigJsonFile(filePath);
-  if (!data) {
-    console.log('❌ File not found', filePath);
-  } else {
-    console.log('------------------');
-    console.log(colors.fg.magenta, actionAns.action, colors.reset);
-    console.log('------------------');
-    console.log(data);
+
+export const selectRollup = async () => {
+  const rollups = await getRollups();
+  if (rollups.length === 0) {
+    throw new Error('No rollups found');
   }
 
-  await readConfigJson();
+  // build the rollup options using the found folders in the projects directory
+  let rollupsChoices = rollups.map((rollup, index) => (
+    {
+      name: `${index + 1}) ${rollup}`,
+      value: rollup
+    }
+  
+  ));
+  const rollupAns = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'rollup',
+      message: 'Select the rollup for chain info',
+      choices: rollupsChoices
+    }
+  ]);
+  return rollupAns.rollup;
+}
+
+
+
+export const displayConfig = async (rollupName:string, rollupConfig:string) => {
+  let filePath = `${PATH_NAME.UPROLL_CLI}/dist/projects/${rollupName}/${rollupConfig}`;
+  const data = await readConfigFile(filePath);
+  console.log('------------------');
+  console.log(colors.fg.magenta, `${rollupName}➜${rollupConfig}`, colors.reset);
+  console.log('------------------');
+  console.log(data);
 };
 
-export const readConfigJsonFile = async (filePath: string) => {
-  // read the file and display the content if the file exists
+export const readConfigFile = async (filePath: string) => {
   try {
-    const data = fs.readFileSync(filePath, 'utf8');
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await fs.promises.access(filePath, fs.constants.F_OK);
 
-    return JSON.parse(data);
-  } catch (error) {
-    return undefined;
+    const data = await fs.promises.readFile(filePath, "utf8");
+
+    if (filePath.endsWith(".json")) {
+      return JSON.parse(data);
+    } else if (filePath.endsWith(".yaml") || filePath.endsWith(".yml")) {
+      return util.inspect(yaml.load(data), { depth: null, colors: true });
+    } else if (filePath.endsWith(".toml")) {
+      return toml.parse(data);
+    } else {
+      throw new Error(
+        "Invalid file format. Supported formats are JSON, YAML, and TOML."
+      );
+    }
+  } catch {
+    throw new Error(`File does not exist or cannot be accessed: ${filePath}`);
   }
 };
