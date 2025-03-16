@@ -55,7 +55,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
     // Get the testnet details from the user
     let postData: {[key: string]: any};
     try{
-      postData = await GetRollupConfig();
+      postData = await GetRollupConfig(projectDetails.projectName);
     } catch (e) {
       deployFailedLog(String(e));
       return;
@@ -63,7 +63,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
 
     // Convert the testnet details to a YAML file
     try{
-      configToYAML(projectDetails.projectName, postData);
+      configToYAML(postData);
     } catch (e) {
       deployFailedLog(String(e));
       return;
