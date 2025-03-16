@@ -37,12 +37,6 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
           },
           {
             type: "input",
-            name: "ws_rpc_endpoint",
-            message: "Enter the WebSocket RPC Endpoint for this dependency:",
-            validate: (input) => (input ? true : "WebSocket RPC Endpoint cannot be empty."),
-          },
-          {
-            type: "input",
             name: "activation_time",
             message: "Enter the Activation Time:",
             validate: (input) => (input ? true : "Activation Time cannot be empty."),
@@ -72,7 +66,7 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
       }
 
       // create dependencies object
-      interop["dependencies"] = JSON.stringify(dependencies);
+      interop["supervisor_params"] = {"dependency_set" : JSON.stringify(dependencies)};
       postData.interop = interop;
     }
 }
