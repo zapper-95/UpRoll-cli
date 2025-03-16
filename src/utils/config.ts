@@ -1,9 +1,9 @@
 import path from "path";
 
 export const CONFIG = {
-  DEPLOYMENT_REPO: 'https://github.com/ethpandaops/optimism-package.git',
+  DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
   DEPLOYMENT_REPO_VERSION: '1.2.0',
-  DEPLOYMENT_REPO_HASH : 'a9e3b2dd26e0938bbffe5df93c1a5b3823114d84',
+  DEPLOYMENT_REPO_HASH : '20d6b94cab6d98454514c4915b85fad826debe50',
   DEPLOYMENT_URL: 'http://localhost:3050',
   DEPLOYMENT_WS_URL: 'ws://localhost:3050',
 };
