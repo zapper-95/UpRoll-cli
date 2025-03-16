@@ -71,12 +71,14 @@ export async function getDaConfig(postData: { [key: string]: any }) {
       name: "da_challenge_window",
       message: "Enter the DA Challenge Window:",
       validate: (input) => (input ? true : "DA Challenge Window cannot be empty."),
+      default: 100,
       },
       {
       type: "number",
       name: "da_resolve_window",
       message: "Enter the DA Resolve Window:",
       validate: (input) => (input ? true : "DA Resolve Window cannot be empty."),
+      default: 100,
       },
       {
       type: "number",
@@ -90,7 +92,7 @@ export async function getDaConfig(postData: { [key: string]: any }) {
       name: "da_resolver_refund_percentage",
       message: "Enter the DA Refund Percentage:",
       validate: (input) => (Number(input) >= 0 && Number(input) <= 100 ? true : "DA Refund Percentage should be between 0 and 100."),
-      default: 50,
+      default: 0,
       }
     ]);
     altda_deploy_config["da_challenge_window"] = daCustomConfig.da_challenge_window;

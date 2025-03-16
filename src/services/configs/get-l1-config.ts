@@ -54,7 +54,7 @@ export async function getL1Config(postData: { [key: string]: any }) {
   l1_config["el_rpc_url"] = el_rpc_url;
 
   if (useSameUrl) {
-    l1_config["el_ws_url"] = el_rpc_url;
+    l1_config["el_ws_url"] = el_rpc_url.includes("http") ? el_rpc_url.replace("http", "ws") : el_rpc_url.replace("https", "wss");
     l1_config["cl_rpc_url"] = el_rpc_url;
   }
   else {
@@ -96,7 +96,7 @@ export async function getL1Config(postData: { [key: string]: any }) {
       name: "deployer_priv_key",
       message: "Enter the Deployer Private Key:",
       validate: (input) => (input ? true : "Deployer Private Key cannot be empty."),
-      default: "0xbcdf20249abf0ed6d944c0288fad489e33f66b3960d9e6229c1cd214ed3bbe31"
+      default: "bcdf20249abf0ed6d944c0288fad489e33f66b3960d9e6229c1cd214ed3bbe31"
     },
   ]);
 
