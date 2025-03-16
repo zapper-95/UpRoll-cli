@@ -1,11 +1,10 @@
-import inquirer from 'inquirer';
 import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog, saveChainInfoLog, saveChainInfoCompleteLog, saveChainInfoFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
-import path from 'path';
 import { GetRollupConfig } from "./get-rollup-config"
 import { getProjectDetails } from './get-project-details';
 import { PATH_NAME } from '../utils/config';
+import { loadingBarAnimationInfinite } from '../utils/log';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -30,13 +29,19 @@ export async function RollupdeployCommandCLI(onlyUI = false) {
 }
 
 async function saveChainInfo(projectName:string){
+    const loading = loadingBarAnimationInfinite(
+      '🚀 Downloading deployment information'
+    );
+  
   return runKurtosisCommand("kurtosis", [
     'files',
     'download',
     projectName,
     'op-deployer-configs',
     './dist/projects/' + projectName
-  ]).then(
+  ])
+  .then(() => clearInterval(loading))
+  .then(
     ()=> saveChainInfoCompleteLog(),
   (err) => saveChainInfoFailedLog(String(err))
   )
@@ -51,8 +56,6 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
     [
       'run',
       './optimism-package',
-      '--args-file',
-      `${PATH_NAME.UPROLL_CLI}/dist/templates/devnet_config.yaml`,
       '--enclave', 
       projectDetails.projectName
     ]
@@ -81,7 +84,6 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
       return;
     }
 
-    kurtosisRunConfig();
 
     // Run Kurtosis using the testnet config
     return runKurtosisCommand(
