@@ -38,7 +38,7 @@ export const startLog = () => {
   );
   console.log(
     colors.fg.green,
-    `Welcome to Upnode Deploy`,
+    `Welcome to UpRoll`,
     colors.reset
   );
   console.log(colors.fg.green, 'OP Stack Deployment Tool', colors.reset);
@@ -329,55 +329,4 @@ export const infoFailLog = (errMsg:string) =>{
     '====================================',
     colors.reset
   );
-}
-
-
-
-export const checkpayloadLog = (payload: PayloadInterface) => {
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-};
-
-export interface PayloadInterface {
-  BATCHER_PRIVATE_KEY: string;
-  PROPOSER_PRIVATE_KEY: string;
-  SEQUENCER_PRIVATE_KEY: string;
-  DEPLOYER_PRIVATE_KEY: string;
-  ADMIN_PRIVATE_KEY: string;
-  L1_RPC_URL: string;
-  L1_CHAIN_NAME: string;
-  L1_CHAIN_ID: number;
-  L1_LOGO_URL: string;
-  L1_NATIVE_CURRENCY_NAME: string;
-  L1_NATIVE_CURRENCY_SYMBOL: string;
-  L1_NATIVE_CURRENCY_DECIMALS: number;
-  L1_BLOCK_EXPLORER_URL: string;
-  L1_BLOCK_EXPLORER_API: string;
-  L1_RPC_KIND: string;
-  L2_CHAIN_NAME: string;
-  L2_CHAIN_ID: number;
-  L2_LOGO_URL: string;
-  L2_NATIVE_CURRENCY_NAME: string;
-  L2_NATIVE_CURRENCY_SYMBOL: string;
-  L2_NATIVE_CURRENCY_DECIMALS: number;
-  // CELESTIA_RPC: string;
-  governanceTokenSymbol: string;
-  governanceTokenName: string;
-  l2BlockTime: number;
-  l2OutputOracleSubmissionInterval: number;
-  finalizationPeriodSeconds: number;
-  APP_LOGO: string;
-  COLOR_PRIMARY: string;
-  COLOR_SECONDARY: string;
-  WALLETCONNECT_PROJECT_ID: string;
-  L1_MULTI_CALL3_ADDRESS: string;
-  L1_MULTI_CALL3_BLOCK_CREATED: number;
 }

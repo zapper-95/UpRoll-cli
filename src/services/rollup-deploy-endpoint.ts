@@ -1,12 +1,8 @@
-import inquirer from 'inquirer';
 import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
-import { configToYAML } from '../utils/configtoYAML';
-import path from 'path';
-import { getProjectDetails, getProjectName } from './get-project-details';
+import { getProjectName } from './get-project-details';
 import fs from 'fs';
 import { PATH_NAME } from '../utils/config';
-import { assert, error } from 'console';
 const yaml = require('js-yaml');
 
 
