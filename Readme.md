@@ -3,8 +3,8 @@
       <source media="(prefers-color-scheme: dark)" srcset="https://upnode.org/static/746efe80b6fc0c3e8fe0326ce303ccfd/416c3/upnode.webp">
       <img src="https://upnode.org/static/746efe80b6fc0c3e8fe0326ce303ccfd/416c3/upnode.webp" height="128">
     </picture>
-    <h1 align="center">Opstack CLI Tool</h1>
-    <h4 align="center">By Upnode Deploy</h4>
+    <h1 align="center">UpRoll CLI Tool</h1>
+    <h4 align="center">By Upnode</h4>
 </p>
 
 <p align="center">
@@ -16,17 +16,20 @@
   </a>
 </p>
 
-# Opstack CLI Tool
+# UpRoll CLI Tool
 
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/jWynfrz/Imgur-Magic.gif" alt="Imgur-Magic" border="0"></a>
+<!-- <a href="https://imgbb.com/"><img src="https://i.ibb.co/jWynfrz/Imgur-Magic.gif" alt="Imgur-Magic" border="0"></a> -->
 
-**Opstack CLI Tool** by Upnode Deploy allows chain operators and developers to quickly launch their OP Stack chain with the necessary infrastructure, including an explorer, bridge, faucet, and monitoring system, by modifying a few environment variables related to the RPC endpoint, private keys, and chain information.
+**UpRoll CLI Tool** by Upnode allows chain operators and developers to quickly configure and launch their OP Stack chain. Customising your chain can be done easily through our [web application](https://uproll-web.vercel.app/) or through the CLI itself.
 
-With easy method by run just command and config your chain by just run `ops run`
+Deploying your chain is as easy as running `uproll deploy [config]`.
 
-Unlike Conduit, **Opstack CLI Tool** provides developers and chain operators with a tool to deploy OP Stack chains on their own servers instead of relying on third-party managed servers. Upnode Deploy is free, open-source, and fully transparent, whereas Conduit is a paid, closed-source solution.
 
-**Opstack CLI Tool** supports the latest OP Stack v1.9.0 and is prepared for the upcoming migration
+
+
+The UpRoll CLI tool runs on top of a fork of the [optimism package](https://github.com/zapper-95/optimism-package) that allows more customisation. Unlike Conduit, **UpRoll CLI Tool** provides developers and chain operators with a tool to deploy OP Stack chains on their own servers instead of relying on third-party managed servers. UpRoll is free, open-source, and fully transparent, whereas Conduit is a paid, closed-source solution.
+
+**UpRoll CLI Tool** supports the latest OP Stack v1.9.0 and is prepared for the upcoming migration
 
 
 ## How to use
