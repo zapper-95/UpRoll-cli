@@ -4,7 +4,6 @@ import { apiDeployCmdCli } from './api-deploy-cmd-cli';
 import { InfoCMDCLI } from './info.cmd-cmd';
 import { LogsCmd } from './logs-cmd-cli';
 import { StatusCMDCLI } from './status-cmd-cli';
-import { StartCMDCLI } from './start-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
 import { RollupDeployEndpoint } from './rollup-deploy-endpoint';
 enum Action {
@@ -40,16 +39,8 @@ export const mainCMDCLI = async (endpoint:string) => {
       message: '🚀 Select the action',
       choices: [
         {
-          name: 'Launch Deployment UI',
-          value: Action.deployUI,
-        },
-        {
-          name: 'Deploy Opstack Rollup include (Deployment UI, Grafana, Blockscout, Bridge UI)',
+          name: 'Deploy Rollup',
           value: Action.deploy,
-        },
-        {
-          name: 'Start the deployment',
-          value: Action.start,
         },
         {
           name: 'Stop the deployment',
@@ -94,14 +85,8 @@ export const mainCMDCLI = async (endpoint:string) => {
   const action = actionAns.action as Action;
 
   switch (action) {
-    case Action.deployUI:
-      await RollupdeployCommandCLI(true);
-      break;
     case Action.deploy:
       await RollupdeployCommandCLI(false);
-      break;
-    case Action.start:
-      await StartCMDCLI();
       break;
     case Action.stop:
       await StopCMDCLI();

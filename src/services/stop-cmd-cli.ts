@@ -1,33 +1,48 @@
 import inquirer from 'inquirer';
 import { getDeploymentStatus, stopAllContainers } from '../shared/api';
 import { colors } from '../utils/colors';
+import { getKurtosis } from '../shared';
+import {selectRollup} from '../shared/index'
+import { PATH_NAME } from '../utils/config';
+
+import { runCommand, runKurtosisCommand} from '../utils';
+import { stopCompleteLog, stopFailedLog} from '../utils/log';
+import { loadingBarAnimationInfinite } from '../utils/log';
+
 
 export async function StopCMDCLI() {
-  const deploymentStatus = await getDeploymentStatus();
-  if (!deploymentStatus) {
-    console.log(colors.fg.red, 'Deployment not found', colors.reset);
-    return;
-  }
-  if (deploymentStatus.status === 'DOWN') {
-    console.log(
-      colors.fg.green,
-      'The deployment is already stopped',
-      colors.reset
-    );
-    return;
-  }
-  const { is_confirm } = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'is_confirm',
-      message: 'Are you sure you want to stop the deployment?',
-    },
-  ]);
-
-  if (!is_confirm) {
+  const kurtosisTest = await getKurtosis();
+  if (!kurtosisTest.isKurtosisInstalled) {
+    console.log(colors.fg.red, 'Kurtosis is not installed', colors.reset);
     return;
   }
 
-  console.log('Stopping the deployment...');
-  await stopAllContainers();
+  let rollupName = '';
+  let loading;
+
+  try {
+    rollupName = await selectRollup();
+    loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
+
+    // Stop the deployment
+    await runKurtosisCommand('kurtosis', [
+      'enclave',
+      'rm',
+      rollupName,
+      "--force"
+    ]);
+    stopCompleteLog();
+
+    // Only run cleanup if the deployment stop was successful
+    await runCommand(`rm -r ${PATH_NAME.UPROLL_CLI}/dist/projects/${rollupName}/`);
+    console.log('Rollup project folder deleted');
+  } catch (err) {
+    stopFailedLog(String(err));
+  } finally {
+    if (loading) clearInterval(loading);
+  }
 }
+
+
+
+

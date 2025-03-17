@@ -4,6 +4,9 @@ import { CONFIG, PATH_NAME } from '../utils/config';
 import axios from 'axios';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import fs from 'fs';
+import inquirer from 'inquirer';
+
 
 const execPromise = promisify(exec);
 
@@ -69,6 +72,85 @@ export const getKurtosis = async () => {
   return { kurtosis, isKurtosisInstalled };
 };
 
+
+async function getRollups(): Promise<string[]> {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects");
+
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK); 
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
+}
+
+const getConfigs = async (projectName: string): Promise<string[]> => {
+  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", projectName);
+
+  try {
+    await fs.promises.access(dirPath, fs.constants.F_OK);
+    return await fs.promises.readdir(dirPath);
+  } catch {
+    return [];
+  }
+};
+
+
+export const selectRollup = async () => {
+  try{
+    const rollups = await getRollups();
+    if (rollups.length === 0) {
+      throw new Error('No rollups found');
+    }
+  
+    // build the rollup options using the found folders in the projects directory
+    let rollupsChoices = rollups.map((rollup, index) => (
+      {
+        name: `${index + 1}) ${rollup}`,
+        value: rollup
+      }
+    
+    ));
+    const rollupAns = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'rollup',
+        message: 'Select the rollup for chain info',
+        choices: rollupsChoices
+      }
+    ]);
+    return rollupAns.rollup;
+  }
+  catch(err){
+    throw err;
+  }
+
+}
+
+export const selectRollupConfig = async (rollupName:string) => {
+  let configs = await getConfigs(rollupName);
+
+  if (configs.length === 0) {
+    throw new Error('No configs found');
+  }
+  let configChoices = configs.map((config, index) => (
+    {
+      name: `${index + 1}) ${config}`,
+      value: config
+    }
+  ));
+
+  const configAns = await inquirer.prompt([
+    // list choice with description
+    {
+      type: 'list',
+      name: 'config',
+      message: '⚙️ Select the config to look up',
+      choices: configChoices
+    },
+  ]);
+  return configAns.config;
+}
 
 export const getKurtosisPath = async () => {
   const CURRENT_PATH = await runCommand('pwd');

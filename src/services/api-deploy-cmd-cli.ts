@@ -21,11 +21,9 @@ let check = false;
  * Deploy Rest API
  */
 export const apiDeployCmdCli = async () => {
-  const kurtosisPath = await getKurtosisPath();
   const optimsimPackageExists = await fs.pathExists(PATH_NAME.DEPLOYMENT_REPO);
 
   const kurtosisTest = await getKurtosis();
-  kurtosis = kurtosisTest.kurtosis;
   if (!kurtosisTest.isKurtosisInstalled) {
     console.log(colors.fg.red, 'Kurtosis is not installed', colors.reset);
     return;
