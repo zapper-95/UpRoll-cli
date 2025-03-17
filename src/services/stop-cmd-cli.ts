@@ -1,7 +1,4 @@
-import inquirer from 'inquirer';
-import { getDeploymentStatus, stopAllContainers } from '../shared/api';
 import { colors } from '../utils/colors';
-import { getKurtosis } from '../shared';
 import {selectRollup} from '../shared/index'
 import { PATH_NAME } from '../utils/config';
 
@@ -11,12 +8,6 @@ import { loadingBarAnimationInfinite } from '../utils/log';
 
 
 export async function StopCMDCLI() {
-  const kurtosisTest = await getKurtosis();
-  if (!kurtosisTest.isKurtosisInstalled) {
-    console.log(colors.fg.red, 'Kurtosis is not installed', colors.reset);
-    return;
-  }
-
   let rollupName = '';
   let loading;
 

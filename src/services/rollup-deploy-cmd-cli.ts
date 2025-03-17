@@ -5,12 +5,20 @@ import { GetRollupConfig } from "./get-rollup-config"
 import { getProjectDetails } from './get-project-details';
 import { PATH_NAME } from '../utils/config';
 import { loadingBarAnimationInfinite } from '../utils/log';
+import { getDockerCompose, getKurtosis } from '../shared/index';
 
-export async function RollupdeployCommandCLI(onlyUI = false) {
+export async function RollupdeployCommandCLI() {
+
   console.clear();
   rollupConfigLog();
 
   try{
+    const dockerComposeTest = await getDockerCompose();
+    if (!dockerComposeTest.isDockerComposeInstalled) throw('Docker Compose is not installed');
+
+    const kurtosisTest = await getKurtosis();
+    if (!kurtosisTest.isKurtosisInstalled) throw("Kurtosis is not installed");
+
     const projectDetails = await getProjectDetails();
 
     // make a directory with the project name in a project folder
