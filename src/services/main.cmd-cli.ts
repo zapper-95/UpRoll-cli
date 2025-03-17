@@ -1,8 +1,6 @@
 import inquirer from 'inquirer';
 import { RollupdeployCommandCLI } from './rollup-deploy-cmd-cli';
-import { apiDeployCmdCli } from './api-deploy-cmd-cli';
 import { InfoCMDCLI } from './info.cmd-cmd';
-import { LogsCmd } from './logs-cmd-cli';
 import { StatusCMDCLI } from './status-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
 import { RollupDeployEndpoint } from './rollup-deploy-endpoint';
@@ -22,8 +20,6 @@ enum Action {
 }
 
 export const mainCMDCLI = async (endpoint:string) => {
-  await apiDeployCmdCli();
-
 
   if (endpoint){
     RollupDeployEndpoint(endpoint);
@@ -43,7 +39,7 @@ export const mainCMDCLI = async (endpoint:string) => {
           value: Action.deploy,
         },
         {
-          name: 'Stop the deployment',
+          name: 'Stop rollup',
           value: Action.stop,
         },
         // {
@@ -86,7 +82,7 @@ export const mainCMDCLI = async (endpoint:string) => {
 
   switch (action) {
     case Action.deploy:
-      await RollupdeployCommandCLI(false);
+      await RollupdeployCommandCLI();
       break;
     case Action.stop:
       await StopCMDCLI();
@@ -101,7 +97,7 @@ export const mainCMDCLI = async (endpoint:string) => {
       await StatusCMDCLI();
       break;
     case Action.logs:
-      await LogsCmd();
+      // await LogsCmd();
       break;
     // case Action.backupConfig:
     //   console.log('Backup Config');

@@ -66,5 +66,4 @@ export async function getSignerConfig(postData: { [key: string]: any }) {
   signer_params["challenger_params"] = challengerConfig;
 
   postData.signer_params = signer_params;
-  console.log(signer_params);
 }

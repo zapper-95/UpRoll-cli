@@ -1,28 +1,29 @@
-import { getAllDockerPs } from '../shared';
-import { getAuthToken, getDeploymentStatus } from '../shared/api';
-import { consoleLogTable } from '../utils';
-import { getKurtosis } from '../shared';
-import { colors } from '../utils/colors';
 import {selectRollup} from '../shared/index'
 import { runKurtosisCommand} from '../utils';
 import { statusCompleteLog, statusFailLog } from '../utils/log';
+import { getDockerCompose, getKurtosis } from '../shared/';
+import { loadingBarAnimationInfinite } from '../utils/log';
 
 export const StatusCMDCLI = async () => {
-  const kurtosisTest = await getKurtosis();
-  if (!kurtosisTest.isKurtosisInstalled) {
-    console.log(colors.fg.red, 'Kurtosis is not installed', colors.reset);
-    return;
-  }
-
+  let loading;
   try{
+
+        // verify docker and kurtosis are installed
+        const dockerComposeTest = await getDockerCompose();
+        if (!dockerComposeTest.isDockerComposeInstalled) throw('Docker Compose is not installed');
+      
+        const kurtosisTest = await getKurtosis();
+        if (!kurtosisTest.isKurtosisInstalled) throw('Kurtosis is not installed');
+
+
         let rollupName = await selectRollup();
+          
         await runKurtosisCommand('kurtosis', [
           'enclave',
           'inspect',
           rollupName,
         ]);
         statusCompleteLog();
-
   }
   catch(err){
     statusFailLog(String(err));

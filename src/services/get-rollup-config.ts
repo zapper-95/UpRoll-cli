@@ -29,7 +29,6 @@ export async function GetRollupConfig(rollupName:string): Promise<{ [key: string
   // Gas Configuration
   await getGasConfig(postData);
 
-  console.log(postData);
   // Data Availability
   await getDaConfig(postData);
 

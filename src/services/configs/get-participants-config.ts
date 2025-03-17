@@ -52,7 +52,6 @@ export async function getParticipantsConfig(postData: { [key: string]: any }) {
       ]);
       adding = addParticipant;
       }
-    console.log(participants)
     postData.participants = participants;
   
 }

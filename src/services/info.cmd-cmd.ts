@@ -5,7 +5,7 @@ import util from 'util';
 import { PATH_NAME } from '../utils/config';
 import { selectRollup, selectRollupConfig } from '../shared';
 import { infoFailLog, infoCompleteLog } from '../utils/log';
-import { info } from 'console';
+import { getDockerCompose, getKurtosis } from '../shared';
 const yaml = require("js-yaml");
 var toml = require('toml');
 
@@ -19,6 +19,12 @@ export const InfoCMDCLI = async () => {
   console.log('------------------');
 
   try{
+    const dockerComposeTest = await getDockerCompose();
+    if (!dockerComposeTest.isDockerComposeInstalled) throw('Docker Compose is not installed');
+
+    const kurtosisTest = await getKurtosis();
+    if (!kurtosisTest.isKurtosisInstalled) throw("Kurtosis is not installed");
+    
     let rollupName = await selectRollup();
     let rollupConfig = await selectRollupConfig(rollupName);
     await displayConfig(rollupName, rollupConfig);
