@@ -7,25 +7,31 @@ import { PATH_NAME } from '../utils/config';
 import { loadingBarAnimationInfinite } from '../utils/log';
 
 export async function RollupdeployCommandCLI(onlyUI = false) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   console.clear();
   rollupConfigLog();
 
-  const projectDetails = await getProjectDetails();
+  try{
+    const projectDetails = await getProjectDetails();
 
-  // make a directory with the project name in a project folder
-  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
-  await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
-      
-  
-  if (projectDetails.networkType === "devnet"){
-    await deployDevnet(projectDetails);
-  }
-  else{ // Testnet
-    await deployTestnet(projectDetails);
-  }
-  // save relevant chain info to the project directory
+    // make a directory with the project name in a project folder
+    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
+    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
+        
+    
+    if (projectDetails.networkType === "devnet"){
+      await deployDevnet(projectDetails);
+    }
+    else{ // Testnet
+      await deployTestnet(projectDetails);
+    }
+    deployCompleteLog();
+    
+    // save relevant chain info to the project directory
     await saveChainInfo(projectDetails.projectName);
+    saveChainInfoCompleteLog();
+  }catch(error){ 
+    deployFailedLog(String(error));
+  }
 }
 
 async function saveChainInfo(projectName:string){
@@ -41,10 +47,6 @@ async function saveChainInfo(projectName:string){
     './dist/projects/' + projectName
   ])
   .then(() => clearInterval(loading))
-  .then(
-    ()=> saveChainInfoCompleteLog(),
-  (err) => saveChainInfoFailedLog(String(err))
-  )
 } 
 
 async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
@@ -59,10 +61,7 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
       '--enclave', 
       projectDetails.projectName
     ]
-  ).then(
-    ()=> deployCompleteLog(),
-  (err) => deployFailedLog(String(err))
-);
+  )
 }
 
 async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
@@ -96,8 +95,5 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         '--enclave',
         projectDetails.projectName,
       ]
-    ).then(
-      ()=> deployCompleteLog(),
-    (err) => deployFailedLog(String(err))
     )
 }

@@ -235,6 +235,104 @@ export const deployFailedLog = (errMsg:string) =>{
 }
 
 
+export const stopFailedLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Unable to stop rollup', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const stopCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Rollup stopped succesfully', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const statusCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Succesfully retrieved rollup status', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+export const statusFailLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Failed to retrieve rollup status', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue, 
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const infoCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Succesfully retrieved rollup info', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+export const infoFailLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Failed to retrieve rollup info', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue, 
+    '====================================',
+    colors.reset
+  );
+}
+
+
+
 export const checkpayloadLog = (payload: PayloadInterface) => {
   console.log(
     colors.fg.blue,
