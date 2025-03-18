@@ -27,8 +27,8 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
       while (addingDependency) {
         const dependency = await inquirer.prompt([
           {
-            type: "number",
-            name: "chain_id",
+            type: "input",
+            name: "chainId",
             message: "Enter the dependency Chain ID:",
             validate: (input) => {
               if (!input) return "Chain ID cannot be empty.";
@@ -36,20 +36,20 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
             },
           },
           {
-            type: "input",
-            name: "activation_time",
+            type: "number",
+            name: "activationTime",
             message: "Enter the Activation Time:",
             validate: (input) => (input ? true : "Activation Time cannot be empty."),
           },
           {
-            type: "input",
-            name: "history_min_time",
+            type: "number",
+            name: "historyMinTime",
             message: "Enter the History Min Time:",
             validate: (input) => (input ? true : "History Min Time cannot be empty."),
           },
         ]);
         
-        dependencies[dependency.chain_id] = dependency;
+        dependencies[dependency.chainId] = dependency;
         
         const { addAnother } = await inquirer.prompt([
           {
