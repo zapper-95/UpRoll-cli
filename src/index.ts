@@ -3,9 +3,9 @@
 import { Command } from 'commander';
 import { startLog } from './utils/log';
 
-import { mainCMDCLI } from './services/main.cmd-cli';
 import packageJson from '../package.json';
-import { RollupDeploy } from './services/rollup-deploy';
+import { mainCMDCLI } from './commands/main-cmd-cli';
+import { RollupDeploy } from './commands/rollup-deploy';
 
 startLog();
 const program = new Command();

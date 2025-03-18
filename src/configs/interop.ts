@@ -1,10 +1,10 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getInteropConfig(postData: { [key: string]: any }) {
     
-    let interop: {[key:string]:any} = {};
+    const interop: {[key:string]:any} = {};
   
     console.log(colors.fg.yellow, "Interop Configuration", colors.reset);
 
@@ -32,7 +32,7 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
             message: "Enter the dependency Chain ID:",
             validate: (input) => {
               if (!input) return "Chain ID cannot be empty.";
-              return dependencies.hasOwnProperty(input) ? "Chain ID already exists." : true;
+              return Object.prototype.hasOwnProperty.call(dependencies, input) ? "Chain ID already exists." : true;
             },
           },
           {

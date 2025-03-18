@@ -1,9 +1,9 @@
-import { PATH_NAME } from "./config";
+import { PATH_NAME } from "../utils/config";
+import path from 'path';
+import fs from 'fs';
+import yaml from 'js-yaml';
 
 export function configToYAML(postData: { [key: string]: any }) {
-  const path = require("path");
-  const fs = require("fs");
-  const yaml = require("js-yaml");
 
   const config: {[key:string]:any} = {};
 
