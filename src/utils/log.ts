@@ -328,3 +328,36 @@ export const infoFailLog = (errMsg:string) =>{
     colors.reset
   );
 }
+
+
+
+export const logCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Succesfully retrieved log', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+export const logFailLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Failed to retrieve log', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue, 
+    '====================================',
+    colors.reset
+  );
+}

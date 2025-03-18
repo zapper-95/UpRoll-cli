@@ -2,16 +2,17 @@ import path from 'path';
 import { colors } from '../utils/colors';
 import { PATH_NAME } from '../utils/config';
 import { readConfigFile, selectLog, selectRollup } from '../utils/project-manage';
-
+import { logCompleteLog, logFailLog } from '../utils/log';
 
 export async function LogsCmd() {
   try{
     const rollupName = await selectRollup();
     const logName  = await selectLog(rollupName);
-    displayLog(rollupName, logName);
+    await displayLog(rollupName, logName);
+    logCompleteLog();
   }
   catch(error){
-    console.log(error);
+    logFailLog(String(error));  
   }
 }
 
