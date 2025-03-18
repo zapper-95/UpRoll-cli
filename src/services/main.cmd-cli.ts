@@ -3,7 +3,7 @@ import { RollupdeployCommandCLI } from './rollup-deploy-cmd-cli';
 import { InfoCMDCLI } from './info.cmd-cmd';
 import { StatusCMDCLI } from './status-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
-import { RollupDeployEndpoint } from './rollup-deploy-endpoint';
+import { RollupDeployEndpoint } from './rollup-deploy';
 enum Action {
   deployUI = 'deployUI',
   deploy = 'deploy',
@@ -19,12 +19,8 @@ enum Action {
   exit = 'exit',
 }
 
-export const mainCMDCLI = async (endpoint:string) => {
+export const mainCMDCLI = async () => {
 
-  if (endpoint){
-    RollupDeployEndpoint(endpoint);
-    return;
-  }
   // select the command
 
   const actionAns = await inquirer.prompt([
