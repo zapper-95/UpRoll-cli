@@ -32,7 +32,7 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
             message: "Enter the dependency Chain ID:",
             validate: (input) => {
               if (!input) return "Chain ID cannot be empty.";
-              return dependencies.hasOwnProperty(input) ? "Chain ID already exists." : true;
+              return Object.prototype.hasOwnProperty.call(dependencies, input) ? "Chain ID already exists." : true;
             },
           },
           {
