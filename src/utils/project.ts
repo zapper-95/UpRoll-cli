@@ -5,3 +5,8 @@ export async function ensureProjectDirectory(projectName: string) {
   await fs.promises.mkdir(projectPath, { recursive: true });
   return projectPath;
 }
+
+export async function removeProjectDirectory(projectName: string){
+    const projectPath = `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectName}/`;
+    await fs.promises.rm(projectPath, { recursive: true });
+}
