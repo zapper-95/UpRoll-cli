@@ -1,6 +1,4 @@
 import inquirer from 'inquirer';
-import { runCommand } from '../utils';
-
 
 export async function getProjectName(){
   const projectName = await inquirer.prompt(

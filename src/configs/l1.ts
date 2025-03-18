@@ -1,9 +1,9 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getL1Config(postData: { [key: string]: any }) {
-  let l1_config: {[key:string]:any} = {};
+  const l1_config: {[key:string]:any} = {};
   
   console.log(colors.fg.yellow, "Select Settlement Layer", colors.reset);
   const { settlementLayer } = await inquirer.prompt([

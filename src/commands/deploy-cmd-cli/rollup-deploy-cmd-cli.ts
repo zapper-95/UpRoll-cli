@@ -1,12 +1,12 @@
-import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../utils/log';
-import { runKurtosisCommand , runCommand} from '../utils';
-import { configToYAML } from '../utils/configtoYAML';
+import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../../utils/log';
+import { configToYAML } from '../../configs/to-yaml';
 import { GetRollupConfig } from "./get-rollup-config"
-import { getProjectDetails } from './get-project-details';
-import { PATH_NAME } from '../utils/config';
-import { loadingBarAnimationInfinite } from '../utils/log';
-import { getDockerCompose, getKurtosis } from '../shared/index';
-import { ensureProjectDirectory } from '../utils/project';
+import { getProjectDetails } from '../../configs/project';
+import { PATH_NAME } from '../../utils/config';
+import { loadingBarAnimationInfinite } from '../../utils/log';
+import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
+import { ensureProjectDirectory } from '../../utils/project-manage';
+import path from 'path';
 
 export async function RollupdeployCommandCLI() {
 
@@ -46,11 +46,10 @@ async function saveChainInfo(projectName:string){
     );
   
   return runKurtosisCommand("kurtosis", [
-    'files',
-    'download',
+    'enclave',
+    'dump',
     projectName,
-    'op-deployer-configs',
-    './dist/projects/' + projectName
+    path.join('./dist/projects/', projectName, "deployment")
   ])
   .then(() => clearInterval(loading))
 } 

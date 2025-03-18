@@ -1,11 +1,7 @@
-import { colors } from '../utils/colors';
-import {selectRollup} from '../shared/index'
-import { PATH_NAME } from '../utils/config';
-
-import {runKurtosisCommand} from '../utils';
-import { stopCompleteLog, stopFailedLog} from '../utils/log';
-import { loadingBarAnimationInfinite } from '../utils/log';
-import { removeProjectDirectory } from '../utils/project';
+import { selectRollup } from '../utils/project-manage';
+import { loadingBarAnimationInfinite, stopFailedLog } from '../utils/log';
+import { removeProjectDirectory } from '../utils/project-manage';
+import { runKurtosisCommand } from '../utils/system';
 
 export async function StopCMDCLI() {
   let rollupName = '';

@@ -1,10 +1,10 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getInteropConfig(postData: { [key: string]: any }) {
     
-    let interop: {[key:string]:any} = {};
+    const interop: {[key:string]:any} = {};
   
     console.log(colors.fg.yellow, "Interop Configuration", colors.reset);
 

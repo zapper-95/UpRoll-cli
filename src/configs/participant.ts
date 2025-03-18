@@ -1,6 +1,6 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
-import {EL_IMAGES, CL_IMAGES} from "../../utils/el_cl_images";
+import { colors } from "../utils/colors";
+import { CL_IMAGES, EL_IMAGES } from "../utils/config";
 
 
 export async function getParticipantsConfig(postData: { [key: string]: any }) {

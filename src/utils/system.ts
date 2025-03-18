@@ -1,27 +1,8 @@
-import { promisify } from 'util';
 import { exec, spawn } from 'child_process';
+import { promisify } from 'util';
 import { PATH_NAME } from './config';
-import { rejects } from 'assert';
 
 const execPromise = promisify(exec);
-
-export const createNewEnv = (newEnv: Record<string, any>) => {
-  let res = '';
-  for (const key in newEnv) {
-    res += `${key}=${newEnv[key]}\n`;
-  }
-  return res;
-};
-
-export const mergeDict = (dict1: any, dict2: any) => {
-  const res = { ...dict1 };
-  for (const key in dict2) {
-    if (dict2.hasOwnProperty(key)) {
-      res[key] = dict2[key];
-    }
-  }
-  return res;
-};
 
 export async function runCommand(command: string) {
   try {
@@ -72,16 +53,42 @@ export function runKurtosisCommand(commandName: string, args:string[]){
 
 }
 
-export const consoleLogTable = (data: any[]) => {
-  // console.log tha table with key as header and value as row
-  const header = Object.keys(data[0]);
-  // const rows = data.map((row) => Object.values(row));
-  // console.log(header, rows);
-  console.table(data, header);
+export const getDockerCompose = async () => {
+  let dockerCompose = '';
+  let isDockerComposeInstalled = false;
+  const dockerCompose1Version = await runCommand('docker-compose -v');
+  const dockerCompose2Version = await runCommand('docker compose -v');
+
+  if (dockerCompose1Version) {
+    dockerCompose = 'docker-compose';
+  } else if (dockerCompose2Version) {
+    dockerCompose = 'docker compose';
+  }
+
+  if (dockerCompose1Version || dockerCompose2Version) {
+    isDockerComposeInstalled = true;
+  }
+
+  return { dockerCompose, isDockerComposeInstalled };
 };
 
-export function stripAnsiCodes(str: string) {
-  // Regular expression to match ANSI escape codes
-  const ansiRegex = /\x1B\[[0-?]*[ -/]*[@-~]/g;
-  return str.replace(ansiRegex, '');
-}
+
+
+export const getKurtosis = async () => {
+  let kurtosis = '';
+  let isKurtosisInstalled = false;
+  const kurtosis1Version = await runCommand('kurtosis');
+  const kurtosis2Version = await runCommand('kurtosis');
+
+  if (kurtosis1Version) {
+    kurtosis = 'kurtosis';
+  } else if (kurtosis2Version) {
+    kurtosis = 'kurtosis';
+  }
+
+  if (kurtosis1Version || kurtosis2Version) {
+    isKurtosisInstalled = true;
+  }
+
+  return { kurtosis, isKurtosisInstalled };
+};

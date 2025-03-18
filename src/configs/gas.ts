@@ -1,5 +1,5 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getGasConfig(postData: { [key: string]: any }) {

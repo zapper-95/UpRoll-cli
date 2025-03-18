@@ -1,5 +1,4 @@
 import { colors } from './colors';
-import { CONFIG } from './config';
 
 export const startLog = () => {
   //   console.log(colors.fg.cyan,
@@ -110,7 +109,6 @@ export function loadingBarAnimationInfinite(
     const progressBar = `[${'='.repeat(currentStep)}${' '.repeat(
       totalSteps - currentStep
     )}]`;
-    const percentage = Math.round((currentStep / totalSteps) * 100);
 
     console.log(
       `${loadingSpin[i]} ${loadingSpin[i]} ${text}... ${progressBar}`

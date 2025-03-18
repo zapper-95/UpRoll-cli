@@ -1,11 +1,10 @@
-import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../utils/log';
-import { runKurtosisCommand , runCommand} from '../utils';
-import { getProjectName } from './get-project-details';
 import fs from 'fs';
-import { PATH_NAME, WEBSITE} from '../utils/config';
-import { ensureProjectDirectory } from '../utils/project';
-import { config } from 'dotenv';
-const yaml = require('js-yaml');
+import { getProjectName } from '../configs/project';
+import { WEBSITE } from '../utils/config';
+import { deployFailedLog, rollupConfigLog } from '../utils/log';
+import { ensureProjectDirectory } from '../utils/project-manage';
+import { runKurtosisCommand } from '../utils/system';
+import yaml from 'js-yaml';
 
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
@@ -60,9 +59,9 @@ export async function RollupDeployFile(file_path:string, projectName: string, pr
 
 export async function RollupDeployEndpoint(id:string, projectName: string, projectPath:string) {
   try{
-    let endpoint = WEBSITE.ENDPOINT.replace('[id]', id);
+    const endpoint = WEBSITE.ENDPOINT.replace('[id]', id);
 
-    let configPath = `${projectPath}/config.yaml`;
+    const configPath = `${projectPath}/config.yaml`;
     await downloadConfig(endpoint, configPath);
     console.log('Downloaded config file');
     await deployFromConfig(configPath, projectName);
@@ -73,7 +72,7 @@ export async function RollupDeployEndpoint(id:string, projectName: string, proje
 }
 
 async function downloadConfig(endpoint:string, configPath:string) {  
-  try{
+
     const response = await fetch(endpoint);
     if (!response.ok) {
       throw new Error('Could not download config file');
@@ -83,9 +82,6 @@ async function downloadConfig(endpoint:string, configPath:string) {
     const yamlObj = yaml.dump(yamltext);
 
     await fs.promises.writeFile(configPath, yamlObj);
-  }catch(error){
-    throw error;
-  }
 }
 
 async function deployFromConfig(configPath:string, projectName:string) {

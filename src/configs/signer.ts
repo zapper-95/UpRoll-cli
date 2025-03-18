@@ -1,6 +1,5 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
-
+import { colors } from "../utils/colors";
 
 export async function getSignerConfig(postData: { [key: string]: any }) {
 
@@ -52,7 +51,7 @@ export async function getSignerConfig(postData: { [key: string]: any }) {
     return config;
   }
 
-  let signer_params: { [key: string]: any } = {};
+  const signer_params: { [key: string]: any } = {};
   const batcherConfig = await getSignerConfig("batcher");
   signer_params["batcher_params"] = batcherConfig;
 
