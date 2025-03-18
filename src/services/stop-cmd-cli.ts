@@ -2,10 +2,10 @@ import { colors } from '../utils/colors';
 import {selectRollup} from '../shared/index'
 import { PATH_NAME } from '../utils/config';
 
-import { runCommand, runKurtosisCommand} from '../utils';
+import {runKurtosisCommand} from '../utils';
 import { stopCompleteLog, stopFailedLog} from '../utils/log';
 import { loadingBarAnimationInfinite } from '../utils/log';
-
+import { removeProjectDirectory } from '../utils/project';
 
 export async function StopCMDCLI() {
   let rollupName = '';
@@ -14,6 +14,7 @@ export async function StopCMDCLI() {
   try {
     rollupName = await selectRollup();
     loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
+    removeProjectDirectory(rollupName);
 
     // Stop the deployment
     await runKurtosisCommand('kurtosis', [
@@ -22,11 +23,8 @@ export async function StopCMDCLI() {
       rollupName,
       "--force"
     ]);
-    stopCompleteLog();
 
-    // Only run cleanup if the deployment stop was successful
-    await runCommand(`rm -r ${PATH_NAME.UPROLL_CLI}/dist/projects/${rollupName}/`);
-    console.log('Rollup project folder deleted');
+
   } catch (err) {
     stopFailedLog(String(err));
   } finally {

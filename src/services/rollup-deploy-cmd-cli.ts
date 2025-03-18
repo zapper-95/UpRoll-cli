@@ -1,4 +1,4 @@
-import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog, saveChainInfoLog, saveChainInfoCompleteLog, saveChainInfoFailedLog} from '../utils/log';
+import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../utils/log';
 import { runKurtosisCommand , runCommand} from '../utils';
 import { configToYAML } from '../utils/configtoYAML';
 import { GetRollupConfig } from "./get-rollup-config"
@@ -6,6 +6,7 @@ import { getProjectDetails } from './get-project-details';
 import { PATH_NAME } from '../utils/config';
 import { loadingBarAnimationInfinite } from '../utils/log';
 import { getDockerCompose, getKurtosis } from '../shared/index';
+import { ensureProjectDirectory } from '../utils/project';
 
 export async function RollupdeployCommandCLI() {
 
@@ -22,9 +23,7 @@ export async function RollupdeployCommandCLI() {
     const projectDetails = await getProjectDetails();
 
     // make a directory with the project name in a project folder
-    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
-    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
-        
+    ensureProjectDirectory(projectDetails.projectName);
     
     if (projectDetails.networkType === "devnet"){
       await deployDevnet(projectDetails);
@@ -32,11 +31,10 @@ export async function RollupdeployCommandCLI() {
     else{ // Testnet
       await deployTestnet(projectDetails);
     }
-    deployCompleteLog();
-    
+
     // save relevant chain info to the project directory
     await saveChainInfo(projectDetails.projectName);
-    saveChainInfoCompleteLog();
+    deployCompleteLog();
   }catch(error){ 
     deployFailedLog(String(error));
   }
