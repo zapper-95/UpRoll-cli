@@ -1,4 +1,5 @@
 import inquirer from 'inquirer';
+import { CleanCMDCLI } from './clean-cmd-cli';
 import { RollupdeployCommandCLI } from './deploy-cmd-cli/rollup-deploy-cmd-cli';
 import { InfoCMDCLI } from './info-cmd-cmd';
 import { LogsCmd } from './logs-cmd-cli';
@@ -17,6 +18,7 @@ enum Action {
   delete = 'delete',
   chainInfo = 'chainInfo',
   exit = 'exit',
+  clean = 'clean',
 }
 
 export const mainCMDCLI = async () => {
@@ -53,6 +55,10 @@ export const mainCMDCLI = async () => {
         {
           name: 'View logs',
           value: Action.logs,
+        },
+        {
+          name: 'Clean',
+          value: Action.clean,
         },
         // {
         //   name: '9) Backup Config',
@@ -94,6 +100,9 @@ export const mainCMDCLI = async () => {
       break;
     case Action.logs:
       await LogsCmd();
+      break;
+    case Action.clean:
+      await CleanCMDCLI();
       break;
     // case Action.backupConfig:
     //   console.log('Backup Config');
