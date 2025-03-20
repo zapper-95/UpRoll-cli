@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc",
     "lint": "npx eslint ./src",
-    "postbuild": "chmod +x dist/index.js",
     "start": "ts-node src/index.ts",
     "blessdev": "nodemon -I --exec ts-node src/test.ts",
     "dev": "nodemon -I --exec ts-node src/test2.ts"

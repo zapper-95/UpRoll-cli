@@ -11,11 +11,11 @@ startLog();
 const program = new Command();
 
 program
-  .name('opstack-cli')
+  .name('UpRoll-cli')
   .description('A CLI tool for manage opstack deployment')
   .version(packageJson.version);
 
-program.command('run').description('Run Opstack CLI Tool').action(() => mainCMDCLI());
+program.command('run').description('Run UpRoll CLI Tool').action(() => mainCMDCLI());
 program
   .command('deploy')
   .description('Deploy Rollup')
@@ -36,7 +36,7 @@ program
 // get version in package.json
 program
   .command('version')
-  .description('Get version of Opstack CLI')
+  .description('Get version of UpRoll CLI')
   .action(() => {
     console.log(`Version: ${packageJson.version}`);
   });

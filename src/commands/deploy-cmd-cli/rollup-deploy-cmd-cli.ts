@@ -1,12 +1,9 @@
-import { rollupConfigLog, deployCompleteLog, deployFailedLog} from '../../utils/log';
-import { configToYAML } from '../../configs/to-yaml';
-import { GetRollupConfig } from "./get-rollup-config"
 import { getProjectDetails } from '../../configs/project';
-import { PATH_NAME } from '../../utils/config';
-import { loadingBarAnimationInfinite } from '../../utils/log';
+import { configToYAML } from '../../configs/to-yaml';
+import { deployCompleteLog, deployFailedLog, loadingBarAnimationInfinite, rollupConfigLog } from '../../utils/log';
+import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder} from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
-import { ensureProjectDirectory } from '../../utils/project-manage';
-import path from 'path';
+import { GetRollupConfig } from "./get-rollup-config";
 
 export async function RollupdeployCommandCLI() {
 
@@ -45,11 +42,12 @@ async function saveChainInfo(projectName:string){
       '🚀 Downloading deployment information'
     );
   
+  const dumpPath = getProjectDeploymentDumpFolder(projectName); 
   return runKurtosisCommand("kurtosis", [
     'enclave',
     'dump',
     projectName,
-    path.join('./dist/projects/', projectName, "deployment")
+    dumpPath,
   ])
   .then(() => clearInterval(loading))
 } 
@@ -82,13 +80,14 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
 
     // Convert the testnet details to a YAML file
     try{
-      configToYAML(postData);
+      await configToYAML(postData);
     } catch (e) {
       deployFailedLog(String(e));
       return;
     }
 
-
+    const configFile = getProjectConfig(projectDetails.projectName);
+    console.log(configFile)
     // Run Kurtosis using the testnet config
     return runKurtosisCommand(
       'kurtosis',
@@ -96,7 +95,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         'run',
         './optimism-package',
         '--args-file',
-        `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/config.yaml`,
+        configFile,
         '--enclave',
         projectDetails.projectName,
       ]

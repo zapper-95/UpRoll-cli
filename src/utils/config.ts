@@ -1,4 +1,5 @@
 import path from "path";
+import os from "os";
 
 export const CONFIG = {
   DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
@@ -10,10 +11,16 @@ export const WEBSITE = {
   ENDPOINT: "https://uproll-web.vercel.app/api/configs/[id]/yaml/"
 }
 
+const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");
+
+import fs from "fs";
+fs.mkdirSync(UPROLL_GLOBAL_DIR, { recursive: true });
+fs.mkdirSync(path.join(UPROLL_GLOBAL_DIR, "projects"), { recursive: true });
 
 export const PATH_NAME = {
-  DEPLOYMENT_REPO: path.join(path.join(__dirname, '../..'), 'optimism-package'),
-  UPROLL_CLI : path.join(__dirname, '../..'),
+  DEPLOYMENT_REPO: path.join(UPROLL_GLOBAL_DIR, "optimism-package"),
+  UPROLL_CLI: UPROLL_GLOBAL_DIR,
+  PROJECTS: path.join(UPROLL_GLOBAL_DIR, "projects"),
 };
 
 

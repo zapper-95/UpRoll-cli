@@ -7,36 +7,28 @@ import yaml from "js-yaml";
 import toml from 'toml';
 
 export async function ensureProjectDirectory(projectName: string) {
-  const projectPath = `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectName}/`;
+  const projectPath = await getProjectFolder(projectName);
   await fs.promises.mkdir(projectPath, { recursive: true });
   return projectPath;
 }
 
 export async function removeProjectDirectory(projectName: string = ""){
-  let projectPath;
-  if (projectName === ""){
-    projectPath = `${PATH_NAME.UPROLL_CLI}/dist/projects/`;
-  }
-  else{
-    projectPath = `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectName}/`;
-  }
+  const projectPath = await getProjectFolder(projectName);
     await fs.promises.rm(projectPath, { recursive: true });
 }
 
 async function getRollups(): Promise<string[]> {
-  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects");
-
+  const projectsPath = await getProjectFolder();
   try {
-    await fs.promises.access(dirPath, fs.constants.F_OK); 
-    return await fs.promises.readdir(dirPath);
+    await fs.promises.access(projectsPath, fs.constants.F_OK); 
+    return await fs.promises.readdir(projectsPath);
   } catch {
     return [];
   }
 }
 
 const getConfigs = async (projectName: string): Promise<string[]> => {
-  const dirPath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", projectName, "deployment", "files", "op-deployer-configs");
-
+  const dirPath = await getProjectDeployerFile(projectName, "");
   try {
     await fs.promises.access(dirPath, fs.constants.F_OK);
     return await fs.promises.readdir(dirPath);
@@ -47,7 +39,8 @@ const getConfigs = async (projectName: string): Promise<string[]> => {
 
 
 export const getLogs = async (projectName: string): Promise<string[]> => {
-  const baseDir = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", projectName, "deployment");
+
+  const baseDir = await getProjectLogFile(projectName, "");
   // return a list of all subdirectories in the deployment directory
   try {
     await fs.promises.access(baseDir, fs.constants.F_OK);
@@ -152,3 +145,29 @@ export const readConfigFile = async (filePath: string) => {
     throw new Error(`Error reading file: ${error}`);
   }
 };
+
+
+export const getProjectFolder = (rollupFolder:string= "") =>{
+  return path.join(PATH_NAME.PROJECTS, rollupFolder);
+}
+
+export const getProjectConfig =  (rollupFolder:string) =>{
+  return path.join(PATH_NAME.PROJECTS, rollupFolder, "config.yaml");
+}
+
+export const getProjectDeployerFile =  (rollupFolder:string, file:string = "") =>{
+  return path.join(PATH_NAME.PROJECTS, rollupFolder, "deployment", "files", "op-deployer-configs", file);
+}
+
+export const getProjectLogFile = (rollupFolder:string, logFolder:string = "") =>{
+  const dirPath = path.join(PATH_NAME.PROJECTS, rollupFolder, "deployment");
+  if (logFolder === ""){
+    return dirPath;
+  }
+  return path.join(dirPath, logFolder, "output.log");
+
+}
+
+export const getProjectDeploymentDumpFolder =  (rollupFolder: string) =>{
+  return path.join(PATH_NAME.PROJECTS, rollupFolder, "deployment");
+}
