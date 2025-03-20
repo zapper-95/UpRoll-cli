@@ -1,10 +1,10 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getInteropConfig(postData: { [key: string]: any }) {
     
-    let interop: {[key:string]:any} = {};
+    const interop: {[key:string]:any} = {};
   
     console.log(colors.fg.yellow, "Interop Configuration", colors.reset);
 
@@ -27,29 +27,29 @@ export async function getInteropConfig(postData: { [key: string]: any }) {
       while (addingDependency) {
         const dependency = await inquirer.prompt([
           {
-            type: "number",
-            name: "chain_id",
+            type: "input",
+            name: "chainId",
             message: "Enter the dependency Chain ID:",
             validate: (input) => {
               if (!input) return "Chain ID cannot be empty.";
-              return dependencies.hasOwnProperty(input) ? "Chain ID already exists." : true;
+              return Object.prototype.hasOwnProperty.call(dependencies, input) ? "Chain ID already exists." : true;
             },
           },
           {
-            type: "input",
-            name: "activation_time",
+            type: "number",
+            name: "activationTime",
             message: "Enter the Activation Time:",
             validate: (input) => (input ? true : "Activation Time cannot be empty."),
           },
           {
-            type: "input",
-            name: "history_min_time",
+            type: "number",
+            name: "historyMinTime",
             message: "Enter the History Min Time:",
             validate: (input) => (input ? true : "History Min Time cannot be empty."),
           },
         ]);
         
-        dependencies[dependency.chain_id] = dependency;
+        dependencies[dependency.chainId] = dependency;
         
         const { addAnother } = await inquirer.prompt([
           {

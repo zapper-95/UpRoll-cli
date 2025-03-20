@@ -1,5 +1,4 @@
 import { colors } from './colors';
-import { CONFIG } from './config';
 
 export const startLog = () => {
   //   console.log(colors.fg.cyan,
@@ -110,7 +109,6 @@ export function loadingBarAnimationInfinite(
     const progressBar = `[${'='.repeat(currentStep)}${' '.repeat(
       totalSteps - currentStep
     )}]`;
-    const percentage = Math.round((currentStep / totalSteps) * 100);
 
     console.log(
       `${loadingSpin[i]} ${loadingSpin[i]} ${text}... ${progressBar}`
@@ -323,6 +321,39 @@ export const infoFailLog = (errMsg:string) =>{
     colors.reset
   );  
   console.log(colors.fg.red, 'Failed to retrieve rollup info', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue, 
+    '====================================',
+    colors.reset
+  );
+}
+
+
+
+export const logCompleteLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Succesfully retrieved log', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+export const logFailLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Failed to retrieve log', colors.reset);
   console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
   console.log(
     colors.fg.blue, 

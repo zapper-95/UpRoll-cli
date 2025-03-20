@@ -7,10 +7,10 @@ import {
   getDaConfig,
   getInteropConfig,
   confirmConfig
-} from "./configs";
+} from "../../configs";
 
 export async function GetRollupConfig(rollupName:string): Promise<{ [key: string]: any }> {
-  let postData: { [key: string]: any } = {};
+  const postData: { [key: string]: any } = {};
 
   postData.rollup_name = rollupName;
 

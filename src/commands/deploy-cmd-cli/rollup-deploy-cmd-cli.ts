@@ -1,11 +1,9 @@
-import { rollupConfigLog , kurtosisRunTestnetLog, deployCompleteLog, deployFailedLog, saveChainInfoLog, saveChainInfoCompleteLog, saveChainInfoFailedLog} from '../utils/log';
-import { runKurtosisCommand , runCommand} from '../utils';
-import { configToYAML } from '../utils/configtoYAML';
-import { GetRollupConfig } from "./get-rollup-config"
-import { getProjectDetails } from './get-project-details';
-import { PATH_NAME } from '../utils/config';
-import { loadingBarAnimationInfinite } from '../utils/log';
-import { getDockerCompose, getKurtosis } from '../shared/index';
+import { getProjectDetails } from '../../configs/project';
+import { configToYAML } from '../../configs/to-yaml';
+import { deployCompleteLog, deployFailedLog, loadingBarAnimationInfinite, rollupConfigLog } from '../../utils/log';
+import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder} from '../../utils/project-manage';
+import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
+import { GetRollupConfig } from "./get-rollup-config";
 
 export async function RollupdeployCommandCLI() {
 
@@ -22,9 +20,7 @@ export async function RollupdeployCommandCLI() {
     const projectDetails = await getProjectDetails();
 
     // make a directory with the project name in a project folder
-    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/`);
-    await runCommand(`mkdir -p ${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/`);
-        
+    ensureProjectDirectory(projectDetails.projectName);
     
     if (projectDetails.networkType === "devnet"){
       await deployDevnet(projectDetails);
@@ -32,11 +28,10 @@ export async function RollupdeployCommandCLI() {
     else{ // Testnet
       await deployTestnet(projectDetails);
     }
-    deployCompleteLog();
-    
+
     // save relevant chain info to the project directory
     await saveChainInfo(projectDetails.projectName);
-    saveChainInfoCompleteLog();
+    deployCompleteLog();
   }catch(error){ 
     deployFailedLog(String(error));
   }
@@ -47,12 +42,12 @@ async function saveChainInfo(projectName:string){
       '🚀 Downloading deployment information'
     );
   
+  const dumpPath = getProjectDeploymentDumpFolder(projectName); 
   return runKurtosisCommand("kurtosis", [
-    'files',
-    'download',
+    'enclave',
+    'dump',
     projectName,
-    'op-deployer-configs',
-    './dist/projects/' + projectName
+    dumpPath,
   ])
   .then(() => clearInterval(loading))
 } 
@@ -85,13 +80,14 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
 
     // Convert the testnet details to a YAML file
     try{
-      configToYAML(postData);
+      await configToYAML(postData);
     } catch (e) {
       deployFailedLog(String(e));
       return;
     }
 
-
+    const configFile = getProjectConfig(projectDetails.projectName);
+    console.log(configFile)
     // Run Kurtosis using the testnet config
     return runKurtosisCommand(
       'kurtosis',
@@ -99,7 +95,7 @@ async function deployTestnet(projectDetails: {projectName: string, networkType: 
         'run',
         './optimism-package',
         '--args-file',
-        `${PATH_NAME.UPROLL_CLI}/dist/projects/${projectDetails.projectName}/config.yaml`,
+        configFile,
         '--enclave',
         projectDetails.projectName,
       ]

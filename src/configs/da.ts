@@ -1,11 +1,11 @@
-import { colors } from "../../utils/colors";
 import inquirer from "inquirer";
+import { colors } from "../utils/colors";
 
 
 export async function getDaConfig(postData: { [key: string]: any }) {
     console.log(colors.fg.yellow, "Data Availability", colors.reset);
-    let altda_deploy_config: {[key:string]:any} = {};
-    let da_server_params: {[key:string]:any} = {};
+    const altda_deploy_config: {[key:string]:any} = {};
+    const da_server_params: {[key:string]:any} = {};
 
     const dataAvailability = await inquirer.prompt([
       {

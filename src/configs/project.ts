@@ -1,7 +1,6 @@
 import inquirer from 'inquirer';
-import { runCommand } from '../utils';
-
-
+import fs from 'fs';
+import { getProjectFolder } from '../utils/project-manage';
 export async function getProjectName(){
   const projectName = await inquirer.prompt(
     [
@@ -9,7 +8,19 @@ export async function getProjectName(){
         type: 'input',
         name: 'projectName',
         message: 'Enter the project name',
-        default: 'myRollup',
+        default: 'my-rollup',
+        validate: (value:string) =>{
+            const regex = /^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$/;
+            if (regex.test(value) === false){
+              return 'Please enter a valid project name (lowercase letters, numbers, and hyphens only, starting with a letter and not ending with a hyphen)';
+            }
+            
+            if (fs.existsSync(getProjectFolder(value))){
+              return "Project already exists";
+            }
+            return true;
+        }
+
       },
     ],
   )

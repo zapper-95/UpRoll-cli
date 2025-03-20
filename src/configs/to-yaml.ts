@@ -1,9 +1,8 @@
-import { PATH_NAME } from "./config";
+import fs from 'fs';
+import yaml from 'js-yaml';
+import { getProjectConfig } from "../utils/project-manage";
 
-export function configToYAML(postData: { [key: string]: any }) {
-  const path = require("path");
-  const fs = require("fs");
-  const yaml = require("js-yaml");
+export async function configToYAML(postData: { [key: string]: any }) {
 
   const config: {[key:string]:any} = {};
 
@@ -44,6 +43,6 @@ export function configToYAML(postData: { [key: string]: any }) {
   // --- Finalize and Save YAML ---
   const newYaml = yaml.dump(config);
   console.log(newYaml);
-  const newConfigPath = path.join(PATH_NAME.UPROLL_CLI, `dist/projects/${postData.rollup_name}/config.yaml`);
-  fs.writeFileSync(newConfigPath, newYaml, "utf8");
+  const newConfigPath = getProjectConfig(postData.rollup_name);
+  await fs.promises.writeFile(newConfigPath, newYaml);
 }
