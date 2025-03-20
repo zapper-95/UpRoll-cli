@@ -1,9 +1,11 @@
 import inquirer from 'inquirer';
+import { CleanCMDCLI } from './clean-cmd-cli';
 import { RollupdeployCommandCLI } from './deploy-cmd-cli/rollup-deploy-cmd-cli';
 import { InfoCMDCLI } from './info-cmd-cmd';
 import { LogsCmd } from './logs-cmd-cli';
 import { StatusCMDCLI } from './status-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
+import { cloneOptimismPacakge } from '../utils/clone';
 enum Action {
   deployUI = 'deployUI',
   deploy = 'deploy',
@@ -17,12 +19,15 @@ enum Action {
   delete = 'delete',
   chainInfo = 'chainInfo',
   exit = 'exit',
+  clean = 'clean',
 }
 
 export const mainCMDCLI = async () => {
 
-  // select the command
+  // clones the optimim package if not already cloned
+  await cloneOptimismPacakge();
 
+  // select the command
   const actionAns = await inquirer.prompt([
     // list choice with description
     {
@@ -53,6 +58,10 @@ export const mainCMDCLI = async () => {
         {
           name: 'View logs',
           value: Action.logs,
+        },
+        {
+          name: 'Clean',
+          value: Action.clean,
         },
         // {
         //   name: '9) Backup Config',
@@ -94,6 +103,9 @@ export const mainCMDCLI = async () => {
       break;
     case Action.logs:
       await LogsCmd();
+      break;
+    case Action.clean:
+      await CleanCMDCLI();
       break;
     // case Action.backupConfig:
     //   console.log('Backup Config');
