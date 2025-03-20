@@ -1,15 +1,17 @@
 import fs from 'fs';
+import yaml from 'js-yaml';
 import { getProjectName } from '../configs/project';
+import { cloneOptimismPacakge } from '../utils/clone';
 import { WEBSITE } from '../utils/config';
 import { deployFailedLog, rollupConfigLog } from '../utils/log';
 import { ensureProjectDirectory } from '../utils/project-manage';
 import { runKurtosisCommand } from '../utils/system';
-import yaml from 'js-yaml';
-
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
   const {id, file} = options;
-
+  
+  await cloneOptimismPacakge();
+  
   rollupConfigLog();
   
   const projectName = await getProjectName();

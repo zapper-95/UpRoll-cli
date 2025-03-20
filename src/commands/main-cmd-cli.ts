@@ -5,6 +5,7 @@ import { InfoCMDCLI } from './info-cmd-cmd';
 import { LogsCmd } from './logs-cmd-cli';
 import { StatusCMDCLI } from './status-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
+import { cloneOptimismPacakge } from '../utils/clone';
 enum Action {
   deployUI = 'deployUI',
   deploy = 'deploy',
@@ -23,8 +24,10 @@ enum Action {
 
 export const mainCMDCLI = async () => {
 
-  // select the command
+  // clones the optimim package if not already cloned
+  await cloneOptimismPacakge();
 
+  // select the command
   const actionAns = await inquirer.prompt([
     // list choice with description
     {
