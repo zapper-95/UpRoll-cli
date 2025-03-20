@@ -1,7 +1,5 @@
-import path from 'path';
 import { colors } from '../utils/colors';
-import { PATH_NAME } from '../utils/config';
-import { readConfigFile, selectLog, selectRollup } from '../utils/project-manage';
+import { getProjectLogFile, readConfigFile, selectLog, selectRollup } from '../utils/project-manage';
 import { logCompleteLog, logFailLog } from '../utils/log';
 
 export async function LogsCmd() {
@@ -17,7 +15,7 @@ export async function LogsCmd() {
 }
 
 export async function displayLog(rollupName:string, logName:string){
-  const filePath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", rollupName, "deployment", logName, "output.log");
+  const filePath = getProjectLogFile(rollupName, logName);
   const data = await readConfigFile(filePath);
 
   console.log('------------------');

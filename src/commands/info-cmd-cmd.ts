@@ -1,8 +1,6 @@
-import path from 'path';
 import { colors } from '../utils/colors';
-import { PATH_NAME } from '../utils/config';
 import { infoCompleteLog, infoFailLog } from '../utils/log';
-import { readConfigFile, selectRollup, selectRollupConfig } from '../utils/project-manage';
+import { getProjectDeployerFile, readConfigFile, selectRollup, selectRollupConfig } from '../utils/project-manage';
 import { getDockerCompose, getKurtosis } from '../utils/system';
 
 
@@ -35,7 +33,7 @@ export const InfoCMDCLI = async () => {
 
 export const displayConfig = async (rollupName:string, rollupConfig:string) => {
   
-  const filePath = path.join(PATH_NAME.UPROLL_CLI, "dist", "projects", rollupName, "deployment", "files", "op-deployer-configs", rollupConfig);
+  const filePath = getProjectDeployerFile(rollupName, rollupConfig);
   const data = await readConfigFile(filePath);
 
   console.log('------------------');
