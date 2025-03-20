@@ -10,7 +10,7 @@ export async function StopCMDCLI() {
   try {
     rollupName = await selectRollup();
     loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
-    removeProjectDirectory(rollupName);
+    await removeProjectDirectory(rollupName);
 
     // Stop the deployment
     await runKurtosisCommand('kurtosis', [
