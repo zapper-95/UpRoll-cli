@@ -43,8 +43,8 @@ export async function configToYAML(postData: { [key: string]: any }) {
 
   // --- Finalize and Save YAML ---
   const newYaml = yaml.dump(config);
-  console.log("Produced YAML:", colors.fg.magenta);
-  console.log(newYaml);
+  console.log(colors.fg.magenta, "Produced YAML:");
+  console.log(newYaml, colors.reset);
   const newConfigPath = getProjectConfig(postData.rollup_name);
   await fs.promises.writeFile(newConfigPath, newYaml);
 }
