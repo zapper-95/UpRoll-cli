@@ -1,7 +1,7 @@
 import { getProjectDetails } from '../../configs/project';
-import { configToYAML } from '../../configs/to-yaml';
+import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
 import { deployCompleteLog, deployFailedLog, loadingBarAnimationInfinite, rollupConfigLog } from '../../utils/log';
-import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder} from '../../utils/project-manage';
+import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder } from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
@@ -20,7 +20,7 @@ export async function RollupdeployCommandCLI() {
     const projectDetails = await getProjectDetails();
 
     // make a directory with the project name in a project folder
-    ensureProjectDirectory(projectDetails.projectName);
+    await ensureProjectDirectory(projectDetails.projectName);
     
     if (projectDetails.networkType === "devnet"){
       await deployDevnet(projectDetails);
@@ -55,12 +55,17 @@ async function saveChainInfo(projectName:string){
 async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
   console.log("Runnning with default devnet config");
   
+  await rollupNameToYAML(projectDetails.projectName); 
+  const configFile = getProjectConfig(projectDetails.projectName);
+
   // Run Kurtosis using the default devnet config
   return runKurtosisCommand(
     'kurtosis',
     [
       'run',
       './optimism-package',
+      '--args-file',
+      configFile,
       '--enclave', 
       projectDetails.projectName
     ]
@@ -70,24 +75,13 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
 async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
 
     // Get the testnet details from the user
-    let postData: {[key: string]: any};
-    try{
-      postData = await GetRollupConfig(projectDetails.projectName);
-    } catch (e) {
-      deployFailedLog(String(e));
-      return;
-    }
+    const postData = await GetRollupConfig(projectDetails.projectName);
 
     // Convert the testnet details to a YAML file
-    try{
-      await configToYAML(postData);
-    } catch (e) {
-      deployFailedLog(String(e));
-      return;
-    }
+    await configToYAML(postData);
+
 
     const configFile = getProjectConfig(projectDetails.projectName);
-    console.log(configFile)
     // Run Kurtosis using the testnet config
     return runKurtosisCommand(
       'kurtosis',
