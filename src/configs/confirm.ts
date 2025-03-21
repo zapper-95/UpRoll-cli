@@ -2,7 +2,7 @@ import inquirer from "inquirer";
 import { colors } from "../utils/colors";
 
 
-export async function confirmConfig(postData: { [key: string]: any }) {
+export async function confirmConfig() {
   // Confirm configuration
   console.log(colors.fg.blue, "\n====================================", colors.reset);
   const { isCorrect } = await inquirer.prompt([
@@ -17,5 +17,4 @@ export async function confirmConfig(postData: { [key: string]: any }) {
     console.log(colors.fg.red, "Please run the command again", colors.reset);
     throw new Error("User did not confirm the data");
   }
-  console.log(postData);
 }

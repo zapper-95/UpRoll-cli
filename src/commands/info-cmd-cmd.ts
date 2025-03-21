@@ -7,8 +7,6 @@ import { getDockerCompose, getKurtosis } from '../utils/system';
 
 export const InfoCMDCLI = async () => {
 
-
-  console.clear();
   console.log('------------------');
   console.log(colors.fg.magenta, 'Chain Info', colors.reset);
   console.log('------------------');

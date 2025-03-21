@@ -35,6 +35,8 @@ export async function GetRollupConfig(rollupName:string): Promise<{ [key: string
   // Interop Configuration
   await getInteropConfig(postData);
 
-  await confirmConfig(postData);
+  console.log(postData);  
+
+  await confirmConfig();
   return postData;
 }

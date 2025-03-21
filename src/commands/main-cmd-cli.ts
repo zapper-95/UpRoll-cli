@@ -40,7 +40,7 @@ export const mainCMDCLI = async () => {
           value: Action.deploy,
         },
         {
-          name: 'Stop rollup',
+          name: 'Stop Rollup',
           value: Action.stop,
         },
         // {
