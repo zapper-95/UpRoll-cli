@@ -48,3 +48,15 @@ export async function configToYAML(postData: { [key: string]: any }) {
   const newConfigPath = getProjectConfig(postData.rollup_name);
   await fs.promises.writeFile(newConfigPath, newYaml);
 }
+
+
+export async function rollupNameToYAML(rollupName: string) {
+
+  const config = {"optimism_package": {"chains":[{"network_params": {"name": rollupName}}]}};
+  const newYaml = yaml.dump(config);
+  
+  console.log(colors.fg.magenta, "Produced YAML:");
+  console.log(newYaml, colors.reset);
+  const newConfigPath = getProjectConfig(rollupName);
+  await fs.promises.writeFile(newConfigPath, newYaml);
+}

@@ -216,7 +216,6 @@ export const deployCompleteLog = () =>{
 
 
 export const deployFailedLog = (errMsg:string) =>{
-  console.clear()
   console.log(
 
     colors.fg.blue,
