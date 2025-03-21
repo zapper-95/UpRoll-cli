@@ -1,6 +1,7 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import { getProjectConfig } from "../utils/project-manage";
+import { colors } from '../utils/colors';
 
 export async function configToYAML(postData: { [key: string]: any }) {
 
@@ -42,7 +43,8 @@ export async function configToYAML(postData: { [key: string]: any }) {
 
   // --- Finalize and Save YAML ---
   const newYaml = yaml.dump(config);
-  console.log(newYaml);
+  console.log(colors.fg.magenta, "Produced YAML:");
+  console.log(newYaml, colors.reset);
   const newConfigPath = getProjectConfig(postData.rollup_name);
   await fs.promises.writeFile(newConfigPath, newYaml);
 }
