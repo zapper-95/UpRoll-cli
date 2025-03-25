@@ -3,9 +3,9 @@ import yaml from 'js-yaml';
 import { getProjectName } from '../configs/project';
 import { cloneOptimismPacakge } from '../utils/clone';
 import { WEBSITE } from '../utils/config';
-import { deployFailedLog, rollupConfigLog } from '../utils/log';
-import { ensureProjectDirectory } from '../utils/project-manage';
 import { runKurtosisCommand } from '../utils/system';
+import { deployFailedLog, rollupConfigLog } from '../utils/log';
+import { ensureProjectDirectory, getProjectConfig, removeExistingEnclave } from '../utils/project-manage';
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
   const {id, file} = options;
@@ -17,15 +17,17 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
   const projectName = await getProjectName();
 
   // make a directory with the project name in a project folder
-  const projectPath = await ensureProjectDirectory(projectName.projectName);
+  await ensureProjectDirectory(projectName.projectName);
+  await removeExistingEnclave(projectName.projectName);
+
   try{
     if (id){
       console.log("Deploying from endpoint");
-      await RollupDeployEndpoint(id, projectName.projectName, projectPath);
+      await RollupDeployEndpoint(id, projectName.projectName);
     }
     else if (file){
       console.log("Deploying from file");
-      await RollupDeployFile(file, projectName.projectName, projectPath);
+      await RollupDeployFile(file, projectName.projectName);
     }
     else{
       throw new Error("Either --id or --file must be specified");
@@ -38,7 +40,7 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
 }
 
 
-export async function RollupDeployFile(file_path:string, projectName: string, projectPath: string) {
+export async function RollupDeployFile(file_path:string, projectName: string) {
   // try to read the file and save it to a yaml in the project folder
   try{
     if (!file_path.endsWith('.yaml')){
@@ -49,7 +51,7 @@ export async function RollupDeployFile(file_path:string, projectName: string, pr
     const yamlObj = yaml.load(yamltext);
     const yamlString = yaml.dump(yamlObj);
     
-    const configPath = `${projectPath}/config.yaml`;
+    const configPath = getProjectConfig(projectName);
 
     await fs.promises.writeFile(configPath, yamlString);
     console.log('Saved config file');
@@ -59,11 +61,12 @@ export async function RollupDeployFile(file_path:string, projectName: string, pr
   }
 }
 
-export async function RollupDeployEndpoint(id:string, projectName: string, projectPath:string) {
+export async function RollupDeployEndpoint(id:string, projectName: string) {
   try{
     const endpoint = WEBSITE.ENDPOINT.replace('[id]', id);
-
-    const configPath = `${projectPath}/config.yaml`;
+    
+    
+    const configPath = getProjectConfig(projectName);
     await downloadConfig(endpoint, configPath);
     console.log('Downloaded config file');
     await deployFromConfig(configPath, projectName);
@@ -87,6 +90,7 @@ async function downloadConfig(endpoint:string, configPath:string) {
 }
 
 async function deployFromConfig(configPath:string, projectName:string) {
+  console.log(configPath);
   return runKurtosisCommand(
     'kurtosis',
     [
