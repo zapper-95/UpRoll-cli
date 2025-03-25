@@ -12,7 +12,7 @@ const program = new Command();
 
 program
   .name('UpRoll-cli')
-  .description('A CLI tool for manage opstack deployment')
+  .description('A CLI tool to manage opstack deployment')
   .version(packageJson.version);
 
 program.command('run').description('Run UpRoll CLI Tool').action(() => mainCMDCLI());
