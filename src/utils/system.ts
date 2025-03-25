@@ -16,7 +16,7 @@ export async function runCommand(command: string) {
   }
 }
 
-export function runKurtosisCommand(commandName: string, args:string[]){
+export function runKurtosisCommand(commandName: string, args:string[], displayErrors=true){
     
     const command = spawn(
       commandName, 
@@ -30,9 +30,11 @@ export function runKurtosisCommand(commandName: string, args:string[]){
       console.log(output.toString());
     })
 
-    command.stderr.on('data', output => {
-      console.log(output.toString());
-    })
+    if (displayErrors){
+      command.stderr.on('data', output => {
+        console.error(output.toString());
+      })
+    }
 
     return new Promise((resolve, reject) => {
       command.on('error', (err) => {
@@ -45,7 +47,7 @@ export function runKurtosisCommand(commandName: string, args:string[]){
         if (code === 0){
           resolve('Command executed successfully');
         }
-        else{
+        else {
           reject(new Error('Command failed while running'));
         }
       })

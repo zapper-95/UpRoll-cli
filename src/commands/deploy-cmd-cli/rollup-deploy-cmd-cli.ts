@@ -1,7 +1,7 @@
 import { getProjectDetails } from '../../configs/project';
 import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
 import { deployCompleteLog, deployFailedLog, loadingBarAnimationInfinite, rollupConfigLog } from '../../utils/log';
-import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder } from '../../utils/project-manage';
+import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder, removeExistingEnclave } from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
@@ -22,6 +22,8 @@ export async function RollupdeployCommandCLI() {
     // make a directory with the project name in a project folder
     await ensureProjectDirectory(projectDetails.projectName);
     
+    await removeExistingEnclave(projectDetails.projectName);
+  
     if (projectDetails.networkType === "devnet"){
       await deployDevnet(projectDetails);
     }
@@ -55,10 +57,12 @@ async function saveChainInfo(projectName:string){
 async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
   console.log("Runnning with default devnet config");
   
+  // makes yaml so enclave named after rollup
   await rollupNameToYAML(projectDetails.projectName); 
   const configFile = getProjectConfig(projectDetails.projectName);
 
-  // Run Kurtosis using the default devnet config
+
+
   return runKurtosisCommand(
     'kurtosis',
     [

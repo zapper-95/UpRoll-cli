@@ -7,11 +7,11 @@ export async function getChainConfig(postData: { [key: string]: any }) {
     console.log(colors.fg.yellow, "Chain Configuration", colors.reset);
      const chainConfig = await inquirer.prompt([
       {
-        type: "number",
+        type: "input",
         name: "network_id",
         message: "Enter the L2 Chain ID:",
         validate: (input) => (input ? true : "L2 Chain ID cannot be empty."),
-        default: 2151908
+        default: "2151908"
       },
       {
         type: "number",

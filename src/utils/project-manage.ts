@@ -5,6 +5,8 @@ import util from 'util';
 import { PATH_NAME } from "./config";
 import yaml from "js-yaml";
 import toml from 'toml';
+import { loadingBarAnimationInfinite } from './log';
+import { runKurtosisCommand } from './system';
 
 export async function ensureProjectDirectory(projectName: string) {
   const projectPath = await getProjectFolder(projectName);
@@ -16,6 +18,29 @@ export async function removeProjectDirectory(projectName: string = ""){
   const projectPath = await getProjectFolder(projectName);
     await fs.promises.rm(projectPath, { recursive: true });
 }
+
+export async function removeUprollDirectory(){
+  // Remove the main uproll directory, including all projects and the optimism package
+  await fs.promises.rm(PATH_NAME.UPROLL_CLI, { recursive: true });
+}
+
+
+export async function removeExistingEnclave(projectName: string) {
+    // try to remove any existing enclave of the same name
+    const loading = loadingBarAnimationInfinite('🚀 Removing existing enclaves with the same project name');
+    try{
+      await runKurtosisCommand('kurtosis', [
+        'enclave',
+        'rm',
+        projectName,
+        "--force",
+      ], false);
+    }
+    catch {
+      // ignore error if no existing enclave of the same name to remove
+    }
+    clearInterval(loading);
+  }
 
 async function getRollups(): Promise<string[]> {
   const projectsPath = await getProjectFolder();
@@ -171,3 +196,5 @@ export const getProjectLogFile = (rollupFolder:string, logFolder:string = "") =>
 export const getProjectDeploymentDumpFolder =  (rollupFolder: string) =>{
   return path.join(PATH_NAME.PROJECTS, rollupFolder, "deployment");
 }
+
+
