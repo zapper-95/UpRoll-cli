@@ -25,7 +25,22 @@ export async function removeUprollDirectory(){
 }
 
 
-export async function removeExistingEnclave(projectName: string) {
+export async function saveChainInfo(projectName:string){
+  const loading = loadingBarAnimationInfinite(
+    '🚀 Downloading deployment information'
+  );
+
+  const dumpPath = getProjectDeploymentDumpFolder(projectName); 
+  return runKurtosisCommand("kurtosis", [
+    'enclave',
+    'dump',
+    projectName,
+    dumpPath,
+  ])
+  .then(() => clearInterval(loading))
+} 
+
+export async function overwriteExistingEnclave(projectName: string) {
     // try to remove any existing enclave of the same name
     const loading = loadingBarAnimationInfinite('🚀 Removing existing enclaves with the same project name');
     try{
@@ -35,11 +50,14 @@ export async function removeExistingEnclave(projectName: string) {
         projectName,
         "--force",
       ], false);
+      console.log("Existing enclave removed");
     }
     catch {
-      // ignore error if no existing enclave of the same name to remove
+      console.log("No existing enclaves found");     
     }
-    clearInterval(loading);
+    finally{
+      clearInterval(loading);
+    }
   }
 
 async function getRollups(): Promise<string[]> {

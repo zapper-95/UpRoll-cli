@@ -28,6 +28,22 @@ export async function getProjectName(){
 }
 
 
+export async function getOverwriteExistingEnclave(): Promise<{removeEnclave:boolean}>{
+  const removeEnclave = await inquirer.prompt(
+    [
+      {
+        type: 'confirm',
+        name: 'removeEnclave',
+        message: 'Do you want to remove any existing enclaves of this name?',
+        default: true
+      }
+    ]
+  )
+  return removeEnclave;
+}
+
+
+
 export async function getNetworkType(){
   const networkType = await inquirer.prompt(
     [

@@ -1,7 +1,7 @@
-import { getProjectDetails } from '../../configs/project';
+import { getOverwriteExistingEnclave, getProjectDetails} from '../../configs/project';
 import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
-import { deployCompleteLog, deployFailedLog, loadingBarAnimationInfinite, rollupConfigLog } from '../../utils/log';
-import { ensureProjectDirectory, getProjectConfig, getProjectDeploymentDumpFolder, removeExistingEnclave } from '../../utils/project-manage';
+import { deployCompleteLog, deployFailedLog, rollupConfigLog } from '../../utils/log';
+import { ensureProjectDirectory, getProjectConfig, overwriteExistingEnclave as overwriteExistingEnclave, saveChainInfo } from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
@@ -22,7 +22,10 @@ export async function RollupdeployCommandCLI() {
     // make a directory with the project name in a project folder
     await ensureProjectDirectory(projectDetails.projectName);
     
-    await removeExistingEnclave(projectDetails.projectName);
+    const {removeEnclave} = await getOverwriteExistingEnclave();
+    if (removeEnclave){
+      await overwriteExistingEnclave(projectDetails.projectName);
+    }
   
     if (projectDetails.networkType === "devnet"){
       await deployDevnet(projectDetails);
@@ -39,20 +42,6 @@ export async function RollupdeployCommandCLI() {
   }
 }
 
-async function saveChainInfo(projectName:string){
-    const loading = loadingBarAnimationInfinite(
-      '🚀 Downloading deployment information'
-    );
-  
-  const dumpPath = getProjectDeploymentDumpFolder(projectName); 
-  return runKurtosisCommand("kurtosis", [
-    'enclave',
-    'dump',
-    projectName,
-    dumpPath,
-  ])
-  .then(() => clearInterval(loading))
-} 
 
 async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
   console.log("Runnning with default devnet config");
