@@ -5,18 +5,24 @@ import util from 'util';
 import { PATH_NAME } from "./config";
 import yaml from "js-yaml";
 import toml from 'toml';
-import { loadingBarAnimationInfinite } from './log';
-import { runKurtosisCommand } from './system';
 
-export async function ensureProjectDirectory(projectName: string) {
+export async function createProjectDirectory(projectName: string) {
   const projectPath = await getProjectFolder(projectName);
   await fs.promises.mkdir(projectPath, { recursive: true });
   return projectPath;
 }
 
-export async function removeProjectDirectory(projectName: string = ""){
+export async function removeProjectDirectory(projectName: string = "", failSilent:boolean=false) {
   const projectPath = await getProjectFolder(projectName);
-    await fs.promises.rm(projectPath, { recursive: true });
+  if (failSilent){
+    try{
+      await fs.promises.access(projectPath, fs.constants.F_OK);
+    }
+    catch{
+      return; // Directory does not exist, fail silently
+    }
+  }
+  await fs.promises.rm(projectPath, { recursive: true });
 }
 
 export async function removeUprollDirectory(){
@@ -25,40 +31,6 @@ export async function removeUprollDirectory(){
 }
 
 
-export async function saveChainInfo(projectName:string){
-  const loading = loadingBarAnimationInfinite(
-    '🚀 Downloading deployment information'
-  );
-
-  const dumpPath = getProjectDeploymentDumpFolder(projectName); 
-  return runKurtosisCommand("kurtosis", [
-    'enclave',
-    'dump',
-    projectName,
-    dumpPath,
-  ])
-  .finally(() => clearInterval(loading))
-} 
-
-export async function overwriteExistingEnclave(projectName: string) {
-    // try to remove any existing enclave of the same name
-    const loading = loadingBarAnimationInfinite('🚀 Removing existing enclaves with the same project name');
-    try{
-      await runKurtosisCommand('kurtosis', [
-        'enclave',
-        'rm',
-        projectName,
-        "--force",
-      ], false);
-      console.log("Existing enclave removed");
-    }
-    catch {
-      console.log("No existing enclaves found");     
-    }
-    finally{
-      clearInterval(loading);
-    }
-  }
 
 async function getRollups(): Promise<string[]> {
   const projectsPath = await getProjectFolder();
