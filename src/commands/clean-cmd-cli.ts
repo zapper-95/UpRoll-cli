@@ -1,6 +1,20 @@
+import { cleanFailLog, cleanSuccesLog } from "../utils/log";
+import { removeUprollDirectory } from '../utils/project-manage';
 import { runKurtosisCommand } from "../utils/system";
-import {removeUprollDirectory} from '../utils/project-manage';
+import { loadingBarAnimationInfinite } from '../utils/log';
+
 export async function CleanCMDCLI(){
-    await runKurtosisCommand('kurtosis', ['clean', '-a']);
-    await removeUprollDirectory();
+    const loading = loadingBarAnimationInfinite('🚀 Cleaning Rollups');
+    try{
+        await runKurtosisCommand('kurtosis', ['clean', '-a']);
+        await removeUprollDirectory();
+        cleanSuccesLog();
+    }
+    catch(err){
+        cleanFailLog(String(err));
+    }
+    finally{
+        clearInterval(loading);
+    }
+
 }

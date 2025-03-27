@@ -5,11 +5,10 @@ import { runKurtosisCommand } from '../utils/system';
 
 export async function StopCMDCLI() {
   let rollupName = '';
-  let loading;
+  const loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
 
   try {
     rollupName = await selectRollup();
-    loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
     await removeProjectDirectory(rollupName);
 
     // Stop the deployment
@@ -24,7 +23,7 @@ export async function StopCMDCLI() {
   } catch (err) {
     stopFailedLog(String(err));
   } finally {
-    if (loading) clearInterval(loading);
+    clearInterval(loading);
   }
 }
 
