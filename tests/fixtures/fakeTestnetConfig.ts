@@ -1,5 +1,5 @@
 export const fakeTestnetConfig = {
-  rollup_name: 'my-rollup',
+  rollup_name: 'test',
   external_l1_network_params: {
     network_id: '3151908',
     el_rpc_url: 'http://el-1-geth-teku:8545',
@@ -36,7 +36,7 @@ export const fakeTestnetConfig = {
     withdrawal_delay: 604800,
     dispute_game_finality_delay: 302400,
     fee_withdrawal_network: 0,
-    name: 'my-rollup'
+    name: 'test'
   },
   gas_config: {
     gas_limit: '0x17D7840',
