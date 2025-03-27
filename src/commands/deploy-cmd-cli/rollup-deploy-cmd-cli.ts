@@ -1,7 +1,8 @@
-import { getOverwriteExistingEnclave, getProjectDetails} from '../../configs/project';
+import { getProjectDetails, getRemoveExistingEnclave } from '../../configs/project';
 import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
+import { removeEnclave, saveChainInfo } from '../../utils/kurtosis';
 import { deployCompleteLog, deployFailedLog, rollupConfigLog } from '../../utils/log';
-import { ensureProjectDirectory, getProjectConfig, overwriteExistingEnclave as overwriteExistingEnclave, saveChainInfo } from '../../utils/project-manage';
+import { createProjectDirectory, getProjectConfig } from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
@@ -20,11 +21,11 @@ export async function RollupdeployCommandCLI() {
     const projectDetails = await getProjectDetails();
 
     // make a directory with the project name in a project folder
-    await ensureProjectDirectory(projectDetails.projectName);
+    await createProjectDirectory(projectDetails.projectName);
     
-    const {removeEnclave} = await getOverwriteExistingEnclave();
-    if (removeEnclave){
-      await overwriteExistingEnclave(projectDetails.projectName);
+    const {removeEnclaveResponse} = await getRemoveExistingEnclave();
+    if (removeEnclaveResponse){
+      await removeEnclave(projectDetails.projectName);
     }
   
     if (projectDetails.networkType === "devnet"){
@@ -42,8 +43,10 @@ export async function RollupdeployCommandCLI() {
   }
 }
 
-
-async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
+/**
+ * @internal
+ */
+export async function deployDevnet(projectDetails: {projectName: string, networkType: string}, signal?: AbortSignal){
   console.log("Runnning with default devnet config");
   
   // makes yaml so enclave named after rollup
@@ -61,11 +64,16 @@ async function deployDevnet(projectDetails: {projectName: string, networkType: s
       configFile,
       '--enclave', 
       projectDetails.projectName
-    ]
+    ],
+    true,
+    signal
   )
 }
 
-async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
+/**
+ * @internal
+ */
+export async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
 
     // Get the testnet details from the user
     const postData = await GetRollupConfig(projectDetails.projectName);

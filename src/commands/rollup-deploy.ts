@@ -1,11 +1,12 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
-import { getProjectName ,getOverwriteExistingEnclave as getOverwriteExistingEnclave} from '../configs/project';
+import { getProjectName ,getRemoveExistingEnclave as getRemoveExistingEnclave} from '../configs/project';
 import { cloneOptimismPacakge } from '../utils/clone';
 import { WEBSITE } from '../utils/config';
 import { runKurtosisCommand } from '../utils/system';
 import { deployFailedLog, rollupConfigLog, deployCompleteLog} from '../utils/log';
-import { ensureProjectDirectory, getProjectConfig, overwriteExistingEnclave, saveChainInfo,  } from '../utils/project-manage';
+import { createProjectDirectory, getProjectConfig} from '../utils/project-manage';
+import { removeEnclave, saveChainInfo } from '../utils/kurtosis';
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
   const {id, file} = options;
@@ -17,11 +18,11 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
   const projectName = await getProjectName();
 
   // make a directory with the project name in a project folder
-  await ensureProjectDirectory(projectName.projectName);
+  await createProjectDirectory(projectName.projectName);
 
-  const {removeEnclave} = await getOverwriteExistingEnclave();
-  if (removeEnclave){
-    await overwriteExistingEnclave(projectName.projectName);
+  const {removeEnclaveResponse} = await getRemoveExistingEnclave();
+  if (removeEnclaveResponse){
+    await removeEnclave(projectName.projectName);
   }
 
 

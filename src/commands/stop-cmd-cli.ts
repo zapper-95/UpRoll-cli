@@ -1,7 +1,7 @@
 import { selectRollup } from '../utils/project-manage';
 import { loadingBarAnimationInfinite, stopFailedLog } from '../utils/log';
 import { removeProjectDirectory } from '../utils/project-manage';
-import { runKurtosisCommand } from '../utils/system';
+import { removeEnclave } from '../utils/kurtosis';
 
 export async function StopCMDCLI() {
   let rollupName = '';
@@ -12,13 +12,7 @@ export async function StopCMDCLI() {
     await removeProjectDirectory(rollupName);
 
     // Stop the deployment
-    await runKurtosisCommand('kurtosis', [
-      'enclave',
-      'rm',
-      rollupName,
-      "--force"
-    ]);
-
+    await removeEnclave(rollupName);
 
   } catch (err) {
     stopFailedLog(String(err));
