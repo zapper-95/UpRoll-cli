@@ -70,7 +70,10 @@ export async function deployDevnet(projectDetails: {projectName: string, network
   )
 }
 
-async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
+/**
+ * @internal
+ */
+export async function deployTestnet(projectDetails: {projectName: string, networkType: string}){
 
     // Get the testnet details from the user
     const postData = await GetRollupConfig(projectDetails.projectName);
