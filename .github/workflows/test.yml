@@ -35,7 +35,7 @@ jobs:
       - name: Run UpRoll
         run: npx uproll run
 
-      - name: Run Jest tests
+      - name: Run Jest Test
         run: npm test -- -t "deploy devnet"
         env:
           CI: true
@@ -72,10 +72,10 @@ jobs:
       - name: Run UpRoll
         run: npx uproll run
 
-      - name: Run external l1 chain
+      - name: Run External L1 Chain
         run: kurtosis run --enclave test --args-file https://raw.githubusercontent.com/zapper-95/optimism-package/refs/heads/main/.github/tests/external-l1/ethereum.yaml github.com/ethpandaops/ethereum-package
 
-      - name: Run Jest tests
+      - name: Run Jest Test
         run: npm test -- -t "deploy testnet CLI"
         env:
           CI: true
