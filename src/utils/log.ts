@@ -360,3 +360,36 @@ export const logFailLog = (errMsg:string) =>{
     colors.reset
   );
 }
+
+
+export const cleanSuccesLog = () =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.green, 'Succesfully cleaned rollups', colors.reset);
+  console.log(
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );
+}
+
+
+export const cleanFailLog = (errMsg:string) =>{
+  console.log(
+
+    colors.fg.blue,
+    '====================================',
+    colors.reset
+  );  
+  console.log(colors.fg.red, 'Failed to clean rollups', colors.reset);
+  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
+  console.log(
+    colors.fg.blue, 
+    '====================================',
+    colors.reset
+  );
+}

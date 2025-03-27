@@ -37,7 +37,7 @@ export async function saveChainInfo(projectName:string){
     projectName,
     dumpPath,
   ])
-  .then(() => clearInterval(loading))
+  .finally(() => clearInterval(loading))
 } 
 
 export async function overwriteExistingEnclave(projectName: string) {
