@@ -1,5 +1,5 @@
 import { colors } from '../utils/colors';
-import { infoCompleteLog, infoFailLog } from '../utils/log';
+import { logFailure, logSuccess } from '../utils/log';
 import { getProjectDeployerFile, readConfigFile, selectRollup, selectRollupConfig } from '../utils/project-manage';
 import { getDockerCompose, getKurtosis } from '../utils/system';
 
@@ -21,10 +21,10 @@ export const InfoCMDCLI = async () => {
     const rollupName = await selectRollup();
     const rollupConfig = await selectRollupConfig(rollupName);
     await displayConfig(rollupName, rollupConfig);
-    infoCompleteLog();
+    logSuccess(`Chain info for ${rollupName} with config ${rollupConfig} displayed successfully.`);
 
   }catch(err){
-    infoFailLog(String(err));
+    logFailure("Failed to display chain info.", String(err));
   }
 
 };

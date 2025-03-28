@@ -1,23 +1,19 @@
-import { selectRollup } from '../utils/project-manage';
-import { loadingBarAnimationInfinite, stopFailedLog } from '../utils/log';
-import { removeProjectDirectory } from '../utils/project-manage';
 import { removeEnclave } from '../utils/kurtosis';
+import { logFailure, logSuccess } from '../utils/log';
+import { removeProjectDirectory, selectRollup } from '../utils/project-manage';
 
 export async function StopCMDCLI() {
   let rollupName = '';
-  const loading = loadingBarAnimationInfinite('🚀 Stopping deployment');
-
   try {
     rollupName = await selectRollup();
     await removeProjectDirectory(rollupName);
-
     // Stop the deployment
     await removeEnclave(rollupName);
+    // log success message
+    logSuccess(`Rollup ${rollupName} has been stopped and removed successfully.`);
 
   } catch (err) {
-    stopFailedLog(String(err));
-  } finally {
-    clearInterval(loading);
+    logFailure("Failed to stop the rollup.", String(err));
   }
 }
 
