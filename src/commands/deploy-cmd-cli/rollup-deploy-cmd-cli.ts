@@ -1,15 +1,14 @@
 import { getProjectDetails, getRemoveExistingEnclave } from '../../configs/project';
 import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
 import { removeEnclave, saveChainInfo } from '../../utils/kurtosis';
-import { deployCompleteLog, deployFailedLog, rollupConfigLog } from '../../utils/log';
+import { logFailure, logSuccess, logWarning } from '../../utils/log';
 import { createProjectDirectory, getProjectConfig } from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
 export async function RollupdeployCommandCLI() {
 
-  console.clear();
-  rollupConfigLog();
+  logSuccess("Starting deployment...");
 
   try{
     const dockerComposeTest = await getDockerCompose();
@@ -25,7 +24,14 @@ export async function RollupdeployCommandCLI() {
     
     const {removeEnclaveResponse} = await getRemoveExistingEnclave();
     if (removeEnclaveResponse){
-      await removeEnclave(projectDetails.projectName);
+      try{
+        await removeEnclave(projectDetails.projectName);
+      }
+      catch{
+        // if we fail to remove the existing enclave, we should log the error but continue
+        // as we might be able to deploy a new one anyway
+        logWarning("Failed to remove existing enclave. This may cause issues if the deployment is using the same resources.");
+      }
     }
   
     if (projectDetails.networkType === "devnet"){
@@ -37,9 +43,10 @@ export async function RollupdeployCommandCLI() {
 
     // save relevant chain info to the project directory
     await saveChainInfo(projectDetails.projectName);
-    deployCompleteLog();
+    logSuccess("Deployment completed successfully.");
+
   }catch(error){ 
-    deployFailedLog(String(error));
+    logFailure("Deployment failed.", String(error));
   }
 }
 

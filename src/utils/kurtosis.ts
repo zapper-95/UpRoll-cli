@@ -31,9 +31,6 @@ export async function removeEnclave(projectName: string) {
       ], false);
       console.log("Existing enclave removed");
     }
-    catch {
-      console.log("No existing enclaves found");     
-    }
     finally{
       clearInterval(loading);
     }

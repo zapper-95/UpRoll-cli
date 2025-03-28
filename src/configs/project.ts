@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs';
 import { getProjectFolder } from '../utils/project-manage';
+import {logWarning} from '../utils/log';
 export async function getProjectName(){
   const projectName = await inquirer.prompt(
     [
@@ -16,7 +17,7 @@ export async function getProjectName(){
             }
             
             if (fs.existsSync(getProjectFolder(value))){
-              return "Project already exists";
+              logWarning(`A project with the name "${value}" already exists.`);
             }
             return true;
         }

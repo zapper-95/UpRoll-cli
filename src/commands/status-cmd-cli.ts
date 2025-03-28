@@ -1,4 +1,4 @@
-import { statusCompleteLog, statusFailLog } from '../utils/log';
+import { logFailure, logSuccess } from '../utils/log';
 import { selectRollup } from '../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../utils/system';
 
@@ -20,9 +20,9 @@ export const StatusCMDCLI = async () => {
           'inspect',
           rollupName,
         ]);
-        statusCompleteLog();
+        logSuccess(`Status check for ${rollupName} completed successfully.`);
   }
   catch(err){
-    statusFailLog(String(err));
+    logFailure("Failed to check the status of the rollup.", String(err));
   }
 };

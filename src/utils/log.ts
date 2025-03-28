@@ -1,3 +1,4 @@
+import { message } from 'blessed';
 import { colors } from './colors';
 
 export const startLog = () => {
@@ -120,29 +121,14 @@ export function loadingBarAnimationInfinite(
   }, interval);
 }
 
-export const rollupConfigLog = () => {
+
+export function logSuccess (message:string) {
   console.log(
     colors.fg.blue,
     '====================================',
     colors.reset
   );
-  console.log(colors.fg.green, 'OP Stack Rollup', colors.reset);
-  console.log(colors.fg.green, 'Config your rollup', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-};
-
-export const saveChainInfoLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Saving chain information to your project folder', colors.reset);
+  console.log(colors.fg.green, message, colors.reset);
   console.log(
     colors.fg.blue,
     '====================================',
@@ -151,62 +137,14 @@ export const saveChainInfoLog = () =>{
 }
 
 
-export const saveChainInfoCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-  console.log(colors.fg.green, 'Chain information saved!', colors.reset);
+export function logFailure (message:string, err:string) {
   console.log(
     colors.fg.blue,
     '====================================',
     colors.reset
   );
-}
-
-
-export const saveChainInfoFailedLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  )
-  console.log(colors.fg.red, 'Failed to save chain information');
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-}
-
-export const kurtosisRunTestnetLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Deploying rollup using config', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-export const deployCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Rollup deployment complete!', colors.reset);
+  console.log(colors.fg.red, message, colors.reset);
+  console.log(`${colors.fg.red}${err}${colors.reset}`);
   console.log(
     colors.fg.blue,
     '====================================',
@@ -215,181 +153,18 @@ export const deployCompleteLog = () =>{
 }
 
 
-export const deployFailedLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Rollup deployment failed');
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-
-export const stopFailedLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Unable to stop rollup', colors.reset);
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-
-export const stopCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Rollup stopped succesfully', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-
-export const statusCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Succesfully retrieved rollup status', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-export const statusFailLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Failed to retrieve rollup status', colors.reset);
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue, 
-    '====================================',
-    colors.reset
-  );
-}
-
-
-export const infoCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Succesfully retrieved rollup info', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-export const infoFailLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Failed to retrieve rollup info', colors.reset);
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue, 
-    '====================================',
-    colors.reset
-  );
+export function logWarning (message:string) {
+  console.log(colors.fg.yellow, "\n Warning: " + message, colors.reset);
 }
 
 
 
-export const logCompleteLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Succesfully retrieved log', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
-
-export const logFailLog = (errMsg:string) =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Failed to retrieve log', colors.reset);
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue, 
-    '====================================',
-    colors.reset
-  );
-}
 
 
-export const cleanSuccesLog = () =>{
-  console.log(
-
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.green, 'Succesfully cleaned rollups', colors.reset);
-  console.log(
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );
-}
 
 
-export const cleanFailLog = (errMsg:string) =>{
-  console.log(
 
-    colors.fg.blue,
-    '====================================',
-    colors.reset
-  );  
-  console.log(colors.fg.red, 'Failed to clean rollups', colors.reset);
-  console.log(`${colors.fg.red}${errMsg}${colors.reset}`);
-  console.log(
-    colors.fg.blue, 
-    '====================================',
-    colors.reset
-  );
-}
+
+
+
+
