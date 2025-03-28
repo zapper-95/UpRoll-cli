@@ -44,6 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configType: [standard, signer-proxy]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -74,8 +80,37 @@ jobs:
 
       - name: Run External L1 Chain
         run: kurtosis run --enclave test --args-file https://raw.githubusercontent.com/zapper-95/optimism-package/refs/heads/main/.github/tests/external-l1/ethereum.yaml github.com/ethpandaops/ethereum-package
+      
+
+      - name: Clone signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        run: git clone https://github.com/upnodedev/signer-proxy.git
+
+
+      - name: Set up Rust for signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: 1.85.0
+
+      - name: Build signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        run: cargo install --path . --no-default-features
+
+      - name: Run signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        run: signer-proxy aws-kms serve &
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Wait for signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        run: curl --retry 5 --retry-delay 2 http://localhost:4000/ping
 
       - name: Run Jest Test
         run: npm test -- -t "deploy testnet CLI"
         env:
           CI: true
+          CONFIG_TYPE: ${{ matrix.configType }}
