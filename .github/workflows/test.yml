@@ -89,13 +89,13 @@ jobs:
 
       - name: Set up Rust for signer-proxy
         if: matrix.configType == 'signer-proxy'
-        uses: actions/setup-rust@v1
+        uses: moonrepo/setup-rust@v1
         with:
           rust-version: 1.85.0
 
       - name: Build signer-proxy
         if: matrix.configType == 'signer-proxy'
-        run: cargo install --path . --no-default-features
+        run: cargo install --path ./signer-proxy --no-default-features
 
       - name: Run signer-proxy
         if: matrix.configType == 'signer-proxy'
