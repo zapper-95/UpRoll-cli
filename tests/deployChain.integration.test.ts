@@ -6,7 +6,8 @@ import { standardConfig, signerConfig } from "./fixtures";
 
 // give 12 minutes for each command to run
 const DEPLOY_TIMEOUT_MS = 12 * 60 * 1000;
-const configType = process.env.CONFIG_TYPE;
+const configType = process.env.CONFIG_TYPE ?? "standard"; // default to standard if not set
+
 
 
 const configs = {
@@ -33,7 +34,8 @@ test('[ci-only] deploy devnet', async() => {
 );
 
 // get the selected config to use based on the CLI argument
-const selected = configs[configType ?? "standard"];
+
+const selected = configType in configs ? configs[configType as keyof typeof configs] : configs["standard"];
 
 test(`[ci-only] deploy testnet CLI - ${configType}`, async() => {
 
