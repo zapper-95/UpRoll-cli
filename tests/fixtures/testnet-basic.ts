@@ -1,4 +1,4 @@
-export const fakeTestnetConfig = {
+export const standardConfig = {
   rollup_name: 'test',
   external_l1_network_params: {
     network_id: '3151908',
