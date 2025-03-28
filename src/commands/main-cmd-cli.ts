@@ -6,6 +6,7 @@ import { LogsCmd } from './logs-cmd-cli';
 import { StatusCMDCLI } from './status-cmd-cli';
 import { StopCMDCLI } from './stop-cmd-cli';
 import { cloneOptimismPacakge } from '../utils/clone';
+import { logFailure } from '../utils/log';
 enum Action {
   deployUI = 'deployUI',
   deploy = 'deploy',
@@ -26,7 +27,8 @@ export const mainCMDCLI = async () => {
 
   // clones the optimim package if not already cloned
   await cloneOptimismPacakge();
-
+  let action = ""
+  try{
   // select the command
   const actionAns = await inquirer.prompt([
     // list choice with description
@@ -82,8 +84,11 @@ export const mainCMDCLI = async () => {
       ],
     },
   ]);
-
-  const action = actionAns.action as Action;
+  action = actionAns.action as Action;
+  }
+  catch(error){
+    logFailure("Failed to select an action", String(error));
+  }
 
   switch (action) {
     case Action.deploy:

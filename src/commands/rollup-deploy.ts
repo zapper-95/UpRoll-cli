@@ -1,19 +1,19 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
-import { getProjectName ,getRemoveExistingEnclave as getRemoveExistingEnclave} from '../configs/project';
+import { getProjectName, getRemoveExistingEnclave } from '../configs/project';
 import { cloneOptimismPacakge } from '../utils/clone';
 import { WEBSITE } from '../utils/config';
-import { runKurtosisCommand } from '../utils/system';
-import { deployFailedLog, rollupConfigLog, deployCompleteLog} from '../utils/log';
-import { createProjectDirectory, getProjectConfig} from '../utils/project-manage';
 import { removeEnclave, saveChainInfo } from '../utils/kurtosis';
+import { logFailure, logSuccess, logWarning } from '../utils/log';
+import { createProjectDirectory, getProjectConfig } from '../utils/project-manage';
+import { runKurtosisCommand } from '../utils/system';
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
   const {id, file} = options;
   
   await cloneOptimismPacakge();
   
-  rollupConfigLog();
+  logSuccess("Rollup deployment started.");
   
   const projectName = await getProjectName();
 
@@ -22,7 +22,15 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
 
   const {removeEnclaveResponse} = await getRemoveExistingEnclave();
   if (removeEnclaveResponse){
-    await removeEnclave(projectName.projectName);
+    try{
+      await removeEnclave(projectName.projectName);
+    }
+    catch{
+      // if we fail to remove the existing enclave, we should log the error but continue
+      // as we might be able to deploy a new one anyway
+      logWarning("Failed to remove existing enclave. This may cause issues if the deployment is using the same resources.");
+      // If we can't remove the existing enclave, we should log a warning but continue with the deployment.
+    }
   }
 
 
@@ -40,10 +48,10 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
     }
 
     await saveChainInfo(projectName.projectName);
-    deployCompleteLog();
+    logSuccess("Deployment completed successfully.");
   }
   catch(error){
-    deployFailedLog(String(error));
+    logFailure("Deployment failed.", String(error));
   }
 
 }

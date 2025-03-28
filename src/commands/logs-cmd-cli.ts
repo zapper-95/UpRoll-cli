@@ -1,16 +1,16 @@
 import { colors } from '../utils/colors';
+import { logFailure, logSuccess } from '../utils/log';
 import { getProjectLogFile, readConfigFile, selectLog, selectRollup } from '../utils/project-manage';
-import { logCompleteLog, logFailLog } from '../utils/log';
 
 export async function LogsCmd() {
   try{
     const rollupName = await selectRollup();
     const logName  = await selectLog(rollupName);
     await displayLog(rollupName, logName);
-    logCompleteLog();
+    logSuccess(`Log for ${rollupName}➜${logName} displayed successfully.`);
   }
   catch(error){
-    logFailLog(String(error));  
+    logFailure("Failed to get rollup log",String(error));  
   }
 }
 
