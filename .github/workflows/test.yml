@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        configType: [standard, signer-proxy]
+        configType: [standard, signer-proxy, altda]
 
     steps:
       - name: Checkout code
