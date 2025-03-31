@@ -4,7 +4,7 @@ import os from "os";
 export const CONFIG = {
   DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
   DEPLOYMENT_REPO_VERSION: '1.2.0',
-  DEPLOYMENT_REPO_HASH : 'fc63a371eece8d40f9a913046c27abc8cb9cff60',
+  DEPLOYMENT_REPO_HASH : '8a13dac56ce6f4e0a873838601a178b14cdc6b4a',
 };
 
 export const WEBSITE = {

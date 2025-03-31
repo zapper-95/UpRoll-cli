@@ -17,6 +17,7 @@ export async function configToYAML(postData: { [key: string]: any }) {
   }
 
   // --- Rollup Chain Configuration ---
+  // only allow one chain for now
   const chain = config.optimism_package.chains[0];
   chain.network_params = postData.network_params;
 
@@ -36,10 +37,11 @@ export async function configToYAML(postData: { [key: string]: any }) {
 
   // --- Data Availability ---
   chain.da_server_params = postData.da_server_params;
-  if (postData.altda_deploy_config === true) {
-    chain.additional_services = ["da_server"];
-  }
+  config.optimism_package.altda_deploy_config = postData.altda_deploy_config;
 
+  // --- Additional Services ---
+  // this may include an altda test
+  chain.additional_services = postData.additional_services;
 
   // --- Finalize and Save YAML ---
   const newYaml = yaml.dump(config);
