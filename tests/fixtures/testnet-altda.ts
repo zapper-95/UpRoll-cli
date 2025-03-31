@@ -49,7 +49,7 @@ export const altdaConfig = {
     use_altda: true,
     da_type: 'custom',
     batch_submission_frequency: 1,
-    da_commitment_type: 'Generic',
+    da_commitment_type: 'GenericCommitment',
     da_challenge_contract_address: '0x9DdefdA33506aD7F75d5Da46d9DCa347d3907bA1',
     da_challenge_window: 100,
     da_resolve_window: 100,

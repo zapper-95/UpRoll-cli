@@ -45,15 +45,15 @@ export async function getDaConfig(postData: { [key: string]: any }) {
           type: "list",
           name: "commitment_type",
           message: "Select a Commitment Type:",
-          choices: ["Generic", "KeccakCommitment"],
-          default: "Generic",
+          choices: ["GenericCommitment", "KeccakCommitment"],
+          default: "GenericCommitment",
         }
       ]);
    
     da_server_params["server_endpoint"] = customDA.server_endpoint;
     altda_deploy_config["da_commitment_type"] = customDA.commitment_type;
   
-    if (altda_deploy_config["da_commitment_type"] === "Generic") {
+    if (altda_deploy_config["da_commitment_type"] === "GenericCommitment") {
       const genericCommitmentConfig = await inquirer.prompt([
       {
         type: "input",
