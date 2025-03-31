@@ -1,8 +1,9 @@
-import { standardConfig, signerConfig } from "../fixtures";
+import { standardConfig, signerConfig, altdaConfig} from "../fixtures";
 
 const configs = {
   "standard": standardConfig,
   "signer-proxy": signerConfig,
+  "altda": altdaConfig,
 };
 
 export function getSelectedConfig() {
