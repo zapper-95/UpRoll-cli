@@ -13,7 +13,6 @@ export async function configToYAML(postData: { [key: string]: any }) {
   config.optimism_package = {
     chains: [{}],
     altda_deploy_config: postData.altda_deploy_config,
-    interop: postData.interop,
   }
 
   // --- Rollup Chain Configuration ---

@@ -1,3 +1,4 @@
+// Currently this interop config is not enabled for testnets, since interop is still an experimental feature.
 import inquirer from "inquirer";
 import { colors } from "../utils/colors";
 

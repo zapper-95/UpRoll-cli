@@ -166,6 +166,10 @@ export const getProjectFolder = (rollupFolder:string= "") =>{
   return path.join(PATH_NAME.PROJECTS, rollupFolder);
 }
 
+export const getDevnetConfig = (configName:string) =>{
+  return path.join(PATH_NAME.DEVNET_CONFIGS, `${configName}.yaml`);
+}
+
 export const getProjectConfig =  (rollupFolder:string) =>{
   return path.join(PATH_NAME.PROJECTS, rollupFolder, "config.yaml");
 }

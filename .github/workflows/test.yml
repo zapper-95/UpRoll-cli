@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    strategy:
+      fail-fast: false
+      matrix:
+        configType: [simple, interop]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -39,6 +43,7 @@ jobs:
         run: npm test -- -t "deploy devnet"
         env:
           CI: true
+          CONFIG_TYPE: ${{ matrix.configType }}
 
   testnet-CLI:
     runs-on: ubuntu-latest

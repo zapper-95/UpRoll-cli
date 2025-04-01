@@ -61,6 +61,23 @@ export async function getNetworkType(){
   return networkType;
 }
 
+export async function getDevnetChoice(){
+  const devnetConfig = await inquirer.prompt(
+    [
+      {
+        type: 'list',
+        name: 'devnetConfig',
+        message: 'Select a Devnet Configuration:',
+        choices: ['simple', 'interop'],
+        default:
+          'simple',
+      }
+    ],
+  )
+  return devnetConfig;
+
+}
+
 export async function getProjectDetails(){
     // Get the name of the project, the config file and type of rollup
     const projectName = await getProjectName();

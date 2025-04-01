@@ -13,16 +13,26 @@ export const WEBSITE = {
 
 const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");
 
+
 import fs from "fs";
 fs.mkdirSync(UPROLL_GLOBAL_DIR, { recursive: true });
 fs.mkdirSync(path.join(UPROLL_GLOBAL_DIR, "projects"), { recursive: true });
+
+const DEVNET_CONFIGS_SRC = path.join(__dirname, "../../devnet_configs");
+const DEVNET_CONFIGS_DEST = path.join(UPROLL_GLOBAL_DIR, "devnet_configs");
+
+if (fs.existsSync(DEVNET_CONFIGS_SRC)) {
+  fs.cpSync(DEVNET_CONFIGS_SRC, DEVNET_CONFIGS_DEST, { recursive: true, force: true });
+} else {
+  console.warn(`Source directory ${DEVNET_CONFIGS_SRC} does not exist.`);
+}
 
 export const PATH_NAME = {
   DEPLOYMENT_REPO: path.join(UPROLL_GLOBAL_DIR, "optimism-package"),
   UPROLL_CLI: UPROLL_GLOBAL_DIR,
   PROJECTS: path.join(UPROLL_GLOBAL_DIR, "projects"),
+  DEVNET_CONFIGS : path.join(UPROLL_GLOBAL_DIR, "devnet_configs"),
 };
-
 
 
 export const EL_IMAGES: {[key:string]:string} = {
