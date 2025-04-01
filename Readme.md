@@ -37,7 +37,7 @@ To run the CLI, you will first need to make sure you have the following programs
 **Install UpRoll CLI Tool**
 
 ```console
-npm install -g @upnode/uproll-cli
+npm install -g uproll-cli
 ```
 
 **Verify version**
@@ -49,7 +49,7 @@ uproll version
 **Update version**
 
 ```console
-npm update -g @upnode/uproll-cli
+npm update -g uproll-cli
 ```
 
 
