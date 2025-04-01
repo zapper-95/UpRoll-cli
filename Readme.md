@@ -25,8 +25,6 @@ Deployment is handled through the CLI. After building your chain using the websi
 For deployment, UpRoll uses a fork of the [optimism package](https://github.com/zapper-95/optimism-package) which provides greater levels of customisation. Unlike Conduit, which is a paid, closed-source solution that relies on third-party managed servers, UpRoll CLI Tool is free, open-source, and allows developers to deploy OP Stack chains on their own infrastructure with full transparency.
 
 
-<!-- ## How to use -->
-<!-- [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/JKe9q2z09XA/0.jpg)](https://www.youtube.com/watch?v=JKe9q2z09XA) -->
 
 ## Requirements
 To run the CLI, you will first need to make sure you have the following programs:
@@ -87,12 +85,12 @@ uproll run
 ```
 Select **Deploy Rollup** from the menu.
 
-<img src="media/images/image.png" alt="Alt Text" style="width:40%; height:auto;">
+<img src="media/images/image.png" alt="Alt Text" style="width:60%; height:auto;">
 
 
 You will then be prompted for values for various parameters. After confirming your selections, a valid configuration file will be generated automatically.
 
-<img src="media/images/image-1.png" alt="Alt Text" style="width:50%; height:auto;">
+<img src="media/images/image-1.png" alt="Alt Text" style="width:60%; height:auto;">
 
 
 #### 2. Deploy your Chain
@@ -188,6 +186,9 @@ If you no longer need to run any chains, use the following command to stop and r
 | **Enter the Proposer Private Key or Signer Endpoint** | Choose between a private key or a signer endpoint for the proposer |
 | **Enter the Challenger Private Key or Signer Endpoint** | Choose between a private key or a signer endpoint for the challenger |
 
+We proivde a [signer-proxy](https://github.com/upnodedev/signer-proxy) tool which can sign be used as a signer endpoint to sign transactions for any of these roles.
+
+
 ### **Rollup Configuration**
 | Parameter | Description |
 |-----------|-------------|
@@ -218,14 +219,6 @@ If you no longer need to run any chains, use the following command to stop and r
 | **Enter the DA Resolve Window** | Time window for resolving disputes |
 | **Enter the DA Bond Size** | Size of the bond for dispute resolution |
 | **Enter the DA Refund Percentage** | Percentage of refund in case of dispute resolution |
-
-### **Interop Configuration**
-| Parameter | Description |
-|-----------|-------------|
-| **Enable interop with other rollups?** | Boolean flag to enable interop |
-| **Enter the dependency Chain ID** | Chain ID of the dependent rollup |
-| **Enter the Activation Time** | Time at which the dependency activates |
-| **Enter the History Min Time** | Minimum time for historical data retention |
 
 
 
