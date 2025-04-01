@@ -1,7 +1,8 @@
 import * as configModule from "../src/commands/deploy-cmd-cli/get-rollup-config";
+import * as projectModule from "../src/configs/project";
 import { deployDevnet, deployTestnet } from "../src/commands/deploy-cmd-cli/rollup-deploy-cmd-cli";
 import { createProjectDirectory } from "../src/utils/project-manage";
-import { getSelectedConfig } from "./helper/configs";
+import { getSelectedDevnetConfig, getSelectedTestnetConfig } from "./helper/test_configs";
 
 
 // give 12 minutes for each command to run
@@ -21,14 +22,16 @@ afterEach(() => {
 });
 
 test('[ci-only] deploy devnet', async() => {
+  const selected = getSelectedDevnetConfig()
   await deployDevnet({projectName: "test", networkType: "devnet"});
+  jest.spyOn(projectModule, "getDevnetChoice").mockResolvedValue({devnetConfig: selected});
   },
   DEPLOY_TIMEOUT_MS
 );
 
 
 test(`[ci-only] deploy testnet CLI`, async() => {
-    const selected = getSelectedConfig()
+    const selected = getSelectedTestnetConfig()
     // mock GetRollupConfig to return fakeconfig
     jest.spyOn(configModule, 'GetRollupConfig').mockResolvedValue(selected);
     await deployTestnet({projectName: "test", networkType: "devnet"});
