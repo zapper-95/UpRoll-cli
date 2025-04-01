@@ -23,12 +23,11 @@ afterEach(() => {
 
 test('[ci-only] deploy devnet', async() => {
   const selected = getSelectedDevnetConfig()
-  await deployDevnet({projectName: "test", networkType: "devnet"});
   jest.spyOn(projectModule, "getDevnetChoice").mockResolvedValue({devnetConfig: selected});
+  await deployDevnet({projectName: "test", networkType: "devnet"});
   },
   DEPLOY_TIMEOUT_MS
 );
-
 
 test(`[ci-only] deploy testnet CLI`, async() => {
     const selected = getSelectedTestnetConfig()
