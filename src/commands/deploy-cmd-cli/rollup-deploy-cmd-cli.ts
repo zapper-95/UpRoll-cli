@@ -1,8 +1,8 @@
-import { getProjectDetails, getRemoveExistingEnclave } from '../../configs/project';
-import { configToYAML, rollupNameToYAML } from '../../configs/to-yaml';
+import { getDevnetChoice, getProjectDetails, getRemoveExistingEnclave } from '../../configs/project';
+import { configToYAML } from '../../configs/to-yaml';
 import { removeEnclave, saveChainInfo } from '../../utils/kurtosis';
 import { logFailure, logSuccess, logWarning } from '../../utils/log';
-import { createProjectDirectory, getProjectConfig } from '../../utils/project-manage';
+import { createProjectDirectory, getProjectConfig, getDevnetConfig} from '../../utils/project-manage';
 import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
@@ -53,15 +53,12 @@ export async function RollupdeployCommandCLI() {
 /**
  * @internal
  */
-export async function deployDevnet(projectDetails: {projectName: string, networkType: string}, signal?: AbortSignal){
+export async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
   console.log("Runnning with default devnet config");
   
-  // makes yaml so enclave named after rollup
-  await rollupNameToYAML(projectDetails.projectName); 
-  const configFile = getProjectConfig(projectDetails.projectName);
-
-
-
+  const configChoice = await getDevnetChoice();
+  const configFile = await getDevnetConfig(configChoice.devnetConfig)
+  console.log(configFile);
   return runKurtosisCommand(
     'kurtosis',
     [
@@ -73,7 +70,6 @@ export async function deployDevnet(projectDetails: {projectName: string, network
       projectDetails.projectName
     ],
     true,
-    signal
   )
 }
 

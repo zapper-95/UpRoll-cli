@@ -16,7 +16,7 @@ export async function runCommand(command: string) {
   }
 }
 
-export function runKurtosisCommand(commandName: string, args:string[], displayErrors=true, signal?: AbortSignal){
+export function runKurtosisCommand(commandName: string, args:string[], displayErrors=true){
     
     const command = spawn(
       commandName, 
@@ -34,13 +34,6 @@ export function runKurtosisCommand(commandName: string, args:string[], displayEr
       command.stderr.on('data', output => {
         console.error(output.toString());
       })
-    }
-
-    if (signal) {
-      signal.addEventListener('abort', () => {
-        console.warn('Aborting Kurtosis command...');
-        if (!command.killed) command.kill('SIGTERM');
-      });
     }
 
     return new Promise((resolve, reject) => {
