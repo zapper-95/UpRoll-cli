@@ -5,7 +5,6 @@ import {
   getChainConfig,
   getGasConfig,
   getDaConfig,
-  getInteropConfig,
   confirmConfig
 } from "../../configs";
 
@@ -31,9 +30,6 @@ export async function GetRollupConfig(rollupName:string): Promise<{ [key: string
 
   // Data Availability
   await getDaConfig(postData);
-
-  // Interop Configuration
-  await getInteropConfig(postData);
 
   console.log(postData);  
 

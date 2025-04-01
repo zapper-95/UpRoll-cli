@@ -53,9 +53,7 @@ export async function RollupdeployCommandCLI() {
 /**
  * @internal
  */
-export async function deployDevnet(projectDetails: {projectName: string, networkType: string}){
-  console.log("Runnning with default devnet config");
-  
+export async function deployDevnet(projectDetails: {projectName: string, networkType: string}){  
   const configChoice = await getDevnetChoice();
   const configFile = await getDevnetConfig(configChoice.devnetConfig)
   console.log(configFile);
