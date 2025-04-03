@@ -6,8 +6,10 @@ import { startLog } from './utils/log';
 import packageJson from '../package.json';
 import { mainCMDCLI } from './commands/main-cmd-cli';
 import { RollupDeploy } from './commands/rollup-deploy';
+import { projectSetUp } from './utils/project-manage';
 
 startLog();
+projectSetUp()
 const program = new Command();
 
 program
