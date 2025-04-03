@@ -1,4 +1,3 @@
-import { message } from 'blessed';
 import { colors } from './colors';
 
 export const startLog = () => {
