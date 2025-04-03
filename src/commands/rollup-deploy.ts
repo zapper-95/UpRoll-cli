@@ -6,7 +6,7 @@ import { WEBSITE } from '../utils/config';
 import { removeEnclave, saveChainInfo } from '../utils/kurtosis';
 import { logFailure, logSuccess, logWarning } from '../utils/log';
 import { createProjectDirectory, getProjectConfig } from '../utils/project-manage';
-import { runKurtosisCommand } from '../utils/system';
+import { delay, runKurtosisCommand } from '../utils/system';
 
 export async function RollupDeploy(options: {id?: string, file?: string}) {
   const {id, file} = options;
@@ -46,6 +46,8 @@ export async function RollupDeploy(options: {id?: string, file?: string}) {
     else{
       throw new Error("Either --id or --file must be specified");
     }
+
+    await delay(2000);
 
     await saveChainInfo(projectName.projectName);
     logSuccess("Deployment completed successfully.");

@@ -2,8 +2,8 @@ import { getDevnetChoice, getProjectDetails, getRemoveExistingEnclave } from '..
 import { configToYAML } from '../../configs/to-yaml';
 import { removeEnclave, saveChainInfo } from '../../utils/kurtosis';
 import { logFailure, logSuccess, logWarning } from '../../utils/log';
-import { createProjectDirectory, getProjectConfig, getDevnetConfig} from '../../utils/project-manage';
-import { getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
+import { createProjectDirectory, getDevnetConfig, getProjectConfig } from '../../utils/project-manage';
+import { delay, getDockerCompose, getKurtosis, runKurtosisCommand } from '../../utils/system';
 import { GetRollupConfig } from "./get-rollup-config";
 
 export async function RollupdeployCommandCLI() {
@@ -41,6 +41,8 @@ export async function RollupdeployCommandCLI() {
       await deployTestnet(projectDetails);
     }
 
+    await delay(2000);
+
     // save relevant chain info to the project directory
     await saveChainInfo(projectDetails.projectName);
     logSuccess("Deployment completed successfully.");
@@ -56,7 +58,6 @@ export async function RollupdeployCommandCLI() {
 export async function deployDevnet(projectDetails: {projectName: string, networkType: string}){  
   const configChoice = await getDevnetChoice();
   const configFile = await getDevnetConfig(configChoice.devnetConfig)
-  console.log(configFile);
   return runKurtosisCommand(
     'kurtosis',
     [
