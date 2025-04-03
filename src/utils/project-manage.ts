@@ -1,10 +1,27 @@
 import fs from 'fs';
 import inquirer from 'inquirer';
+import yaml from "js-yaml";
 import path from 'path';
+import toml from 'toml';
 import util from 'util';
 import { PATH_NAME } from "./config";
-import yaml from "js-yaml";
-import toml from 'toml';
+
+
+export function projectSetUp(){
+
+  fs.mkdirSync(PATH_NAME.UPROLL_CLI, { recursive: true });
+  fs.mkdirSync(path.join(PATH_NAME.UPROLL_CLI, "projects"), { recursive: true });
+  
+  const DEVNET_CONFIGS_SRC = path.join(__dirname, "../../devnet_configs");
+  const DEVNET_CONFIGS_DEST = path.join(PATH_NAME.UPROLL_CLI, "devnet_configs");
+  
+  if (fs.existsSync(DEVNET_CONFIGS_SRC)) {
+    fs.cpSync(DEVNET_CONFIGS_SRC, DEVNET_CONFIGS_DEST, { recursive: true, force: true });
+  } else {
+    console.warn(`Source directory ${DEVNET_CONFIGS_SRC} does not exist.`);
+  }
+}
+
 
 export async function createProjectDirectory(projectName: string) {
   const projectPath = await getProjectFolder(projectName);

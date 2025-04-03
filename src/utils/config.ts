@@ -1,10 +1,9 @@
-import path from "path";
 import os from "os";
+import path from "path";
 
 export const CONFIG = {
   DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
-  DEPLOYMENT_REPO_VERSION: '1.2.0',
-  DEPLOYMENT_REPO_HASH : '8a13dac56ce6f4e0a873838601a178b14cdc6b4a',
+  DEPLOYMENT_REPO_HASH : '53bc8d9c4235ad00e0d0226e102d633c883ff82a',
 };
 
 export const WEBSITE = {
@@ -13,19 +12,6 @@ export const WEBSITE = {
 
 const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");
 
-
-import fs from "fs";
-fs.mkdirSync(UPROLL_GLOBAL_DIR, { recursive: true });
-fs.mkdirSync(path.join(UPROLL_GLOBAL_DIR, "projects"), { recursive: true });
-
-const DEVNET_CONFIGS_SRC = path.join(__dirname, "../../devnet_configs");
-const DEVNET_CONFIGS_DEST = path.join(UPROLL_GLOBAL_DIR, "devnet_configs");
-
-if (fs.existsSync(DEVNET_CONFIGS_SRC)) {
-  fs.cpSync(DEVNET_CONFIGS_SRC, DEVNET_CONFIGS_DEST, { recursive: true, force: true });
-} else {
-  console.warn(`Source directory ${DEVNET_CONFIGS_SRC} does not exist.`);
-}
 
 export const PATH_NAME = {
   DEPLOYMENT_REPO: path.join(UPROLL_GLOBAL_DIR, "optimism-package"),
