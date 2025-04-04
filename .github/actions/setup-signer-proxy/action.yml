@@ -1,0 +1,28 @@
+name: Setup Signer Proxy
+description: This action sets up the signer-proxy for use in workflows.
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clone signer-proxy
+      shell: bash
+      run: git clone https://github.com/upnodedev/signer-proxy.git
+
+    - name: Set up Rust
+      uses: moonrepo/setup-rust@v1
+
+    - name: Build signer-proxy
+      shell: bash
+      run: cargo install --path ./signer-proxy --no-default-features
+
+    - name: Start signer-proxy (background)
+      shell: bash
+      run: signer-proxy aws-kms serve &
+      env:
+        AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}
+    
+    - name: Wait for signer-proxy
+      shell: bash
+      run: curl --retry 5 --retry-delay 2 http://localhost:4000/ping

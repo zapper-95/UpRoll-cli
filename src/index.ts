@@ -3,39 +3,42 @@
 import { Command } from 'commander';
 import { startLog } from './utils/log';
 
-import { LogsCmdAPICLI } from './services/logs-cmd-cli';
-import { mainCMDCLI } from './services/main.cmd-cli';
-import { apiDeployCmdCli } from './services/api-deploy-cmd-cli';
 import packageJson from '../package.json';
+import { mainCMDCLI } from './commands/main-cmd-cli';
+import { RollupDeploy } from './commands/rollup-deploy';
+import { projectSetUp } from './utils/project-manage';
 
 startLog();
+projectSetUp()
 const program = new Command();
 
 program
-  .name('opstack-cli')
-  .description('A CLI tool for manage opstack deployment')
+  .name('UpRoll-cli')
+  .description('A CLI tool to manage opstack deployment')
   .version(packageJson.version);
 
-program.command('run').description('Run Opstack CLI Tool').action(mainCMDCLI);
+program.command('run').description('Run UpRoll CLI Tool').action(() => mainCMDCLI());
 program
-  .command('api')
-  .description('Run Opstack CLI API')
-  .action(apiDeployCmdCli);
-program
-  .command('logs build')
-  .description('View logs from Docker Compose services')
-  .option('-f, --follow', 'Follow log output')
-  .option(
-    '-t, --tail <lines>',
-    'Number of lines to show from the end of the logs',
-    'all'
-  )
-  .action(LogsCmdAPICLI);
+  .command('deploy')
+  .description('Deploy Rollup')
+  .option('-i, --id <id>', 'id of endpoint')
+  .option('-f, --file <config>', 'config file to deploy')
+  .action((options) => {
+    const hasID = Boolean(options.id);
+    const hasFile = Boolean(options.file);
+    
+    if (hasID === hasFile) {
+      console.error('Error: You must specify only one of --id or --file');
+      process.exit(1);
+    }
+
+    RollupDeploy(options);
+  });
 
 // get version in package.json
 program
   .command('version')
-  .description('Get version of Opstack CLI')
+  .description('Get version of UpRoll CLI')
   .action(() => {
     console.log(`Version: ${packageJson.version}`);
   });

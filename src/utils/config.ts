@@ -1,38 +1,35 @@
+import os from "os";
+import path from "path";
+
 export const CONFIG = {
-  DEPLOYMENT_REPO: 'https://github.com/upnodedev/opstack-deployment.git',
-  DEPLOYMENT_REPO_VERSION: 'v1.1.0',
-  DEPLOYMENT_URL: 'http://localhost:3050',
-  DEPLOYMENT_WS_URL: 'ws://localhost:3050',
+  DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
+  DEPLOYMENT_REPO_HASH : '65c7c6df1ba50c4c3d3588accd533881a133da39',
 };
+
+export const WEBSITE = {
+  ENDPOINT: "https://uproll-web.vercel.app/api/configs/[id]/yaml/"
+}
+
+const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");
+
 
 export const PATH_NAME = {
-  DEPLOYMENT_REPO: 'opstack-deployment',
+  DEPLOYMENT_REPO: path.join(UPROLL_GLOBAL_DIR, "optimism-package"),
+  UPROLL_CLI: UPROLL_GLOBAL_DIR,
+  PROJECTS: path.join(UPROLL_GLOBAL_DIR, "projects"),
+  DEVNET_CONFIGS : path.join(UPROLL_GLOBAL_DIR, "devnet_configs"),
 };
 
-export const ENV_DEPLOYMENT_REPO_DEFAULT = {
-  USER_NAME: '',
-  USER_PASSWORD: '',
-  JWT_SECRET: '',
 
-  // database
-  POSTGRES_USER: '',
-  POSTGRES_PASSWORD: '',
-  POSTGRES_DB: 'mydatabase',
+export const EL_IMAGES: {[key:string]:string} = {
+  "op-geth": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:latest",
+  "op-reth": "ghcr.io/paradigmxyz/op-reth:latest",
+  "op-erigon": "testinprod/op-erigon:latest",
+  "op-nethermind": "nethermind/nethermind:latest",
+  "op-besu": "ghcr.io/optimism-java/op-besu:latest",
+}
 
-  // domain
-  DOMAIN_NAME: 'localhost',
-  PROTOCOL: 'http',
-};
-
-export const DOCKER_COMPOSE_SERVICE = {
-  api: {
-    backend: 'backend-main',
-  },
-};
-
-export const ContainerServiceList = [
-  {
-    name: 'backend-main',
-
-  }
-]
+export const CL_IMAGES: {[key:string]:string} = {
+  "op-node": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:develop",
+  "hildr": "ghcr.io/optimism-java/hildr:latest",
+}

@@ -1,0 +1,101 @@
+name: Deployment Tests
+
+on: [push]
+
+jobs:
+  devnet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configType: [simple, interop]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Kurtosis
+        run: |
+          echo "deb [trusted=yes] https://apt.fury.io/kurtosis-tech/ /" | sudo tee /etc/apt/sources.list.d/kurtosis.list
+          sudo apt update
+          sudo apt install kurtosis-cli
+          kurtosis analytics disable
+
+      - name: Verify Docker is available
+        run: docker version
+
+      - name: Compile the code to js
+        run: npm run build
+
+      - name: Run UpRoll
+        run: npx uproll run
+
+      - name: Run Jest Test
+        run: npm test -- -t "deploy devnet"
+        env:
+          CI: true
+          CONFIG_TYPE: ${{ matrix.configType }}
+
+  testnet-CLI:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+  
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configType: [standard, signer-proxy, altda]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Kurtosis
+        run: |
+          echo "deb [trusted=yes] https://apt.fury.io/kurtosis-tech/ /" | sudo tee /etc/apt/sources.list.d/kurtosis.list
+          sudo apt update
+          sudo apt install kurtosis-cli
+          kurtosis analytics disable
+
+      - name: Verify Docker is available
+        run: docker version
+
+      - name: Compile the code to js
+        run: npm run build
+
+      - name: Run UpRoll
+        run: npx uproll run
+
+      - name: Run External L1 Chain
+        run: kurtosis run --enclave test --args-file https://raw.githubusercontent.com/zapper-95/optimism-package/refs/heads/main/.github/tests/external-l1/ethereum.yaml github.com/ethpandaops/ethereum-package
+      
+      - name: Start signer-proxy
+        if: matrix.configType == 'signer-proxy'
+        uses: ./.github/actions/setup-signer-proxy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Run Jest Test
+        run: npm test -- -t "deploy testnet CLI"
+        env:
+          CI: true
+          CONFIG_TYPE: ${{ matrix.configType }}
