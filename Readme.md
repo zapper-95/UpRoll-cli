@@ -1,7 +1,7 @@
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://upnode.org/static/746efe80b6fc0c3e8fe0326ce303ccfd/416c3/upnode.webp">
-      <img src="https://upnode.org/static/746efe80b6fc0c3e8fe0326ce303ccfd/416c3/upnode.webp" height="128">
+      <img src="./media/images/upnode_logo.png" height="188">
     </picture>
     <h1 align="center">UpRoll CLI Tool</h1>
     <h4 align="center">By Upnode</h4>
