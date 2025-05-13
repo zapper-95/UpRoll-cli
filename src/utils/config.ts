@@ -7,7 +7,7 @@ export const CONFIG = {
 };
 
 export const WEBSITE = {
-  ENDPOINT: "https://uproll-web.vercel.app/api/configs/[id]/yaml/"
+  ENDPOINT: "https://uproll.upnode.org/api/configs/[id]/yaml/"
 }
 
 const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");

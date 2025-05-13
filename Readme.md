@@ -62,7 +62,7 @@ Our website allows you to create and store rollup configurations, which can then
 
 
 #### 1. Create a Rollup Configuration
-  1.  **Sign up** and navigate to the [Create Your Rollup](https://uproll-web.vercel.app/config) page
+  1.  **Sign up** and navigate to the [Create Your Rollup](https://uproll.upnode.org/config) page
   2. Configure your chain settings and click **Save**
   3. Your configuration will be assigned a unique **configuration ID**
 
