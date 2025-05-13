@@ -2,12 +2,12 @@ import os from "os";
 import path from "path";
 
 export const CONFIG = {
-  DEPLOYMENT_REPO: 'https://github.com/zapper-95/optimism-package.git',
-  DEPLOYMENT_REPO_HASH : '65c7c6df1ba50c4c3d3588accd533881a133da39',
+  DEPLOYMENT_REPO: 'https://github.com/upnodedev/optimism-package.git',
+  DEPLOYMENT_REPO_HASH : 'c565daa4d2828193bba0f74239249ccb8cfe08aa',
 };
 
 export const WEBSITE = {
-  ENDPOINT: "https://uproll-web.vercel.app/api/configs/[id]/yaml/"
+  ENDPOINT: "https://uproll.upnode.org/api/configs/[id]/yaml/"
 }
 
 const UPROLL_GLOBAL_DIR = path.join(os.homedir(), "UpRoll");
